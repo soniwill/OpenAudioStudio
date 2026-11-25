@@ -1,0 +1,26 @@
+schema: spec-driven
+
+context: |
+  Redija em pt-BR. Preserve em inglês os cabeçalhos estruturais do OpenSpec,
+  como Purpose, Requirements, Requirement e Scenario, e use WHEN, THEN, AND,
+  SHALL e MUST em maiúsculas.
+  A taxonomia tem 11 capacidades de conceito alinhadas ao FMOD Studio 2.04:
+  events, instruments, timeline-logic, parameters, modulation-automation,
+  mixing, snapshots-vcas, spatialization, banks-assets, live-update e metering-profiling.
+  As oito capacidades de plataforma são engine-core, c-api-abi, bank-format,
+  project-publish, studio-shell, unity-bridge, mcp-automation e dev-harness.
+  Em specs de conceito, prefixe cada título Requirement com Runtime —,
+  Autoria — ou Unity — conforme a camada observável.
+  openspec/specs/ é canônico para capacidades migradas. Registre mudanças
+  em openspec/changes/. Mantenha docs/legacy/ e docs/specs/ como legado
+  somente leitura e aponte para o spec canônico quando houver migração.
+
+rules:
+  proposal:
+    - Declare motivação, escopo, exclusões, capacidades afetadas e impacto por camada.
+  specs:
+    - Organize os deltas por capacidade e descreva comportamento observável com cenários verificáveis.
+    - Use os cabeçalhos de delta e requisitos do schema e valide com openspec validate --strict.
+  tasks:
+    - Divida o trabalho em tarefas verificáveis com camada, resultado esperado e comando ou evidência de aceite.
+    - Inclua documentação, exemplos e os gates aplicáveis ao escopo.

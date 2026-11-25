@@ -1,0 +1,44 @@
+{
+  "engine": "Piper",
+  "engine_version": "1.8.0",
+  "model_repository": "rhasspy/piper-voices",
+  "model_revision": "42301ec547bc2939386cf0ae9f9050ca05b1d3af",
+  "model_repository_license": "MIT",
+  "training_recordings_license": "CC0-1.0",
+  "training_recordings_source": "https://github.com/OHF-Voice/voice-datasets",
+  "model_files_sha256": {
+    "faber": {
+      "pt_BR-faber-medium.onnx": "75e913eb463db0b6ac7ddf68d3e4c9ac19ace36dc3b710a81039b448352b8ffc",
+      "pt_BR-faber-medium.onnx.json": "6b6801319e5a70aa4d75c63343515f55d1cd671ecd1ac511586bc16216812261",
+      "MODEL_CARD": "a99caaa7e04fea58294ba4dea46a7ba07fa1f7902c6dff65b6ea2be0e98c5132"
+    },
+    "jeff": {
+      "pt_BR-jeff-medium.onnx": "82ddcdb01a0342f078bd89ce2815eda27185818d15e15f06fb9a72ac3bce94e1",
+      "pt_BR-jeff-medium.onnx.json": "8dc6e33760a02bc217ae83f8a8ede973c08b0e46c240f48f7f9fb9f0dbe45e0b",
+      "MODEL_CARD": "a81ea309434fe2fa23ed89c8ae270bc8aa40908b14e182fae54c021cc368f7a8"
+    }
+  },
+  "files": [
+    {
+      "file": "vo_welcome.wav",
+      "voice": "pt_BR-faber-medium",
+      "text": "Bem-vindo ao Audio Playground tridimensional do OpenAudio Studio.",
+      "duration_seconds": 3.495,
+      "sha256": "b07782e31c20350d5377f552fc181cf01542e3814b1dde9dfabb183ae591019d"
+    },
+    {
+      "file": "vo_spatial.wav",
+      "voice": "pt_BR-jeff-medium",
+      "text": "Estação espacial tridimensional e cones direcionais ativos.",
+      "duration_seconds": 3.796,
+      "sha256": "5afb35de3ce29e91d902c21c8fb39bf0e12d060ed2cfd9cdd74e09c1e34f4c09"
+    },
+    {
+      "file": "vo_ducking.wav",
+      "voice": "pt_BR-faber-medium",
+      "text": "Banco de voz carregado sob demanda, com ducking aplicado na música.",
+      "duration_seconds": 3.785,
+      "sha256": "8ff60517c86ebd8e0d32c55fbd654c31992f9033730a6d1aff6ad6a2df67fce4"
+    }
+  ]
+}

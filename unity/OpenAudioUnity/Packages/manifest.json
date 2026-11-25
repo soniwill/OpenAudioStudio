@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "com.openaudio.core": "file:../../com.openaudio.core",
+    "com.unity.modules.assetbundle": "1.0.0",
+    "com.unity.test-framework": "1.4.5",
+    "com.unity.modules.audio": "1.0.0",
+    "com.unity.modules.imgui": "1.0.0",
+    "com.unity.modules.physics": "1.0.0",
+    "com.unity.modules.physics2d": "1.0.0"
+  },
+  "testables": [
+    "com.openaudio.core"
+  ]
+}

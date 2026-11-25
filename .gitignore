@@ -1,0 +1,47 @@
+/build/
+/debug.log
+/example_project/build/
+.vs/
+*.user
+*.suo
+*.bankc-lock-*
+unity/OpenAudioUnity/[Ll]ibrary/
+unity/OpenAudioUnity/[Tt]emp/
+unity/OpenAudioUnity/[Oo]bj/
+unity/OpenAudioUnity/[Bb]uild/
+unity/OpenAudioUnity/[Bb]uilds/
+unity/OpenAudioUnity/[Ll]ogs/
+unity/OpenAudioUnity/UserSettings/
+/graphify-out/
+
+# Saídas de build e testes
+/unity/StandaloneTests/bin/
+/unity/StandaloneTests/obj/
+/unity/com.openaudio.core/Plugins/x86_64/oae_audio.dll
+/unity/com.openaudio.core/Plugins/x86_64/oae_audio.pdb
+/unity/com.openaudio.core/Plugins/x86_64/oae_audio.pdb.meta
+
+# Bancos gerados por oae_bankc e suas cópias no Unity
+/example_project/*.bank
+/example_project/*.bank.catalog.json
+/unity/OpenAudioUnity/Assets/StreamingAssets/*.bank
+/unity/OpenAudioUnity/Assets/StreamingAssets/*.bank.catalog.json
+/unity/OpenAudioUnity/Assets/StreamingAssets/*.bank.meta
+/unity/OpenAudioUnity/Assets/StreamingAssets/*.bank.catalog.json.meta
+
+# Saídas do gerador do Audio Playground
+/example_project/assets/playground/*.wav
+/example_project/playground_project.json
+/example_project/playground_vo_project.json
+
+# Material interno e evidências locais
+/benchmark-fmod-wwise-spec.pdf
+/docs/ui-references/
+/docs/references/interface/
+/docs/ai/history/
+/docs/ai/opencode.md
+/.codex/
+/.opencode/
+/opencode.json
+/GEMINI.md
+/openspec/changes/**/evidence/*.log

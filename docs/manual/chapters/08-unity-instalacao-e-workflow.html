@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 8 — Como Studio e Unity Trabalham Juntos | OpenAudio Studio</title>
+  <link rel="stylesheet" href="../assets/css/manual.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="manual-sidebar"></aside>
+
+    <main class="main-content">
+      <div class="breadcrumbs"><a href="../index.html">Manual</a> › Cap. 8 — Studio ↔ Unity</div>
+      <h1>Capítulo 8 — Como OpenAudio Studio e Unity Trabalham Juntos</h1>
+      <p class="lead">
+        Entenda a divisão de responsabilidades entre os dois programas, como instalar o pacote
+        <code>com.openaudio.core</code> na Unity e onde colocar seus arquivos <code>.bank</code>.
+      </p>
+
+      <div class="theory-box box">
+        <div class="box-title">Teoria Básica — Dois Programas, Um Mesmo Motor de Áudio</div>
+        <p>
+          O <strong>OpenAudio Studio</strong> é a sua bancada de criação sonora (onde você monta eventos, efeitos e mixagem).
+          A <strong>Unity</strong> é o motor do jogo (onde personagens andam, colidem e mudam de fase).
+        </p>
+        <p>
+          A grande vantagem é que <strong>a Unity usa exatamente a mesma engine nativa (<code>oae_audio.dll</code>) que toca o som no Studio</strong>.
+          O jogo usa o banco publicado e aplica os parâmetros, os gatilhos e o posicionamento da cena em execução.
+        </p>
+      </div>
+
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/unity-bridge-workflow.svg" alt="Fluxo conjunto entre OpenAudio Studio e Unity">
+        </div>
+        <figcaption class="callout-caption">
+          Fluxo completo: o Studio publica <code>.bank</code> + <code>.bank.catalog.json</code> na pasta <code>StreamingAssets</code> da Unity.
+        </figcaption>
+      </figure>
+
+      <h2>1. Passo a Passo de Instalação na Unity</h2>
+      <ol>
+        <li>
+          <strong>Adicionar o pacote UPM (<code>com.openaudio.core</code>):</strong>
+          Na Unity, abra <em>Window → Package Manager → + → Add package from disk...</em> e selecione o arquivo
+          <code>unity/com.openaudio.core/package.json</code>.
+        </li>
+        <li>
+          <strong>Garantir a DLL nativa (<code>oae_audio.dll</code>):</strong>
+          Execute o script <code>scripts/deploy_unity.ps1</code> (ou copie <code>oae_audio.dll</code> para
+          <code>Plugins/x86_64/</code> dentro do pacote para Windows x64).
+        </li>
+        <li>
+          <strong>Copiar os Bancos Publicados:</strong>
+          Coloque o <code>ExampleGameProject.bank</code> e o <code>ExampleGameProject.bank.catalog.json</code> gerados pelo <em>Build Bank</em> dentro de
+          <code>Assets/StreamingAssets/</code> no seu projeto Unity.
+        </li>
+      </ol>
+
+      <h2>2. O que o banco e o catálogo fazem</h2>
+      <p>O <code>.bank</code> contém o áudio e as regras publicadas. O <code>.bank.catalog.json</code> permite ao Editor encontrar os caminhos disponíveis no seletor <code>[EventRef]</code>. O seletor verifica tamanho e CRC-32 do banco correspondente. Se ele indicar inconsistência, copie novamente os dois arquivos da mesma compilação.</p>
+      <h2>3. Faça o primeiro teste</h2>
+      <figure class="callout-figure manual-photo"><div class="callout-stage"><img src="../assets/img/unity-bank-loader.svg" alt="Inspector do Bank Loader com um banco configurado"><span class="manual-highlight" aria-hidden="true" style="left:2%;top:40%;width:97%;height:14%"></span></div><figcaption class="callout-caption">Bank Files identifica o banco que a cena carrega. Use ExampleGameProject.bank no exercício da moeda.</figcaption></figure>
+      <ol><li>Publique o projeto do exemplo do <a href="02-projetos-e-publicacao.html">capítulo 2</a>. Copie <code>ExampleGameProject.bank</code> e o catálogo para <code>Assets/StreamingAssets/</code>.</li>
+      <li>Em uma cena de teste, adicione os componentes de gerência (<code>OpenAudioManager</code>), carga (<code>StudioBankLoader</code>) e emissão espacial (<code>StudioEventEmitter</code>) junto ao <code>StudioListener</code> na câmera conforme o <a href="09-unity-componentes-inspector.html">capítulo 9</a>. Use <code>event:/sfx/coin</code> para ouvir a moeda ao entrar em Play Mode.</li>
+      <li>Confira o <strong>Console</strong> se faltar som. <code>DllNotFoundException</code> aponta para a instalação do plug-in nativo. <code>Bank file not found</code> pede que você revise a pasta e o nome do banco. Se o evento estiver ausente, confira o caminho e a versão publicada.</li></ol>
+      <h2 id="paridade">Confirme qual versão o jogo está tocando</h2>
+      <ol><li>Escolha uma mudança fácil de identificar, como reduzir a moeda de <code>0 dB</code> para <code>-12 dB</code>. Ouça no Studio e anote o caminho do evento.</li><li>Publique e copie o par de arquivos para <code>Assets/StreamingAssets/</code>. Confira o nome em <strong>Bank Files</strong>. Faça a troca fora do Play Mode e inicie uma nova sessão para carregar a versão.</li><li>Dispare o mesmo <strong>Event Path</strong>. Se soar como antes, confira a pasta do projeto Unity, o nome do banco, o caminho e os ajustes de ganho no jogo. Se o seletor estiver vazio, confira o catálogo e tente digitar o caminho completo.</li></ol>
+      <p>Este fluxo usa Windows x64. Antes do primeiro Play, confira se <strong>OpenAudio Engine Core</strong> aparece em <strong>Packages</strong> e se <code>oae_audio.dll</code> está em <code>Plugins/x86_64/</code> dentro do pacote.</p>
+
+      <h2>Termos da integração</h2>
+      <dl><dt>UPM</dt><dd>Unity Package Manager, responsável por importar e resolver dependências do pacote.</dd><dt>StreamingAssets</dt><dd>Pasta que leva os arquivos do banco ao jogo. O nome da pasta descreve a distribuição dos arquivos. O loader lê o banco como uma unidade.</dd><dt>CRC-32</dt><dd>Valor calculado a partir dos bytes do arquivo, usado para detectar divergência entre banco e catálogo.</dd><dt>Play Mode</dt><dd>Execução da cena dentro do Editor para testar o jogo.</dd></dl>
+
+      <figure class="callout-figure"><div class="callout-stage"><img src="../assets/img/studio-transport.png" alt="Botões da barra superior do Studio"></div><figcaption class="callout-caption">Use Build Bank, ao lado de Save Project, para gerar os arquivos que a Unity consome.</figcaption></figure>
+
+      <div class="chapter-footer">
+        <a href="07-deck-inferior-mixer-efeitos.html">← Cap. 7 — Bottom Deck e Logs</a>
+        <a href="09-unity-componentes-inspector.html">Próximo: Cap. 9 — Componentes na Unity →</a>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/manual.js"></script>
+</body>
+</html>

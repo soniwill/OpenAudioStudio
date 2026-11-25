@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 9 — Componentes na Unity (Sem Código) | OpenAudio Studio</title>
+  <link rel="stylesheet" href="../assets/css/manual.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="manual-sidebar"></aside>
+
+    <main class="main-content">
+      <div class="breadcrumbs"><a href="../index.html">Manual</a> › Cap. 9 — Componentes na Unity</div>
+      <h1>Componentes no Inspector da Unity</h1>
+      <p class="lead">Configure a primeira cena sem escrever um script. Você vai carregar o banco antes de disparar a moeda e depois experimentar posicionamento e diagnóstico.</p>
+      <h2 id="primeiro-som">Ouça a moeda ao iniciar a cena</h2>
+      <p>Prepare o banco <code>ExampleGameProject.bank</code> e seu catálogo conforme o <a href="08-unity-instalacao-e-workflow.html">capítulo 8</a>.</p>
+      <ol>
+<li>Na <strong>Hierarchy</strong>, crie um GameObject vazio chamado <strong>OpenAudio</strong>. No <strong>Inspector</strong>, use <strong>Add Component</strong> e procure <strong>OpenAudio Audio Manager</strong>.</li>
+<li>Crie um segundo objeto, <strong>Banco</strong>, com <strong>OpenAudio Studio Bank Loader</strong>. Em <strong>Bank Files</strong>, adicione <code>ExampleGameProject.bank</code>. Escolha <strong>Synchronous</strong> e <strong>Awake</strong>.</li>
+<li>Crie um terceiro objeto, <strong>Moeda</strong>, com <strong>OpenAudio Studio Event Emitter</strong>. Em <strong>Event Path</strong>, selecione <code>event:/sfx/coin</code>. Use <strong>Play Trigger</strong> em <strong>Start</strong> e <strong>Spatial Mode</strong> em <strong>None</strong>.</li>
+<li>Entre em <strong>Play Mode</strong>. Você deve ouvir um disparo curto. Ao sair e entrar novamente, o <strong>Start</strong> dispara o evento outra vez. Se faltar som, confira o caminho e o nome do banco no <strong>Console</strong>.</li>
+</ol>
+      <h2 id="manager">Audio Manager</h2>
+      <figure class="callout-figure manual-photo"><div class="callout-stage"><img src="../assets/img/unity-manager.png" alt="Inspector do Audio Manager no Unity"><span class="manual-highlight" aria-hidden="true" style="left:1%;top:73%;width:98%;height:26%"></span></div><figcaption class="callout-caption">Áudio e ciclo de vida ficam acima das opções de Live-Linking. O destaque indica o endereço e a porta da conexão.</figcaption></figure>
+      <p>Cria o motor e o atualiza a cada quadro. Use um objeto dedicado na cena inicial. Ele persiste quando a cena muda e descarta duplicatas.</p>
+      <table><thead><tr><th>Controle</th><th>O que muda</th></tr></thead><tbody>
+<tr><td>Sample Rate / Channels</td><td>Amostras por segundo e canais de saída. Comece com 48.000 Hz e 2 canais para estéreo.</td></tr>
+<tr><td>Max Physical Voices</td><td>Limite de vozes reais. Em um teste com muitas fontes contínuas, reduza o limite e compare as contagens real e virtual no overlay.</td></tr>
+<tr><td>Initialize No Device</td><td>Inicializa sem saída física. Deixe desmarcado para ouvir os exercícios.</td></tr>
+<tr><td>Pause On Focus Loss</td><td>Pausa o master quando o jogo perde o foco. Deixe desmarcado ao alternar para o Studio durante a edição ao vivo.</td></tr>
+<tr><td>Enable Live Linking / Live Host / Live Port</td><td>Ativa e endereça a conexão em Editor e Development Build. Para as duas aplicações no mesmo PC, use <code>127.0.0.1</code> e <code>7450</code>.</td></tr>
+</tbody></table>
+      <h2 id="loader">Studio Bank Loader</h2>
+      <figure class="callout-figure manual-photo"><div class="callout-stage"><img src="../assets/img/unity-bank-loader.svg" alt="Inspector do Bank Loader com um banco configurado"><span class="manual-highlight" aria-hidden="true" style="left:2%;top:40%;width:97%;height:14%"></span></div><figcaption class="callout-caption">Bank Files identifica o banco que a cena carrega. Use ExampleGameProject.bank no exercício da moeda.</figcaption></figure>
+      <table><thead><tr><th>Controle</th><th>O que muda</th></tr></thead><tbody>
+<tr><td>Bank Files</td><td>Lista de bancos. Caminhos relativos partem de <code>StreamingAssets</code>. Com vários bancos, carregue o Master antes dos bancos de conteúdo.</td></tr>
+<tr><td>Load Mode</td><td><strong>Synchronous</strong> retorna após a tentativa de carga. <strong>Asynchronous</strong> inicia em segundo plano. Aguarde o estado <code>Loaded</code> de cada banco necessário antes de disparar seus eventos.</td></tr>
+<tr><td>Load Trigger</td><td><strong>Awake</strong> carrega na inicialização do objeto, <strong>Start</strong> na fase de início e <strong>Manual</strong> via <code>Load()</code>. Evite depender da ordem entre dois componentes em <strong>Start</strong>.</td></tr>
+<tr><td>Unload Trigger</td><td><strong>OnDestroy</strong> descarrega ao destruir o objeto. <strong>Manual</strong> delega o descarregamento a <code>Unload()</code>.</td></tr>
+<tr><td>Preload Sample Data</td><td>Campo reservado no Inspector. A implementação atual segue o mesmo caminho de carga com a caixa marcada ou desmarcada.</td></tr>
+</tbody></table>
+      <h2 id="emitter">Studio Event Emitter e seletor de eventos</h2>
+      <figure class="callout-figure manual-photo"><div class="callout-stage"><img src="../assets/img/unity-eventref.svg" alt="Inspector do Audio Playground Controller com botões Browse ao lado dos caminhos"><span class="manual-highlight" aria-hidden="true" style="left:83%;top:14%;width:16%;height:40%"></span></div><figcaption class="callout-caption">Os componentes com campos <code>[EventRef]</code> usam o mesmo seletor de caminho do emitter. Digite o caminho completo ou abra Browse… ao lado do campo.</figcaption></figure>
+      <table><thead><tr><th>Controle</th><th>O que muda</th></tr></thead><tbody>
+<tr><td>Event Path</td><td>Caminho completo do evento. O botão <strong>Browse…</strong> abre um menu hierárquico com os eventos dos catálogos válidos. Se a lista vier vazia, confira os dois arquivos e digite o caminho completo para testar a reprodução.</td></tr>
+<tr><td>Play Trigger</td><td><strong>Awake</strong>, <strong>Start</strong> ou <strong>OnEnable</strong> automatizam o disparo no ciclo de vida do objeto. <strong>OnTriggerEnter</strong> reage à entrada em uma área de colisão. <strong>Manual</strong> espera por <code>Play()</code>.</td></tr>
+<tr><td>Stop Trigger / Stop Mode</td><td>Escolha desativação, destruição, saída da área ou <code>Stop()</code> manual. <strong>Immediate</strong> corta o som. <strong>AllowFadeout</strong> permite a saída configurada. Compare os dois com um evento que tenha uma cauda audível.</td></tr>
+<tr><td>Spatial Mode / Is 3D</td><td><strong>None</strong> para sons 2D/UI. <strong>Spatial2D</strong> para jogos 2D no plano XY. <strong>Spatial3D</strong> para posicionamento tridimensional completo no espaço do jogo com cálculo de atenuação e cone.</td></tr>
+<tr><td>Min Distance / Max Distance</td><td>Unidades de mundo (metros). Até a distância mínima, o som tem ganho integral (0 dB). A partir da máxima, silêncio ou patamar mínimo configurado.</td></tr>
+<tr><td>Cones Direcionais (3D)</td><td><strong>Inner Angle</strong> (zona de 100% de energia), <strong>Outer Angle</strong> (zona de transição) e <strong>Outer Gain</strong> (atenuação sonora quando o ouvinte está atrás da fonte, ex.: escapamento de carro ou alto-falante direcional).</td></tr>
+<tr><td>Sound Size &amp; Min Extent</td><td><strong>Sound Size:</strong> Raio aparente da fonte sonora para <em>envelopment</em> estéreo (uma cachoeira gigante envolve o jogador em estéreo quando ele se aproxima, em vez de soar como um ponto microscópico).</td></tr>
+<tr><td>Initial Parameters</td><td>Pares nome e valor aplicados na inicialização da instância. Use nomes presentes no evento publicado.</td></tr>
+</tbody></table>
+
+      <h2 id="builtin-params">Built-in 3D Parameters Automáticos (Sem Código)</h2>
+      <div class="theory-box box">
+        <div class="box-title">O que são Built-in Parameters?</div>
+        <p>
+          O motor OpenAudio calcula em tempo real variáveis geométricas e cinemáticas entre o <code>StudioEventEmitter</code> e o <code>StudioListener</code> ativo. Se o evento criado no Studio possuir parâmetros locais com estes nomes canônicos, <strong>eles são atualizados automaticamente a cada quadro pelo motor sem nenhuma linha de script C#</strong>:
+        </p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome do Parâmetro Canônico</th>
+            <th>Faixa Típica</th>
+            <th>Grandeza Física e Aplicação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Distance</code></td>
+            <td>0 a Max Distance (m)</td>
+            <td>Distância euclidiana em linha reta entre emissor e ouvinte. Use para modular filtros passa-baixas (abafamento do ar) e envio para reverb de ambiente.</td>
+          </tr>
+          <tr>
+            <td><code>Direction</code></td>
+            <td>-180° a +180°</td>
+            <td>Ângulo horizontal no plano do ouvinte (0° = à frente, ±90° = lados, ±180° = atrás). Use para transições de microfonação ou simulação de HRTF.</td>
+          </tr>
+          <tr>
+            <td><code>Elevation</code></td>
+            <td>-90° a +90°</td>
+            <td>Ângulo vertical de inclinação (-90° = abaixo do ouvinte, +90° = acima da cabeça). Ideal para passos no andar de cima ou helicópteros sobrevoando.</td>
+          </tr>
+          <tr>
+            <td><code>EventConeAngle</code></td>
+            <td>0° a 180°</td>
+            <td>Desvio angular do ouvinte em relação ao eixo frontal do emissor. Use para atenuar agudos ou alterar o timbre de fontes direcionais.</td>
+          </tr>
+          <tr>
+            <td><code>Speed</code></td>
+            <td>0 a 100+ m/s</td>
+            <td>Velocidade relativa entre emissor e ouvinte. Útil para modular vento relativo, rotação de motores ou intensidade de atrito em alta velocidade.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 id="listener">Studio Listener e Orientação Tridimensional</h2>
+      <p>Adicione <strong>OpenAudio Studio Listener</strong> ao GameObject da câmera ou do personagem. O pacote usa um listener ativo por sistema. Colocar vários componentes na cena não cria uma mixagem independente por câmera; split-screen com uma mistura espacial por visão não é suportado por este componente.</p>
+      <h3>Teste de emissor à frente e atrás</h3>
+      <p>Use o banco publicado de <code>example_project/project.json</code> e o catálogo correspondente. O teste usa <code>event:/music/theme</code> e compara a mesma fonte a quatro metros do ponto de escuta.</p>
+
+      <pre><code>+--------------------------------------------------------------------------+
+|  GEOMETRIA DO ENSAIO 3D NA UNITY (FRENTE vs COSTAS)                      |
++--------------------------------------------------------------------------+
+|                                                                          |
+|                         Listener (Frente)                                |
+|                            (0, 0, 4)                                     |
+|                           [ OUVINTE ]                                    |
+|                                ^                                         |
+|                                |  d = 4 m                                |
+|                                |  EventConeAngle = 0°                    |
+|                                |  Ganho do Cone = 1.0 (0 dB)             |
+|                                |                                         |
+|                       +-----------------+                                |
+|                       |     EMISSOR     |  Orientado para +Z             |
+|                       |    (0, 0, 0)    |  Inner: 90° / Outer: 180°      |
+|                       |                 |  Outer Gain: 0.25 (-12 dB)     |
+|                       +-----------------+                                |
+|                                |                                         |
+|                                |  d = 4 m                                |
+|                                |  EventConeAngle = 180°                  |
+|                                |  Ganho do Cone = 0.25 (-12 dB)          |
+|                                v                                         |
+|                           [ OUVINTE ]                                    |
+|                         Listener (Costas)                                |
+|                            (0, 0, -4)                                    |
+|                                                                          |
++--------------------------------------------------------------------------+</code></pre>
+
+      <ol>
+        <li>Crie uma cena de teste com um <strong>OpenAudio Audio Manager</strong>. Configure um <strong>OpenAudio Studio Bank Loader</strong> com o banco do exercício em <strong>Bank Files</strong>, carga <strong>Synchronous</strong> e <strong>Load Trigger: Awake</strong>. Adicione um único <strong>OpenAudio Studio Listener</strong> à câmera em <code>(0, 0, 4)</code>, voltada para a origem.</li>
+        <li>Crie um emissor na origem voltado para <code>+Z</code> e adicione <strong>OpenAudio Studio Event Emitter</strong>. Selecione <code>event:/music/theme</code>, <strong>Play Trigger: Start</strong> e <strong>Spatial Mode: Spatial3D</strong>.</li>
+        <li>Defina <strong>Min Distance</strong> como <code>1 m</code>, <strong>Max Distance</strong> como <code>20 m</code>, <strong>Rolloff</strong> como <strong>Linear</strong> e os campos de cone <strong>Inner Angle</strong>, <strong>Outer Angle</strong> e <strong>Outer Gain</strong> como <code>90°</code>, <code>180°</code> e <code>0.25</code>. Use o painel 3D Spatializer para testar distância e pan na prévia local do Studio.</li>
+        <li>Entre em Play Mode e ouça o tema. Saia de Play Mode, mova a câmera para <code>(0, 0, -4)</code>, aponte-a para a origem e entre de novo. A distância será a mesma (4 metros) e, atrás do emissor, o ganho do cone será de um quarto do ganho frontal (picos medidos no Editor 6000.0.34f1: <code>0,5750</code> na frente vs <code>0,1437</code> nas costas, confirmando a atenuação de <code>−12 dB</code>).</li>
+        <li>Durante a reprodução, o motor calcula <code>Distance</code>, <code>Direction</code>, <code>Elevation</code>, <code>EventConeAngle</code> e <code>Speed</code>. Para verificar por código, leia cada valor depois da atualização dos componentes com <code>emitter.Instance.GetParameter(nome, out var valor, out _)</code>. Neste teste, a distância deve permanecer em <code>4</code> e o ângulo do cone deve ir de <code>0°</code> para <code>180°</code>. Para usar esses nomes nos seletores de autoria, declare os parâmetros locais correspondentes.</li>
+      </ol>
+      <p>Ao terminar, saia de Play Mode e volte a câmera a <code>(0, 0, 4)</code>, voltada para a origem.</p>
+      <h2 id="overlay">Diagnostics Overlay</h2>
+      <figure class="callout-figure manual-photo"><div class="callout-stage"><img src="../assets/img/unity-telemetry.png" alt="Overlay da Unity mostrando vozes e leituras de pico, RMS e K-14"><span class="manual-highlight" aria-hidden="true" style="left:1%;top:9%;width:97%;height:10%"></span></div><figcaption class="callout-caption">O destaque marca o total de vozes reais e virtuais. Abaixo, o overlay mostra as leituras dos barramentos monitorados.</figcaption></figure>
+      <p>Adicione <strong>OpenAudio Diagnostics Overlay</strong> para acompanhar a telemetria em tempo real no canto superior direito da janela de jogo durante <code>Play Mode</code> no Editor ou em Development Build. A primeira linha exibe a contagem de vozes no formato <code>Voices: &lt;RealVoices&gt; Real / &lt;VirtualVoices&gt; Virtual (Total &lt;TotalVoices&gt;)</code>, onde as vozes virtuais correspondem a <code>Total - Real</code>. Abaixo, exibe bancos dos loaders encontrados, instâncias ativas e níveis dos barramentos (Peak, RMS e K-14). Configure <strong>Visible</strong>, <strong>Toggle Key</strong> (<kbd>F9</kbd> por padrão), <strong>Watched Events</strong> e <strong>Watched Buses</strong>. Toque um evento contínuo, observe as contagens, pare o evento e compare.</p>
+      <h2 id="ordem">Por que Awake, Start e Manual mudam o resultado?</h2>
+      <p>No exercício, o Manager inicia o motor. O Loader usa <strong>Awake</strong> com carga síncrona. O Emitter dispara em <strong>Start</strong>. Se trocar a carga para <strong>Asynchronous</strong>, Start pode ocorrer enquanto o banco ainda está em <code>Loading</code>. Use <strong>Manual</strong> no Emitter e chame <code>Play()</code> depois de verificar que o banco requerido chegou a <code>Loaded</code>.</p>
+      <p>Compare <strong>Start</strong> e <strong>Manual</strong> com o mesmo evento. No segundo caso, entrar em Play Mode carrega o banco e o emissor espera uma chamada. Para a primeira reprodução, confira se o sistema tem saída física e se <strong>Spatial Mode</strong> está em <strong>None</strong>. Depois, use o teste de distância para perceber o que o listener acrescenta.</p>
+
+      <h2>Termos da cena</h2>
+      <dl><dt>GameObject</dt><dd>Objeto que recebe componentes na cena.</dd><dt>Inspector</dt><dd>Painel que mostra as propriedades do objeto selecionado.</dd><dt>Trigger</dt><dd>Condição que dispara uma ação. Pode ser uma fase do objeto ou a entrada em uma área.</dd><dt>Listener</dt><dd>Ponto de escuta usado para calcular posição e distância.</dd><dt>Voz virtual</dt><dd>Reprodução acompanhada pelo motor sem ocupar uma voz física de saída.</dd></dl>
+
+      <div class="chapter-footer">
+        <a href="08-unity-instalacao-e-workflow.html">← Cap. 8 — Studio ↔ Unity</a>
+        <a href="10-unity-api-csharp-e-live.html">Próximo: Cap. 10 — API C# e Live-Linking →</a>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/manual.js"></script>
+</body>
+</html>

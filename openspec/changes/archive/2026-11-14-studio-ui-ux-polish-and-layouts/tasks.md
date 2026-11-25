@@ -1,0 +1,31 @@
+# Tasks
+
+## 1. Tokens de Tema, Sliders 1:1 e Paleta de Tracks
+
+- [x] 1.1 [Camada: studio] Estender `studio/Source/UI/Theme.h` com a paleta curada `TrackColors` (cores distintas para atribuição cíclica a pistas) e tokens de destaque para seleção de pista/clipe, *ghost preview* e cards do Inspector; verificar compilando `--target oae_studio`.
+- [x] 1.2 [Camada: studio] Implementar `getSliderThumbRadius` e `getSliderLayout` em `studio/Source/UI/OaeDarkLookAndFeel.h/.cpp` alinhados a `OaeTheme::Sliders::thumbDiameter` (`12.0f`) e refatorar `OaeSlider::mouseDown`/`mouseDrag` (`studio/Source/UI/OaeSlider.h`) para rastreamento `1:1` sobre a extensão útil do trilho sem salto inicial e com `0.1x` apenas com `Shift`; verificar com teste de fumaça verificando deslocamento horizontal `1:1` em `studio/Source/Main.cpp`.
+- [x] 1.3 [Camada: studio] Adicionar suporte a cor por pista (`color`) com atribuição cíclica determinística, leitura e alteração com Undo/Redo em `studio/Source/Model/AuthoringModel.h/.cpp`; verificar em `run_smoke_timeline()` que a propriedade persiste no JSON sem impactar a compilação de banco (`oae_bankc`).
+
+## 2. Cores de Track, Seleção no Palco, Waveforms Universais e Ghost Drag
+
+- [x] 2.1 [Camada: studio] Atualizar `TrackHeaderPanel.h/.cpp` e `TimelineTrackLane.h/.cpp` para exibir seletor de cor no cabeçalho da pista, destacar a pista selecionada de ponta a ponta (tint translúcido + bordas superior/inferior contínuas conectando header e raia quando há 2+ pistas) e pintar o background dos clipes pela cor da pista com badge exclusivo de tipo (`[SGL]`, `[MLT]`, `[SCT]`, `[PRG]`, `[EVT]`, `[CMD]`) na barra de título e seleção de clipe em alto contraste; verificar com smoke em `studio/Source/Main.cpp` e captura visual via `studio_ui_screenshot`.
+- [x] 2.2 [Camada: studio] Implementar resolução universal de fontes de waveform para `Single`, `Multi` (playlist), `Scatterer` (playlist), `Programmer` (`audio_table`) e `Event` (recursivo para todos os tipos de instrumento filho com proteção contra ciclos) em `TimelineTrackLane.cpp`; verificar que todos os tipos exibem envelope não vazio quando há áudio associado via smoke e `studio_ui_screenshot`.
+- [x] 2.3 [Camada: studio] Evoluir `WaveformEnvelope::render_clip` em `studio/Source/Timeline/WaveformCache.h/.cpp` para renderizar formas de onda poligonais suaves (`juce::Path` contínuo anti-aliased) com silhueta de pico em gradiente vertical e núcleo RMS interno contrastado sobre o fundo colorido pela pista; verificar visualmente via `studio_ui_screenshot` no componente `timeline_view`.
+- [x] 2.4 [Camada: studio] Implementar pré-visualização contínua de *Ghost Geometry* durante `mouseDrag` na mesma pista e entre pistas em `TimelinePanel.h/.cpp` e `TimelineTrackLane.h/.cpp`, mantendo contorno tracejado na posição original, silhueta fantasma sob o cursor, linhas-guia até a régua e indicador numérico em `ms`; verificar com teste de fumaça de arraste horizontal/vertical + Undo/Redo em `studio/Source/Main.cpp`.
+
+## 3. Property Inspector Modular em Cards Colapsáveis (Clip, Track, Event)
+
+- [x] 3.1 [Camada: studio] Criar componente reutilizável de card colapsável (`InspectorSectionCard`) e refatorar `InspectorPanel::create_event_editor` (`studio/Source/UI/InspectorPanel.h/.cpp`) para exibir exclusivamente o contexto selecionado dividido em três cards independentes (**Clip** -> **Track** -> **Event**), com barra lateral colorida pela pista, badge de escopo, subgrupos lógicos internos e preservação do estado de colapso e scroll; verificar compilação `--target oae_studio` e smoke de seleção no Inspector.
+- [x] 3.2 [Camada: studio] Integrar o seletor de cor da pista e os controles contextualizados no Card `TRACK` e no Card `CLIP` com suporte completo a Undo/Redo e `FlexBox`/`Grid` fluido em larguras mínimas; verificar via `studio_ui_screenshot` no componente de inspetor.
+
+## 4. Sistema de Layouts, 3 Templates Nativos, Custom Presets e Ocultação Total de Painéis
+
+- [x] 4.1 [Camada: studio] Evoluir `DockingLayoutManager.h/.cpp` para gerenciar visibilidade independente por painel (`transport`, `browser`, `timeline`, `inspector`, `bottom_deck`), ocultação total sem áreas vazias bloqueando o canvas, movimentação de painéis entre slots com suporte a abas e serialização retrocompatível em `oae_studio_layout.json`; verificar com smoke de visibilidade e realocação de slots em `studio/Source/Main.cpp`.
+- [x] 4.2 [Camada: studio] Implementar os 3 templates nativos somente leitura (`Default (Authoring)`, `Stage Focus`, `Mixing & Mastering`), criação/salvamento de layouts personalizados, exclusão protegida apenas a layouts do usuário e comando `Reset Layout` em `DockingLayoutManager`; verificar com teste de fumaça cobrindo aplicação de templates, criação, exclusão e reset.
+- [x] 4.3 [Camada: studio] Adicionar a `WorkspaceBar` compacta permanente no topo de `MainComponent.h/.cpp` e botões de controle nos cabeçalhos dos painéis (fechar/ocultar, trocar slot, *pop-out*, seletor de layout, `+ Save`, `Delete`, `Reset` e `Hide All / Restore`); verificar a operação completa mesmo com todos os painéis fechados via smoke e `studio_ui_screenshot`.
+
+## 5. Testes de Fumaça, Validação Visual via MCP Snapshot e Documentação
+
+- [x] 5.1 [Camada: studio] Ampliar `studio/Source/Main.cpp` com smokes automatizados cobrindo rastreamento `1:1` de `OaeSlider`, seleção multi-pista e cor por pista, waveforms universais, *ghost drag*, cards colapsáveis do Inspector, 3 templates nativos, custom layouts, reset e ocultação total, e executar `pwsh -NoProfile -File scripts/verify.ps1 -Layer studio` (100% aprovado).
+- [x] 5.2 [Camada: studio / mcp] Executar validação visual completa utilizando a ferramenta `studio_ui_screenshot` do servidor MCP do Studio (`openspec/specs/mcp-automation/spec.md`) para capturar e inspecionar os PNGs renderizados da janela completa, `timeline_view` (múltiplas tracks, seleção, cores e waveforms poligonais), Inspector em cards e os 3 templates de layout com painéis ocultos.
+- [x] 5.3 [Camada: docs] Atualizar `docs/UI_GUIDELINES.md` com os novos tokens de `TrackColors`, regras de cards do Inspector, padrão de barra de título dos clipes e `WorkspaceBar`, atualizar `docs/ai/memory.md` e validar com `pwsh -NoProfile -File scripts/verify.ps1 -Layer docs` e `openspec validate "studio-ui-ux-polish-and-layouts" --strict`.

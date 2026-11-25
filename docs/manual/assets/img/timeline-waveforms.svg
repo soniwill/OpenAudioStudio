@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 460" width="100%" height="auto">
+  <rect width="980" height="460" rx="8" fill="#202225" stroke="#2f3237" stroke-width="2"/>
+
+  <!-- 1. Overview Minimap -->
+  <rect x="12" y="12" width="956" height="44" rx="5" fill="#161719" stroke="#2f3237"/>
+  <rect x="180" y="18" width="220" height="32" rx="3" fill="#00f5d4" fill-opacity="0.16" stroke="#00f5d4"/>
+  <text x="24" y="39" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="11">Minimap (Visão Geral)</text>
+
+  <!-- 2. Snap & Ruler -->
+  <rect x="12" y="64" width="160" height="42" rx="5" fill="#282b30" stroke="#40444b"/>
+  <text x="92" y="89" fill="#00f5d4" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" text-anchor="middle">Snap: 1/4 Beat ▾</text>
+
+  <rect x="180" y="64" width="788" height="42" rx="5" fill="#282b30" stroke="#2f3237"/>
+  <text x="195" y="83" fill="#a0a4ab" font-family="Consolas, monospace" font-size="11">0.0s (Bar 1)       1.0s (Bar 2)       2.0s (Bar 3)       3.0s</text>
+  <!-- Marker & Loop region -->
+  <rect x="200" y="88" width="66" height="15" rx="3" fill="#38b000"/>
+  <text x="233" y="99" fill="#081214" font-family="Segoe UI, sans-serif" font-size="9" font-weight="700" text-anchor="middle">120 BPM</text>
+  <rect x="350" y="88" width="210" height="15" rx="3" fill="#ffb703" fill-opacity="0.28" stroke="#ffb703"/>
+  <text x="455" y="99" fill="#ffb703" font-family="Segoe UI, sans-serif" font-size="9" font-weight="700" text-anchor="middle">LOOP REGION</text>
+
+  <!-- 3. Track Headers -->
+  <rect x="12" y="114" width="160" height="150" rx="5" fill="#282b30" stroke="#00f5d4" stroke-width="1.5"/>
+  <text x="24" y="136" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700">Track 1 — Base</text>
+  <rect x="24" y="148" width="136" height="12" rx="3" fill="#161719"/>
+  <rect x="24" y="148" width="96" height="12" rx="3" fill="#00f5d4"/>
+  <text x="24" y="176" fill="#a0a4ab" font-family="Consolas, monospace" font-size="11">Vol: -1.5 dB  Pan: C</text>
+  <rect x="24" y="190" width="32" height="24" rx="4" fill="#161719" stroke="#ff5964"/>
+  <text x="40" y="206" fill="#ff5964" font-family="Segoe UI, sans-serif" font-size="11" font-weight="700" text-anchor="middle">M</text>
+  <rect x="64" y="190" width="32" height="24" rx="4" fill="#161719" stroke="#ffb703"/>
+  <text x="80" y="206" fill="#ffb703" font-family="Segoe UI, sans-serif" font-size="11" font-weight="700" text-anchor="middle">S</text>
+
+  <rect x="12" y="274" width="160" height="150" rx="5" fill="#282b30" stroke="#2f3237"/>
+  <text x="24" y="296" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700">Track 2 — Camada</text>
+  <text x="24" y="324" fill="#a0a4ab" font-family="Consolas, monospace" font-size="11">Vol: -6.0 dB  Pan: L15</text>
+
+  <!-- 4. Track Lanes & Waveform Clip -->
+  <rect x="180" y="114" width="788" height="150" rx="5" fill="#161719" stroke="#2f3237"/>
+  <rect x="220" y="126" width="360" height="126" rx="6" fill="#282b30" stroke="#00f5d4" stroke-width="1.5"/>
+  <!-- Fade In & Out curves -->
+  <path d="M220 252 Q245 140 280 140 L520 140 Q555 140 580 252" fill="rgba(0,245,212,0.08)" stroke="#ffb703" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <!-- Waveform -->
+  <path d="M235 190 L245 170 L255 210 L265 155 L275 225 L285 160 L295 220 L305 150 L315 230 L325 165 L335 215 L345 158 L355 220 L365 172 L375 208 L385 160 L395 220 L405 168 L415 212 L425 155 L435 225 L445 168 L455 210 L465 165 L475 215 L485 175 L495 205 L505 178 L515 202 L525 182 L535 198 L555 190" fill="none" stroke="#00f5d4" stroke-width="2"/>
+  <text x="234" y="146" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600">tema_loop.wav (Fade In: 120ms · Fade Out: 180ms)</text>
+
+  <rect x="180" y="274" width="788" height="150" rx="5" fill="#161719" stroke="#2f3237"/>
+  <rect x="350" y="290" width="210" height="118" rx="6" fill="#282b30" stroke="#b5179e" stroke-width="1.5"/>
+  <text x="364" y="312" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600">Multi-Instrument (Playlist)</text>
+  <text x="364" y="336" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="11">Condição: Intensidade &gt;= 0.5</text>
+
+  <!-- Playhead -->
+  <line x1="395" y1="64" x2="395" y2="440" stroke="#00f5d4" stroke-width="2"/>
+  <polygon points="388,64 402,64 395,76" fill="#00f5d4"/>
+</svg>

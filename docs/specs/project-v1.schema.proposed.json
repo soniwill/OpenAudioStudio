@@ -1,0 +1,2186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OpenAudioEngine project.json v1 — proposta para revisão",
+  "description": "Contrato de autoria aprovado em 2026-11-12. A validação estrutural deve ser complementada pelas regras semânticas do contrato de autoria v1.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[^\\u0000]+$"
+    },
+    "samples": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/sample"
+      }
+    },
+    "buses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/bus"
+      }
+    },
+    "global_parameters": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/parameter"
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/event"
+      }
+    },
+    "effect_automations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/effectAutomation"
+      }
+    },
+    "vcas": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/vca"
+      }
+    },
+    "audio_table": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/audioTableEntry"
+      }
+    },
+    "mixer": {
+      "$ref": "#/$defs/mixer"
+    }
+  },
+  "required": [
+    "version"
+  ],
+  "$defs": {
+    "audioTableEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^\\u0000]+$"
+        },
+        "sample_id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^\\u0000]+$"
+        }
+      },
+      "required": [
+        "key",
+        "sample_id"
+      ]
+    },
+    "eventPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^event:/[^/\\u0000]+(?:/[^/\\u0000]+)*$"
+    },
+    "snapshotPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^snapshot:/[^/\\u0000]+(?:/[^/\\u0000]+)*$"
+    },
+    "busPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^bus:/(?:[^/\\u0000]+(?:/[^/\\u0000]+)*)?$"
+    },
+    "vcaPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^vca:/[^/\\u0000]+(?:/[^/\\u0000]+)*$"
+    },
+    "sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^\\u0000]+$"
+        },
+        "file": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!/|[A-Za-z]:)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\\\\\u0000]+\\.(?:[Ww][Aa][Vv]|[Oo][Gg][Gg]|[Ff][Ll][Aa][Cc]|[Mm][Pp]3)$"
+        },
+        "stream": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "file"
+      ]
+    },
+    "parameter": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "continuous"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^\\u0000]+$"
+            },
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            },
+            "default_value": {
+              "type": "number"
+            },
+            "seek_speed": {
+              "type": "number",
+              "minimum": 0,
+              "default": 0
+            },
+            "seek_speed_down": {
+              "type": "number",
+              "minimum": 0,
+              "default": 0
+            },
+            "velocity": {
+              "type": "number",
+              "default": 0
+            },
+            "hold_during_playback": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "required": [
+            "kind",
+            "name",
+            "min",
+            "max",
+            "default_value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "discrete"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^\\u0000]+$"
+            },
+            "min": {
+              "type": "integer"
+            },
+            "max": {
+              "type": "integer"
+            },
+            "default_value": {
+              "type": "integer"
+            },
+            "seek_speed": {
+              "type": "number",
+              "minimum": 0,
+              "default": 0
+            },
+            "seek_speed_down": {
+              "type": "number",
+              "minimum": 0,
+              "default": 0
+            },
+            "velocity": {
+              "type": "number",
+              "default": 0
+            },
+            "hold_during_playback": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "required": [
+            "kind",
+            "name",
+            "min",
+            "max",
+            "default_value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "labeled"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^\\u0000]+$"
+            },
+            "labels": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[^\\u0000]+$"
+              },
+              "maxItems": 64,
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "default_value": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 63,
+              "default": 0
+            },
+            "seek_speed": {
+              "type": "number",
+              "minimum": 0,
+              "default": 0
+            },
+            "seek_speed_down": {
+              "type": "number",
+              "minimum": 0,
+              "default": 0
+            },
+            "velocity": {
+              "type": "number",
+              "default": 0
+            },
+            "hold_during_playback": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "required": [
+            "kind",
+            "name",
+            "labels"
+          ]
+        }
+      ]
+    },
+    "paramRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "scope": {
+          "enum": [
+            "local",
+            "global"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^\\u0000]+$"
+        }
+      },
+      "required": [
+        "scope",
+        "name"
+      ]
+    },
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "probability_pct": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 100
+        },
+        "terms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "param": {
+                "$ref": "#/$defs/paramRef"
+              },
+              "min": {
+                "type": "number"
+              },
+              "max": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "param",
+              "min",
+              "max"
+            ]
+          },
+          "maxItems": 4
+        }
+      }
+    },
+    "curve": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "points": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              },
+              "shape": {
+                "enum": [
+                  "linear",
+                  "hold",
+                  "ease_in",
+                  "ease_out",
+                  "s_curve"
+                ],
+                "default": "linear"
+              }
+            },
+            "required": [
+              "x",
+              "y"
+            ]
+          },
+          "maxItems": 32,
+          "minItems": 1
+        }
+      },
+      "required": [
+        "points"
+      ]
+    },
+    "automation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "target": {
+              "enum": [
+                "volume",
+                "pitch",
+                "pan"
+              ]
+            },
+            "is_timeline": {
+              "const": true
+            },
+            "curve": {
+              "$ref": "#/$defs/curve"
+            }
+          },
+          "required": [
+            "target",
+            "is_timeline",
+            "curve"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "target": {
+              "enum": [
+                "volume",
+                "pitch",
+                "pan"
+              ]
+            },
+            "is_timeline": {
+              "const": false
+            },
+            "param": {
+              "$ref": "#/$defs/paramRef"
+            },
+            "curve": {
+              "$ref": "#/$defs/curve"
+            }
+          },
+          "required": [
+            "target",
+            "is_timeline",
+            "param",
+            "curve"
+          ]
+        }
+      ]
+    },
+    "modulator": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "random"
+            },
+            "target": {
+              "enum": [
+                "volume",
+                "pitch",
+                "pan"
+              ]
+            },
+            "range": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 80
+            }
+          },
+          "required": [
+            "kind",
+            "target",
+            "range"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "ahdsr"
+            },
+            "attack_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "hold_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "decay_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "sustain": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 1
+            },
+            "release_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "release_on_key_off": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "required": [
+            "kind"
+          ]
+        }
+      ]
+    },
+    "playlistEntry": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "sample_id": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^\\u0000]+$"
+            },
+            "weight": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "default": 1
+            }
+          },
+          "required": [
+            "sample_id"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "target_event": {
+              "$ref": "#/$defs/eventPath"
+            },
+            "weight": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "default": 1
+            }
+          },
+          "required": [
+            "target_event"
+          ]
+        }
+      ]
+    },
+    "instrument": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "single"
+            },
+            "offset_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "length_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "start_offset_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "loop": {
+              "type": "boolean",
+              "default": false
+            },
+            "async": {
+              "type": "boolean",
+              "default": false
+            },
+            "fade_in_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "fade_out_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "volume_db_base": {
+              "type": "number",
+              "minimum": -200,
+              "maximum": 200,
+              "default": 0
+            },
+            "pitch_semitones_base": {
+              "type": "number",
+              "minimum": -200,
+              "maximum": 200,
+              "default": 0
+            },
+            "volume_db_random_range": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 80,
+              "default": 0
+            },
+            "pitch_semitones_random_range": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 48,
+              "default": 0
+            },
+            "condition": {
+              "$ref": "#/$defs/condition"
+            },
+            "modulators": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/modulator"
+              }
+            },
+            "sample_id": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^\\u0000]+$"
+            },
+            "sheet_parameter": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^\\u0000]+$"
+            },
+            "param_min": {
+              "type": "number"
+            },
+            "param_max": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "kind",
+            "sample_id"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "multi"
+            },
+            "offset_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "length_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "start_offset_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "loop": {
+              "type": "boolean",
+              "default": false
+            },
+            "async": {
+              "type": "boolean",
+              "default": false
+            },
+            "fade_in_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "fade_out_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "volume_db_base": {
+              "type": "number",
+              "minimum": -200,
+              "maximum": 200,
+              "default": 0
+            },
+            "pitch_semitones_base": {
+              "type": "number",
+              "minimum": -200,
+              "maximum": 200,
+              "default": 0
+            },
+            "volume_db_random_range": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 80,
+              "default": 0
+            },
+            "pitch_semitones_random_range": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 48,
+              "default": 0
+            },
+            "condition": {
+              "$ref": "#/$defs/condition"
+            },
+            "modulators": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/modulator"
+              }
+            },
+            "delay_ms_random_range": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5000,
+              "default": 0
+            },
+            "playlist_mode": {
+              "enum": [
+                "random",
+                "random_no_repeat",
+                "sequential",
+                "shuffle"
+              ],
+              "default": "random"
+            },
+            "playlist_scope": {
+              "enum": [
+                "global",
+                "instance"
+              ],
+              "default": "global"
+            },
+            "playlist": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/playlistEntry"
+              },
+              "minItems": 1
+            },
+            "sheet_parameter": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^\\u0000]+$"
+            },
+            "param_min": {
+              "type": "number"
+            },
+            "param_max": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "kind",
+            "playlist"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "scatterer"
+            },
+            "offset_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "length_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "start_offset_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "loop": {
+              "type": "boolean",
+              "default": false
+            },
+            "async": {
+              "type": "boolean",
+              "default": false
+            },
+            "fade_in_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "fade_out_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "volume_db_base": {
+              "type": "number",
+              "minimum": -200,
+              "maximum": 200,
+              "default": 0
+            },
+            "pitch_semitones_base": {
+              "type": "number",
+              "minimum": -200,
+              "maximum": 200,
+              "default": 0
+            },
+            "volume_db_random_range": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 80,
+              "default": 0
+            },
+            "pitch_semitones_random_range": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 48,
+              "default": 0
+            },
+            "condition": {
+              "$ref": "#/$defs/condition"
+            },
+            "modulators": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/modulator"
+              }
+            },
+            "delay_ms_random_range": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5000,
+              "default": 0
+            },
+            "playlist_mode": {
+              "enum": [
+                "random",
+                "random_no_repeat",
+                "sequential",
+                "shuffle"
+              ],
+              "default": "random"
+            },
+            "playlist_scope": {
+              "enum": [
+                "global",
+                "instance"
+              ],
+              "default": "global"
+            },
+            "playlist": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/playlistEntry"
+              },
+              "minItems": 1
+            },
+            "spawn_interval_min_ms": {
+              "type": "number",
+              "minimum": 10,
+              "maximum": 600000,
+              "default": 200
+            },
+            "spawn_interval_max_ms": {
+              "type": "number",
+              "minimum": 10,
+              "maximum": 600000,
+              "default": 1000
+            },
+            "polyphony": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 64,
+              "default": 8
+            },
+            "total_sounds": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000,
+              "default": 0
+            },
+            "min_scatter_distance": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000,
+              "default": 0
+            },
+            "max_scatter_distance": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000,
+              "default": 10
+            },
+            "sheet_parameter": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^\\u0000]+$"
+            },
+            "param_min": {
+              "type": "number"
+            },
+            "param_max": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "kind",
+            "playlist"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "event"
+            },
+            "offset_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "length_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "start_offset_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "loop": {
+              "type": "boolean",
+              "default": false
+            },
+            "async": {
+              "type": "boolean",
+              "default": false
+            },
+            "fade_in_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "fade_out_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "volume_db_base": {
+              "type": "number",
+              "minimum": -200,
+              "maximum": 200,
+              "default": 0
+            },
+            "pitch_semitones_base": {
+              "type": "number",
+              "minimum": -200,
+              "maximum": 200,
+              "default": 0
+            },
+            "volume_db_random_range": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 80,
+              "default": 0
+            },
+            "pitch_semitones_random_range": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 48,
+              "default": 0
+            },
+            "condition": {
+              "$ref": "#/$defs/condition"
+            },
+            "modulators": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/modulator"
+              }
+            },
+            "target_event": {
+              "$ref": "#/$defs/eventPath"
+            },
+            "sheet_parameter": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^\\u0000]+$"
+            },
+            "param_min": {
+              "type": "number"
+            },
+            "param_max": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "kind",
+            "target_event"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "command"
+            },
+            "offset_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "condition": {
+              "$ref": "#/$defs/condition"
+            },
+            "command_type": {
+              "enum": [
+                "start_event",
+                "stop_event",
+                "snapshot_on",
+                "snapshot_off"
+              ]
+            },
+            "command_target": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/eventPath"
+                },
+                {
+                  "$ref": "#/$defs/snapshotPath"
+                }
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "command_type",
+            "command_target"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "programmer"
+            },
+            "offset_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "length_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "start_offset_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "loop": {
+              "type": "boolean",
+              "default": false
+            },
+            "async": {
+              "type": "boolean",
+              "default": false
+            },
+            "fade_in_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "fade_out_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "volume_db_base": {
+              "type": "number",
+              "minimum": -200,
+              "maximum": 200,
+              "default": 0
+            },
+            "pitch_semitones_base": {
+              "type": "number",
+              "minimum": -200,
+              "maximum": 200,
+              "default": 0
+            },
+            "volume_db_random_range": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 80,
+              "default": 0
+            },
+            "pitch_semitones_random_range": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 48,
+              "default": 0
+            },
+            "programmer_key": {
+              "type": "string",
+              "pattern": "^[^\\u0000]*$",
+              "default": ""
+            },
+            "condition": {
+              "$ref": "#/$defs/condition"
+            },
+            "modulators": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/modulator"
+              }
+            },
+            "sheet_parameter": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^\\u0000]+$"
+            },
+            "param_min": {
+              "type": "number"
+            },
+            "param_max": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "kind"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "silence"
+            },
+            "offset_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "length_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "condition": {
+              "$ref": "#/$defs/condition"
+            }
+          },
+          "required": [
+            "kind",
+            "length_ms"
+          ]
+        }
+      ]
+    },
+    "track": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "volume_db": {
+          "type": "number",
+          "minimum": -200,
+          "maximum": 200,
+          "default": 0
+        },
+        "pan": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1,
+          "default": 0
+        },
+        "automations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/automation"
+          }
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/effect"
+          },
+          "maxItems": 16
+        },
+        "instruments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/instrument"
+          }
+        }
+      },
+      "required": [
+        "instruments"
+      ]
+    },
+    "logicItem": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "marker"
+            },
+            "position_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^\\u0000]+$"
+            }
+          },
+          "required": [
+            "kind",
+            "name",
+            "position_ms"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "tempo"
+            },
+            "position_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "bpm": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "default": 120
+            },
+            "ts_upper": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 4
+            },
+            "ts_lower": {
+              "enum": [
+                1,
+                2,
+                4,
+                8,
+                16,
+                32,
+                64
+              ],
+              "default": 4
+            }
+          },
+          "required": [
+            "kind"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "loop_region"
+            },
+            "start_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "length_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0,
+              "exclusiveMinimum": 0
+            },
+            "iterations": {
+              "type": "integer",
+              "minimum": -1,
+              "maximum": 2147483647,
+              "default": -1
+            },
+            "until_key_off": {
+              "type": "boolean",
+              "default": false
+            },
+            "condition": {
+              "$ref": "#/$defs/condition"
+            }
+          },
+          "required": [
+            "kind",
+            "start_ms",
+            "length_ms"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "sustain_point"
+            },
+            "position_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            }
+          },
+          "required": [
+            "kind",
+            "position_ms"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "transition_marker"
+            },
+            "position_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "target_marker": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^\\u0000]+$"
+            },
+            "quantization": {
+              "enum": [
+                "immediate",
+                "beat",
+                "bar"
+              ],
+              "default": "immediate"
+            },
+            "crossfade_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "condition": {
+              "$ref": "#/$defs/condition"
+            }
+          },
+          "required": [
+            "kind",
+            "position_ms",
+            "target_marker"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "transition_region"
+            },
+            "start_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "length_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0,
+              "exclusiveMinimum": 0
+            },
+            "target_marker": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^\\u0000]+$"
+            },
+            "quantization": {
+              "enum": [
+                "immediate",
+                "beat",
+                "bar"
+              ],
+              "default": "immediate"
+            },
+            "crossfade_ms": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 86400000,
+              "default": 0
+            },
+            "condition": {
+              "$ref": "#/$defs/condition"
+            }
+          },
+          "required": [
+            "kind",
+            "start_ms",
+            "length_ms",
+            "target_marker"
+          ]
+        }
+      ]
+    },
+    "effect": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "limiter"
+            },
+            "position": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "bypass": {
+              "type": "boolean",
+              "default": false
+            },
+            "params": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 3,
+              "minItems": 3
+            },
+            "wet": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 1
+            },
+            "dry": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            }
+          },
+          "required": [
+            "type",
+            "params"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "compressor"
+            },
+            "position": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "bypass": {
+              "type": "boolean",
+              "default": false
+            },
+            "params": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 5,
+              "minItems": 5
+            },
+            "wet": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 1
+            },
+            "dry": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "sidechain_bus": {
+              "$ref": "#/$defs/busPath"
+            }
+          },
+          "required": [
+            "type",
+            "params"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "eq3"
+            },
+            "position": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "bypass": {
+              "type": "boolean",
+              "default": false
+            },
+            "params": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 5,
+              "minItems": 5
+            },
+            "wet": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 1
+            },
+            "dry": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            }
+          },
+          "required": [
+            "type",
+            "params"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "lowpass"
+            },
+            "position": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "bypass": {
+              "type": "boolean",
+              "default": false
+            },
+            "params": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "wet": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 1
+            },
+            "dry": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            }
+          },
+          "required": [
+            "type",
+            "params"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "highpass"
+            },
+            "position": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "bypass": {
+              "type": "boolean",
+              "default": false
+            },
+            "params": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "wet": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 1
+            },
+            "dry": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            }
+          },
+          "required": [
+            "type",
+            "params"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "reverb"
+            },
+            "position": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "bypass": {
+              "type": "boolean",
+              "default": false
+            },
+            "params": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 3,
+              "minItems": 3
+            },
+            "wet": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 1
+            },
+            "dry": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            }
+          },
+          "required": [
+            "type",
+            "params"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "delay"
+            },
+            "position": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "bypass": {
+              "type": "boolean",
+              "default": false
+            },
+            "params": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "wet": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 1
+            },
+            "dry": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            }
+          },
+          "required": [
+            "type",
+            "params"
+          ]
+        }
+      ]
+    },
+    "bus": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/busPath"
+        },
+        "parent": {
+          "$ref": "#/$defs/busPath",
+          "default": "bus:/"
+        },
+        "volume": {
+          "type": "number",
+          "minimum": 0,
+          "default": 1
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/effect"
+          },
+          "maxItems": 16
+        }
+      },
+      "required": [
+        "path"
+      ]
+    },
+    "snapshotTarget": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "bus_path": {
+              "$ref": "#/$defs/busPath"
+            },
+            "value": {
+              "type": "number",
+              "minimum": -200,
+              "maximum": 200,
+              "default": 0
+            },
+            "param_id": {
+              "const": -1,
+              "default": -1
+            }
+          },
+          "required": [
+            "bus_path",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "bus_path": {
+              "$ref": "#/$defs/busPath"
+            },
+            "value": {
+              "type": "number"
+            },
+            "position": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "effect_index": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295
+            },
+            "effect_type": {
+              "enum": [
+                "limiter",
+                "compressor",
+                "eq3",
+                "lowpass",
+                "highpass",
+                "reverb",
+                "delay"
+              ]
+            },
+            "param_id": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295
+            }
+          },
+          "required": [
+            "bus_path",
+            "value",
+            "param_id",
+            "position",
+            "effect_index",
+            "effect_type"
+          ]
+        }
+      ]
+    },
+    "event": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "event"
+            },
+            "path": {
+              "$ref": "#/$defs/eventPath"
+            },
+            "volume_db": {
+              "type": "number",
+              "minimum": -200,
+              "maximum": 200,
+              "default": 0
+            },
+            "pan": {
+              "type": "number",
+              "minimum": -1,
+              "maximum": 1,
+              "default": 0
+            },
+            "pitch_semitones": {
+              "type": "number",
+              "minimum": -200,
+              "maximum": 200,
+              "default": 0
+            },
+            "max_instances": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295,
+              "default": 64
+            },
+            "steal_mode": {
+              "enum": [
+                "oldest",
+                "quietest",
+                "none"
+              ],
+              "default": "oldest"
+            },
+            "cooldown_ms": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3600000,
+              "default": 0
+            },
+            "stop_fadeout_ms": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3600000,
+              "default": 0
+            },
+            "priority": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 256,
+              "default": 128
+            },
+            "bus_path": {
+              "$ref": "#/$defs/busPath",
+              "default": "bus:/"
+            },
+            "parameters": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/parameter"
+              }
+            },
+            "user_props": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[^\\u0000]+$"
+              },
+              "additionalProperties": {
+                "type": "string",
+                "pattern": "^[^\\u0000]*$"
+              }
+            },
+            "tracks": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/track"
+              }
+            },
+            "logic_items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/logicItem"
+              }
+            },
+            "modulators": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/modulator"
+              }
+            },
+            "automations": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/automation"
+              }
+            }
+          },
+          "required": [
+            "kind",
+            "path"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "snapshot"
+            },
+            "path": {
+              "$ref": "#/$defs/snapshotPath"
+            },
+            "parameters": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/parameter"
+              }
+            },
+            "priority": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 256,
+              "default": 128
+            },
+            "stop_fadeout_ms": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3600000,
+              "default": 0
+            },
+            "snapshot_mode": {
+              "enum": [
+                "override",
+                "blending"
+              ],
+              "default": "override"
+            },
+            "fade_in_ms": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3600000,
+              "default": 0
+            },
+            "intensity_param": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^\\u0000]+$"
+            },
+            "snapshot_targets": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/snapshotTarget"
+              },
+              "minItems": 1
+            },
+            "user_props": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[^\\u0000]+$"
+              },
+              "additionalProperties": {
+                "type": "string",
+                "pattern": "^[^\\u0000]*$"
+              }
+            }
+          },
+          "required": [
+            "kind",
+            "path",
+            "snapshot_targets"
+          ]
+        }
+      ]
+    },
+    "effectAutomation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "bus_path": {
+          "$ref": "#/$defs/busPath"
+        },
+        "position": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0
+        },
+        "effect_index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "effect_type": {
+          "enum": [
+            "limiter",
+            "compressor",
+            "eq3",
+            "lowpass",
+            "highpass",
+            "reverb",
+            "delay"
+          ]
+        },
+        "param_id": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "param": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scope": {
+              "const": "global"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^\\u0000]+$"
+            }
+          },
+          "required": [
+            "scope",
+            "name"
+          ]
+        },
+        "curve": {
+          "$ref": "#/$defs/curve"
+        }
+      },
+      "required": [
+        "bus_path",
+        "position",
+        "effect_index",
+        "effect_type",
+        "param_id",
+        "param",
+        "curve"
+      ]
+    },
+    "vca": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/vcaPath"
+        },
+        "buses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/busPath"
+          },
+          "uniqueItems": true
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/eventPath"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "path"
+      ]
+    },
+    "mixer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "master": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "volume": {
+              "type": "number",
+              "minimum": 0,
+              "default": 1
+            },
+            "mute": {
+              "type": "boolean",
+              "default": false
+            },
+            "effects": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/effect"
+              },
+              "maxItems": 16
+            }
+          }
+        }
+      }
+    }
+  }
+}

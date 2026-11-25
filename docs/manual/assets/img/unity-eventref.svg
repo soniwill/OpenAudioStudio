@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 510" width="450" height="510">
+  <rect width="450" height="510" fill="#383838" rx="3"/>
+  <rect x="0" y="0" width="450" height="26" fill="#3e3e3e"/>
+  <line x1="0" y1="26" x2="450" y2="26" stroke="#262626" stroke-width="1"/>
+  <polygon points="8,10 15,10 11.5,16" fill="#bdbdbd"/>
+  <rect x="20" y="6" width="14" height="14" rx="2" fill="#4f4f4f" stroke="#777" stroke-width="1"/>
+  <text x="27" y="17" fill="#c8c8c8" font-family="Consolas, monospace" font-size="10" text-anchor="middle">#</text>
+  <rect x="39" y="6" width="14" height="14" rx="2" fill="#2c2c2c" stroke="#5a5a5a" stroke-width="1"/>
+  <path d="M42,13 L45,16 L50,10" fill="none" stroke="#d4d4d4" stroke-width="1.6"/>
+  <text x="60" y="17" fill="#e2e2e2" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600">OpenAudio Audio Playground Controller</text>
+  <circle cx="404" cy="13" r="6" fill="none" stroke="#9e9e9e" stroke-width="1.2"/>
+  <text x="404" y="16.5" fill="#9e9e9e" font-family="Segoe UI, sans-serif" font-size="9" text-anchor="middle">?</text>
+  <circle cx="436" cy="9" r="1.3" fill="#9e9e9e"/>
+  <circle cx="436" cy="13" r="1.3" fill="#9e9e9e"/>
+  <circle cx="436" cy="17" r="1.3" fill="#9e9e9e"/>
+
+  <text x="14" y="44" fill="#bdbdbd" font-family="Segoe UI, sans-serif" font-size="11.5">Script</text>
+  <rect x="184" y="31" width="254" height="18" rx="2" fill="#2e2e2e" stroke="#222222"/>
+  <text x="204" y="44" fill="#a8a8a8" font-family="Segoe UI, sans-serif" font-size="11">AudioPlaygroundController</text>
+  <circle cx="428" cy="40" r="4.5" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+  <circle cx="428" cy="40" r="1.5" fill="#8a8a8a"/>
+
+  <text x="14" y="67" fill="#e0e0e0" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700">Event Paths</text>
+
+  <g font-family="Segoe UI, sans-serif" font-size="11">
+    <text x="14" y="89" fill="#cfcfcf">Footstep Event Path</text>
+    <rect x="184" y="76" width="188" height="18" rx="2" fill="#282828" stroke="#1d1d1d"/>
+    <text x="190" y="89" fill="#dcdcdc">event:/playground/footstep</text>
+    <rect x="377" y="76" width="63" height="18" rx="2" fill="#525252" stroke="#2c2c2c"/>
+    <text x="408.5" y="89" fill="#e6e6e6" text-anchor="middle">Browse...</text>
+
+    <text x="14" y="113" fill="#cfcfcf">Emitter 3D Event Path</text>
+    <rect x="184" y="100" width="188" height="18" rx="2" fill="#282828" stroke="#1d1d1d"/>
+    <text x="190" y="113" fill="#dcdcdc">event:/playground/emitter_3d</text>
+    <rect x="377" y="100" width="63" height="18" rx="2" fill="#525252" stroke="#2c2c2c"/>
+    <text x="408.5" y="113" fill="#e6e6e6" text-anchor="middle">Browse...</text>
+
+    <text x="14" y="137" fill="#cfcfcf">Adaptive Music Event Path</text>
+    <rect x="184" y="124" width="188" height="18" rx="2" fill="#282828" stroke="#1d1d1d"/>
+    <text x="190" y="137" fill="#dcdcdc">event:/playground/adaptive_music</text>
+    <rect x="377" y="124" width="63" height="18" rx="2" fill="#525252" stroke="#2c2c2c"/>
+    <text x="408.5" y="137" fill="#e6e6e6" text-anchor="middle">Browse...</text>
+
+    <text x="14" y="161" fill="#cfcfcf">Forest Scatterer Event Path</text>
+    <rect x="184" y="148" width="188" height="18" rx="2" fill="#282828" stroke="#1d1d1d"/>
+    <text x="190" y="161" fill="#dcdcdc">event:/playground/forest_scatterer</text>
+    <rect x="377" y="148" width="63" height="18" rx="2" fill="#525252" stroke="#2c2c2c"/>
+    <text x="408.5" y="161" fill="#e6e6e6" text-anchor="middle">Browse...</text>
+
+    <text x="14" y="185" fill="#cfcfcf">Dialogue VO Event Path</text>
+    <rect x="184" y="172" width="188" height="18" rx="2" fill="#282828" stroke="#1d1d1d"/>
+    <text x="190" y="185" fill="#dcdcdc">event:/playground/dialogue_vo</text>
+    <rect x="377" y="172" width="63" height="18" rx="2" fill="#525252" stroke="#2c2c2c"/>
+    <text x="408.5" y="185" fill="#e6e6e6" text-anchor="middle">Browse...</text>
+
+    <text x="14" y="209" fill="#cfcfcf">Ui Click Event Path</text>
+    <rect x="184" y="196" width="188" height="18" rx="2" fill="#282828" stroke="#1d1d1d"/>
+    <text x="190" y="209" fill="#dcdcdc">event:/playground/ui_click</text>
+    <rect x="377" y="196" width="63" height="18" rx="2" fill="#525252" stroke="#2c2c2c"/>
+    <text x="408.5" y="209" fill="#e6e6e6" text-anchor="middle">Browse...</text>
+
+    <text x="14" y="233" fill="#cfcfcf">Coin Event Path</text>
+    <rect x="184" y="220" width="188" height="18" rx="2" fill="#282828" stroke="#1d1d1d"/>
+    <text x="190" y="233" fill="#dcdcdc">event:/sfx/coin</text>
+    <rect x="377" y="220" width="63" height="18" rx="2" fill="#525252" stroke="#2c2c2c"/>
+    <text x="408.5" y="233" fill="#e6e6e6" text-anchor="middle">Browse...</text>
+
+    <text x="14" y="257" fill="#cfcfcf">Theme Event Path</text>
+    <rect x="184" y="244" width="188" height="18" rx="2" fill="#282828" stroke="#1d1d1d"/>
+    <text x="190" y="257" fill="#dcdcdc">event:/music/theme</text>
+    <rect x="377" y="244" width="63" height="18" rx="2" fill="#525252" stroke="#2c2c2c"/>
+    <text x="408.5" y="257" fill="#e6e6e6" text-anchor="middle">Browse...</text>
+  </g>
+
+  <text x="14" y="294" fill="#e0e0e0" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700">Snapshots &amp; VCAs</text>
+
+  <g font-family="Segoe UI, sans-serif" font-size="11">
+    <text x="14" y="317" fill="#cfcfcf">Cave Reverb Snapshot</text>
+    <rect x="184" y="304" width="188" height="18" rx="2" fill="#282828" stroke="#1d1d1d"/>
+    <text x="190" y="317" fill="#dcdcdc">snapshot:/playground/cave_reverb</text>
+    <rect x="377" y="304" width="63" height="18" rx="2" fill="#525252" stroke="#2c2c2c"/>
+    <text x="408.5" y="317" fill="#e6e6e6" text-anchor="middle">Browse...</text>
+
+    <text x="14" y="341" fill="#cfcfcf">VO Ducking Snapshot</text>
+    <rect x="184" y="328" width="188" height="18" rx="2" fill="#282828" stroke="#1d1d1d"/>
+    <text x="190" y="341" fill="#dcdcdc">snapshot:/playground/vo_ducking</text>
+    <rect x="377" y="328" width="63" height="18" rx="2" fill="#525252" stroke="#2c2c2c"/>
+    <text x="408.5" y="341" fill="#e6e6e6" text-anchor="middle">Browse...</text>
+
+    <text x="14" y="365" fill="#cfcfcf">Master Vca Path</text>
+    <rect x="184" y="352" width="256" height="18" rx="2" fill="#282828" stroke="#1d1d1d"/>
+    <text x="190" y="365" fill="#dcdcdc">vca:/playground_master</text>
+
+    <text x="14" y="389" fill="#cfcfcf">Music Vca Path</text>
+    <rect x="184" y="376" width="256" height="18" rx="2" fill="#282828" stroke="#1d1d1d"/>
+    <text x="190" y="389" fill="#dcdcdc">vca:/playground_music</text>
+
+    <text x="14" y="413" fill="#cfcfcf">Sfx Vca Path</text>
+    <rect x="184" y="400" width="256" height="18" rx="2" fill="#282828" stroke="#1d1d1d"/>
+    <text x="190" y="413" fill="#dcdcdc">vca:/playground_sfx</text>
+
+    <text x="14" y="437" fill="#cfcfcf">VO Bank File Name</text>
+    <rect x="184" y="424" width="256" height="18" rx="2" fill="#282828" stroke="#1d1d1d"/>
+    <text x="190" y="437" fill="#dcdcdc">playground_vo.bank</text>
+  </g>
+
+  <text x="14" y="468" fill="#e0e0e0" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700">Demo Settings</text>
+  <text x="14" y="491" fill="#cfcfcf" font-family="Segoe UI, sans-serif" font-size="11">Auto Build Procedural Room</text>
+  <rect x="184" y="479" width="14" height="14" rx="2" fill="#464646" stroke="#2c2c2c"/>
+  <path d="M187,486 L190,489 L195,483" fill="none" stroke="#e2e2e2" stroke-width="1.6"/>
+</svg>

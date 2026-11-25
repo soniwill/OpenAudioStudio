@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barramentos, VCAs e snapshots | OpenAudio Studio</title>
+  <link rel="stylesheet" href="../assets/css/manual.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="manual-sidebar"></aside>
+
+    <main class="main-content">
+      <div class="breadcrumbs"><a href="../index.html">Manual</a> › Fundamentos de mixagem</div>
+      <h1>Barramentos, VCAs e snapshots</h1>
+      <p class="lead">Siga o caminho que o som percorre. Depois, experimente o fader de um canal, o controle de um grupo e uma alteração temporária da mixagem. Use uma cópia de <code>example_project</code>.</p>
+      <nav aria-label="Nesta página"><ul><li><a href="#barramento">Barramento e caminho do sinal</a></li><li><a href="#vca">VCA e multiplicação de ganho</a></li><li><a href="#snapshot">Snapshot e estados da mixagem</a></li><li><a href="#diagnostico">Qual controle escolher?</a></li></ul></nav>
+
+      <div class="purpose-box box">
+        <div class="box-title">Mergulho Teórico na Topologia de Mixagem</div>
+        <p>
+          Para uma explicação exaustiva sobre o Signal Flow completo, a matemática de buffers de barramento e a diferença arquitetural entre Buses e VCAs, consulte a página dedicada de <a href="fundamentos-mixagem-buses-vcas-snapshots.html">Fundamentos: Buses, VCAs e Snapshots</a>.
+        </p>
+      </div>
+
+      <h2 id="barramento">O que é um barramento de áudio?</h2>
+      <p>Um <strong>barramento</strong>, ou <em>bus</em>, é um ponto onde sinais de áudio se juntam. Imagine que uma moeda e um passo soem ao mesmo tempo. Cada evento produz sua sequência de amostras. Quando ambos saem pelo mesmo barramento, o motor soma os sinais. O fader altera a amplitude da mistura, e um efeito inserido no barramento recebe o sinal combinado. É assim que um único controle consegue abaixar todos os efeitos sonoros de uma categoria.</p>
+      <p>A faixa organiza clipes dentro de um evento. No Inspetor, <strong>Bus Route</strong> escolhe o destino do som desse evento. O campo <strong>Parent</strong> de um barramento define para onde ele encaminha sua saída. O Master, <code>bus:/</code>, é o ponto final da árvore. A parte <code>ui</code> no caminho <code>event:/ui/moeda</code> organiza a árvore de eventos. Para rotear o som para UI, selecione o barramento correspondente em <strong>Bus Route</strong>.</p>
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/foundations-mixer-deck.png" alt="Mixer Deck com Master, barramentos sfx e music e faders de mixagem">
+        </div>
+        <figcaption class="callout-caption">Console de mixagem no Bottom Deck: channel strips com faders em dB, medidores balísticos Peak/RMS e roteamento hierárquico até o barramento Master.</figcaption>
+        <ul class="callout-legend">
+          <li><div><strong>Master (<code>bus:/</code>):</strong> Recebe a soma final e encaminha o sinal para a saída de áudio do sistema.</div></li>
+          <li><div><strong>Barramentos de Categoria (<code>sfx</code>, <code>music</code>):</strong> Agrupam eventos afins para controle conjunto de ganho e processamento de DSPs.</div></li>
+          <li><div><strong>VCAs:</strong> Multiplicam os ganhos nominais de seus membros sem receber o sinal de áudio nem consumir nós de mixagem.</div></li>
+          <li><div><strong>Snapshots:</strong> Substituem ou modulam estados da mixagem (ex.: atenuação de música no menu de pausa).</div></li>
+        </ul>
+      </figure>
+      <table>
+        <thead><tr><th>Origem</th><th>Primeiro destino</th><th>Destino seguinte</th></tr></thead>
+        <tbody><tr><td><code>event:/sfx/coin</code></td><td><code>bus:/sfx</code></td><td><code>bus:/</code></td></tr>
+        <tr><td><code>event:/music/theme</code></td><td><code>bus:/music</code></td><td><code>bus:/</code></td></tr>
+        <tr><td>Saída de sfx e music</td><td><code>bus:/</code></td><td>Saída do motor</td></tr></tbody>
+      </table>
+
+      <h3>Exercício para seguir a moeda até o Master</h3>
+      <ol>
+        <li>Abra a cópia de <code>example_project/project.json</code>, selecione a moeda e confira <strong>Bus Route</strong> em <code>bus:/sfx</code>. Abra <strong>Mixer Deck</strong>. Ative <strong>Loop</strong> para repetir a audição e dê <strong>Play</strong>. Observe sfx e Master a cada disparo.</li>
+        <li>Abaixe o fader de <strong>sfx</strong> de <code>0 dB</code> para <code>-6 dB</code>. A amplitude do sinal nesse estágio cai para aproximadamente a metade. Restaure o fader e faça a mesma mudança em <strong>music</strong>. A moeda continua no caminho de sfx. Restaure music.</li>
+        <li>Teste <strong>M</strong> em sfx para silenciar e clique de novo para voltar. <strong>S</strong> ativa Solo para isolar um barramento durante a audição. Com uma fonte em reprodução, procure atividade em seu barramento e no Master.</li>
+        <li>Pare. Use <strong>+ → New Bus</strong>, renomeie <code>bus:/new_bus</code> para <code>bus:/ui</code> e confira <strong>Parent</strong> em <code>bus:/</code>. No evento da moeda, troque <strong>Bus Route</strong> para <code>bus:/ui</code>. Toque e veja a atividade passar de sfx para ui. Devolva a moeda a <code>bus:/sfx</code> ao terminar.</li>
+      </ol>
+      <p>Use o fader do Mixer Deck para comparar níveis em audição. Para gravar o ganho de autoria do barramento, selecione-o na árvore e edite <strong>Volume</strong> no Inspetor antes de salvar e publicar. Confira esse valor ao reabrir e depois no jogo.</p>
+
+      <h2 id="vca">O que é um VCA?</h2>
+      <p><strong>VCA</strong> vem de <em>Voltage-Controlled Amplifier</em>, amplificador controlado por tensão. Em mesas analógicas, um controle comum pode enviar uma tensão de controle a vários amplificadores de canal. O áudio de cada canal segue sua própria rota. No OpenAudio, o equivalente digital é um multiplicador de ganho aplicado aos barramentos membros. O VCA conserva o valor do fader individual e as rotas de cada canal.</p>
+      <p>Use um VCA para ajustar categorias que precisam reagir juntas. O controle <strong>Volume do jogo</strong> pode reduzir música e efeitos ao mesmo tempo, preservando o equilíbrio definido nos faders. Para aplicar um compressor à soma de vários sinais, encaminhe-os a um barramento comum e insira o efeito nesse barramento.</p>
+      <table>
+        <thead><tr><th>Fader de sfx</th><th>VCA</th><th>Ganho efetivo nesta etapa</th></tr></thead>
+        <tbody><tr><td><code>0,8</code></td><td><code>1,0</code></td><td><code>0,8</code></td></tr>
+        <tr><td><code>0,8</code></td><td><code>0,5</code></td><td><code>0,8 × 0,5 = 0,4</code></td></tr>
+        <tr><td><code>0,8</code></td><td>Dois VCAs de <code>0,5</code></td><td><code>0,8 × 0,5 × 0,5 = 0,2</code></td></tr></tbody>
+      </table>
+      <p>Os números da tabela são ganhos lineares. Um fator <code>0,5</code> equivale a aproximadamente <code>-6 dB</code>. Dois fatores desses somam aproximadamente <code>-12 dB</code>. Se um VCA se aplicar ao barramento filho e ao pai, o mesmo sinal poderá receber atenuação nos dois estágios. Use um único estágio por rota quando quiser uma única redução.</p>
+
+      <h3>Teste o grupo que já existe</h3>
+      <ol><li>Toque a moeda em Loop. Deixe sfx e Master em <code>0 dB</code>.</li>
+        <li>Baixe apenas <strong>game_audio</strong> para <code>-6 dB</code>. Observe o medidor de sfx. O sinal fica mais baixo e o fader de sfx permanece em <code>0 dB</code>.</li>
+        <li>Selecione <code>event:/music/theme</code> e repita a comparação. Music também é membro de <code>vca:/game_audio</code>. Restaure <code>0 dB</code> e desligue Loop.</li>
+        <li>Na Unity, use <a href="10-unity-api-csharp-e-live.html#mix">o exercício do menu de volume</a> para controlar o grupo pela API.</li></ol>
+
+      <h3>Crie um grupo e indique seus membros</h3>
+      <p>Na árvore, escolha <strong>+ → New VCA</strong> e use <kbd>F2</kbd> para mudar o caminho. Um VCA novo começa com listas vazias. Neste build, o Inspetor mostra o caminho e a associação é feita no JSON. Salve e feche o Studio. Edite a entrada correspondente na lista <code>vcas</code> e use <code>buses</code> para indicar os barramentos que receberão o ganho. O exemplo abaixo usa barramentos presentes em um projeto novo. Preserve outras entradas da lista, reabra, publique e teste.</p>
+      <pre><code>"vcas": [
+  {
+    "path": "vca:/game_audio",
+    "buses": ["bus:/sfx", "bus:/music"],
+    "events": []
+  }
+]</code></pre>
+
+      <h2 id="snapshot">O que é um snapshot de mixagem?</h2>
+      <p>Um snapshot reúne mudanças temporárias de mixagem. Ao entrar na pausa, você pode baixar a música e ajustar um efeito. Ao sair, o motor volta a compor o nível com os demais ajustes ativos. Cada alvo escolhe um barramento e uma propriedade. No exemplo <code>snapshot:/pause_menu</code>, o alvo é o ganho de <code>bus:/music</code>, o delta é <code>-6 dB</code> e a entrada dura <code>100 ms</code>. No JSON, um alvo com <code>param_id</code> igual a <code>-1</code> corresponde a ganho.</p>
+      <ol><li>Toque <code>event:/music/theme</code>. Ative <strong>pause_menu</strong> na linha <strong>Snapshots</strong> do Mixer Deck. Observe a redução do nível da música. Desative para restaurar.</li>
+        <li>Selecione o snapshot na árvore e compare <strong>Fade In</strong> em <code>100 ms</code> e <code>500 ms</code>. Comece com o snapshot inativo em cada tentativa. O segundo ajuste leva mais tempo para atingir o alvo.</li>
+        <li>Ao usar vários snapshots sobre a mesma propriedade, o modo <strong>override</strong> usa a prioridade para resolver o alvo e <strong>blending</strong> compõe as contribuições previstas na autoria. Compare os modos depois de testar um único snapshot.</li></ol>
+
+      <h2 id="diagnostico">Qual controle escolher?</h2>
+      <table>
+        <thead><tr><th>Situação</th><th>Controle</th><th>Como confirmar</th></tr></thead>
+        <tbody>
+          <tr><td>Só a moeda está alta.</td><td>Volume do evento ou da faixa.</td><td>Compare com outro som que sai por sfx.</td></tr>
+          <tr><td>Todos os sons de interface precisam soar mais suaves.</td><td>Barramento de UI com fader ou efeito próprio.</td><td>Confira os eventos roteados para UI.</td></tr>
+          <tr><td>Um ajuste do jogador precisa reduzir várias categorias juntas.</td><td>VCA com os barramentos necessários.</td><td>Confira os faders membros antes e depois.</td></tr>
+          <tr><td>A música precisa recuar enquanto o menu de pausa está aberto.</td><td>Snapshot ligado à abertura e ao fechamento do menu.</td><td>Compare antes, durante e depois da pausa.</td></tr>
+          <tr><td>O Master se aproxima do limite só quando os sons se somam.</td><td>Reduza os ganhos de origem e preserve margem no Master.</td><td>Compare o pico com os eventos tocando juntos. Dois sinais iguais e alinhados podem elevar a soma em cerca de 6 dB.</td></tr>
+        </tbody>
+      </table>
+      <h2>Termos de mixagem</h2>
+      <dl><dt>Fader</dt><dd>Controle de ganho. Em 0 dB, aplica ganho unitário naquele estágio.</dd><dt>Roteamento</dt><dd>Caminho que o áudio percorre até a saída.</dd><dt>Ganho efetivo</dt><dd>Resultado combinado dos ganhos do caminho. Multiplique ganhos lineares ou some os valores em dB.</dd><dt>Headroom</dt><dd>Margem entre os picos e o limite digital. Dá espaço para fontes simultâneas e ataques fortes.</dd><dt>Insert</dt><dd>Efeito no caminho do canal. Para processamento paralelo, veja <a href="13-unity-timeline-e-bancos.html#routing">envios e retornos</a>.</dd></dl>
+      <div class="chapter-footer"><a href="00-conceitos-basicos.html">← Fundamentos</a><a href="07-deck-inferior-mixer-efeitos.html">Controles do Mixer Deck →</a></div>
+    </main>
+  </div>
+  <script src="../assets/js/manual.js"></script>
+</body>
+</html>

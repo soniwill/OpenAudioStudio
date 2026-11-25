@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 10 — API C# e Live-Linking | OpenAudio Studio</title>
+  <link rel="stylesheet" href="../assets/css/manual.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="manual-sidebar"></aside>
+
+    <main class="main-content">
+      <div class="breadcrumbs"><a href="../index.html">Manual</a> › Cap. 10 — API C# e Live-Linking</div>
+      <h1>API C# e edição ao vivo na Unity</h1>
+      <p class="lead">Dispare sons a partir de regras do jogo, mantenha eventos longos sob controle e ajuste a mixagem durante o Play Mode.</p>
+      <h2 id="api">Um som curto a partir de um botão</h2>
+      <p>Use a cena do capítulo 9, configure o emissor em <strong>Manual</strong> para o teste ou use apenas o gerenciador e o carregador. Salve <code>AudioDoJogo.cs</code>, adicione-o a um GameObject e vincule <code>TocarMoeda</code> ao <strong>On Click</strong> de um botão da Unity. Cada clique toca uma moeda. As chamadas usam o namespace <code>OpenAudio</code>.</p>
+      <pre><code>using OpenAudio;
+using UnityEngine;
+
+public class AudioDoJogo : MonoBehaviour
+{
+    [EventRef] public string evento = &quot;event:/sfx/coin&quot;;
+
+    public void TocarMoeda()
+    {
+        var sistema = OaeAudioManager.Instance?.System;
+        if (sistema == null || !sistema.IsValid) return;
+
+        try
+        {
+            sistema.PlayOneShot(evento);
+        }
+        catch (OaeException erro)
+        {
+            Debug.LogWarning(erro.Message, this);
+        }
+    }
+}</code></pre>
+      <h2 id="instance">Controle de uma instância</h2>
+      <p><code>GetEvent</code> busca a descrição. <code>CreateInstance()</code> cria uma reprodução individual. Guarde a instância enquanto precisar mudar volume, pitch, pan, posição na timeline ou parâmetros. Pare e libere ao terminar. Use <code>KeyOff()</code> quando a autoria prevê sustentação. <code>Stop()</code> pede encerramento. Parâmetros locais usam <code>SetParameter</code> ou <code>SetParameterWithLabel</code>. Parâmetros globais usam <code>SetGlobalParameter</code> ou <code>SetGlobalParameterWithLabel</code>.</p>
+      <pre><code>var tema = sistema.GetEvent(&quot;event:/music/theme&quot;).CreateInstance();
+tema.OnTimelineBeat += batida =&gt; Debug.Log($&quot;{batida.bar}.{batida.beat}&quot;);
+tema.OnTimelineMarker += marcador =&gt; Debug.Log(marcador.Name);
+tema.Start();
+
+// Ao encerrar a reprodução, antes de descarregar o banco:
+tema.Stop(OaeStopMode.Immediate);
+tema.Dispose();</code></pre>
+      <p>No jogo, execute o encerramento em uma ação posterior, por exemplo na troca de fase. As notificações de batida e marcador dependem de itens de tempo e marcadores no evento publicado. A moeda e o tema básicos servem para testar a reprodução. Para verificar os callbacks, use um evento com os itens correspondentes. O gerenciador chama <code>Update()</code>, que despacha notificações, incluindo início, parada, roubo de instância e sons iniciados ou encerrados.</p>
+      <h2 id="mix">Volume do jogo, pausa e medição</h2>
+      <pre><code>sistema.GetBus(&quot;bus:/music&quot;).Volume = 0.5f;
+sistema.GetVca(&quot;vca:/game_audio&quot;).Volume = 0.8f;
+sistema.GetBus(&quot;bus:/sfx&quot;).Paused = true;
+sistema.GetBus(&quot;bus:/sfx&quot;).Paused = false;</code></pre>
+      <p>O ganho da API é linear. <code>0.5</code> corresponde a aproximadamente <code>-6 dB</code>. Um barramento recebe áudio e pode aplicar efeitos. Um VCA coordena o ganho dos membros que recebeu na autoria. O controle <code>FadeTo</code> faz uma mudança gradual, <code>GetMeter</code> lê pico e RMS e <code>GetChannelsPlaying</code> mostra a contagem de vozes. Para aplicar um snapshot, obtenha a descrição pelo caminho <code>snapshot:/pause_menu</code>, crie uma instância, inicie e encerre ao sair da pausa.</p>
+      <h3 id="menu-volume">Ligue o VCA ao menu de opções</h3>
+      <p>Use o banco de <code>ExampleGameProject</code>, que declara <code>vca:/game_audio</code> com música e efeitos. Em uma cena com Manager e Loader, salve o código abaixo em <code>VolumeDoJogo.cs</code> e adicione-o a um GameObject. No Slider da UI, defina a faixa de <code>0</code> a <code>1</code> e ligue <strong>On Value Changed</strong> a <strong>Ajustar(float)</strong> na opção de valor dinâmico.</p>
+      <pre><code>using OpenAudio;
+using UnityEngine;
+
+public class VolumeDoJogo : MonoBehaviour
+{
+    public void Ajustar(float valor)
+    {
+        var sistema = OaeAudioManager.Instance?.System;
+        if (sistema == null || !sistema.IsValid) return;
+
+        try
+        {
+            sistema.GetVca(&quot;vca:/game_audio&quot;).Volume = Mathf.Clamp01(valor);
+        }
+        catch (OaeException erro)
+        {
+            Debug.LogWarning(erro.Message, this);
+        }
+    }
+}</code></pre>
+      <p>Com música tocando, mova de <code>1</code> para <code>0,5</code>. Dispare também a moeda. Ambos recebem o fator. Em seguida, compare com um ajuste apenas em <code>bus:/music</code>. O capítulo <a href="14-barramentos-vcas-snapshots.html#vca">Barramentos, VCAs e snapshots</a> explica a diferença. Se o caminho do VCA não for encontrado, confira a publicação e a lista de membros.</p>
+
+      <h2 id="live">Live-Linking</h2>
+      <figure class="callout-figure"><div class="callout-stage"><img src="../assets/img/live-linking-sessions.svg" alt="Diagrama de arquitetura da sessão de Live-Linking entre Studio e Unity"></div><figcaption class="callout-caption">Fluxo de conexão e desconexão bidirecional: o handshake valida o protocolo e o CRC-32 do banco, sincroniza parâmetros e reverte com segurança ao motor local ao sair do Play Mode.</figcaption></figure>
+
+      <figure class="callout-figure manual-photo"><div class="callout-stage"><img src="../assets/img/unity-manager.png" alt="Inspector do Audio Manager no Unity"><span class="manual-highlight" aria-hidden="true" style="left:1%;top:73%;width:98%;height:26%"></span></div><figcaption class="callout-caption">Na Unity, ative <strong>Enable Live Linking</strong> no OaeAudioManager. O destaque indica o endereço <code>127.0.0.1</code> e a porta TCP <code>7450</code>.</figcaption></figure>
+
+      <figure class="callout-figure"><div class="callout-stage"><img src="../assets/img/deck-tab6-diagnostics.png" alt="Aba Diagnostics e log do OpenAudio Studio"></div><figcaption class="callout-caption">No Studio, abra Diagnostics &amp; Log para acompanhar as mensagens de telemetria e conexões iniciadas por [Live].</figcaption></figure>
+
+      <div class="callout-box">
+        <h3>Evidência visual de conexão e desconexão no transporte</h3>
+        <p>A barra de transporte do OpenAudio Studio altera dinamicamente seu rótulo de telemetria ao negociar o handshake e ao encerrar a sessão:</p>
+        <div style="display:flex; flex-direction:column; gap:12px; margin-top:10px;">
+          <div>
+            <p><strong>1. Conectado (Play Mode ativo na Unity):</strong> O status exibe o cliente identificado em verde/ciano brilhante (<code>Live: Unity Connected</code>):</p>
+            <img src="../assets/img/live-transport-connected.png" alt="Barra de transporte do Studio com status Live: Unity Connected" style="max-width:100%; border:1px solid #333; border-radius:4px;">
+          </div>
+          <div>
+            <p><strong>2. Desconectado (Saída do Play Mode):</strong> Ao fechar o socket, o status reverte imediatamente para <code>Live: Offline (Local Engine)</code>:</p>
+            <img src="../assets/img/live-transport-disconnected.png" alt="Barra de transporte do Studio com status Live: Offline (Local Engine)" style="max-width:100%; border:1px solid #333; border-radius:4px;">
+          </div>
+        </div>
+      </div>
+
+      <ol>
+<li>Publique o banco no Studio e copie o <code>.bank</code> e seu catálogo para <code>StreamingAssets</code>. Carregue o banco antes do primeiro disparo. No Audio Manager, ative <strong>Enable Live Linking</strong>, use <code>127.0.0.1</code> e a porta <code>7450</code>. Deixe <strong>Pause On Focus Loss</strong> desmarcado para que o Studio continue visível durante o teste.</li>
+<li>Abra <strong>Diagnostics &amp; Log</strong> no Studio. Ao iniciar, o bridge registra <code>[Live] Live-Linking TCP bridge listening on 127.0.0.1:7450</code> (ou porta indisponível caso outra instância já esteja em execução). Entre em Play Mode e procure a confirmação <code>[Live] Connected to Unity (bank_crc32=..., match=OK).</code>. Se os CRCs diferirem, o Studio registra o aviso <code>[Live] WARNING: Connected to Unity with bank_crc32 mismatch...</code>; publique de novo e copie o mesmo banco para a Unity.</li>
+<li>Com um evento tocando, altere no Studio o fader, pan ou mute de seu barramento. Use <strong>Play</strong>, <strong>Stop</strong> ou <strong>Key Off</strong> no transporte para comparar o controle remoto com a prévia do Studio. Ao publicar com <strong>Build Bank</strong>, o log registra <code>[Build] Starting bank compilation...</code> e, ao concluir, <code>[Build] Bank compiled successfully!</code>; em caso de erro, exibe <code>[Build Error] Exit code: &lt;código&gt;</code> acompanhado do detalhamento do compilador.</li>
+<li>Saia do Play Mode para desconectar. O encerramento de <code>OaeAudioManager</code> (em <code>ShutdownEngine()</code>) fecha o socket TCP ordenadamente. O log do Studio informa <code>[Live] Client disconnected; reverted to local StudioEngine.</code> e a barra de transporte atualiza o status para <code>Live: Offline (Local Engine)</code>, retornando à prévia local sem travar o áudio em reprodução. Salve e republique para levar as alterações ao banco do jogo.</li>
+</ol>
+      <p>Para testar a identidade do banco no handshake, passe o CRC da publicação do jogo ao chamar <code>EnableLiveLinking(host, port, bankCrc32)</code>. A conexão automática usa <code>0</code> como CRC desconhecido. O status de conexão, nesse caso, confirma que o cliente respondeu.</p>
+      <p>O Studio não oferece um profiler de vozes dedicado nesta versão (recurso planejado para etapa futura). A contagem de vozes reais e virtuais em tempo de execução fica no <a href="09-unity-componentes-inspector.html#overlay">Diagnostics Overlay da Unity</a> (<kbd>F9</kbd>), no formato <code>Voices: X Real / Y Virtual (Total Z)</code>; o painel Diagnostics &amp; Log do Studio concentra as mensagens operacionais e a telemetria da conexão.</p>
+      <h2>Termos da API</h2>
+      <dl><dt>Instância</dt><dd>Execução individual de um evento, com estado próprio.</dd><dt>One-shot</dt><dd>Disparo curto que segue até o fim sem controle posterior por quem o chamou.</dd><dt>Callback</dt><dd>Função que o motor chama quando acontece algo de interesse.</dd><dt>Handshake</dt><dd>Troca inicial de mensagens que estabelece a sessão entre Studio e jogo.</dd></dl>
+
+      <div class="chapter-footer">
+        <a href="09-unity-componentes-inspector.html">← Cap. 9 — Componentes na Unity</a>
+        <a href="13-unity-timeline-e-bancos.html">Próximo: Integração avançada →</a>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/manual.js"></script>
+</body>
+</html>

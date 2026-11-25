@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fundamentos — Eventos e Parâmetros | OpenAudio Studio</title>
+  <link rel="stylesheet" href="../assets/css/manual.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="manual-sidebar"></aside>
+
+    <main class="main-content">
+      <div class="breadcrumbs"><a href="../index.html">Manual</a> › Fundamentos › Eventos e Parâmetros</div>
+      <h1>Fundamentos — A Teoria dos Eventos e Parâmetros</h1>
+      <p class="lead">
+        Compreenda a ontologia do áudio interativo: por que tocar arquivos <code>.wav</code> diretamente limita a produção de jogos, como os Eventos criam uma barreira de desacoplamento entre código e arte, e como os Parâmetros Locais e Globais transformam o som em uma experiência viva e reativa.
+      </p>
+
+      <nav aria-label="Nesta página">
+        <ul>
+          <li><a href="#paradigma">1. O Paradigma do Áudio Interativo vs. Áudio Linear</a></li>
+          <li><a href="#eventos-dor">2. Por que existem Eventos? A Dor do Áudio Estático</a></li>
+          <li><a href="#modelo-mental-evento">3. O Modelo Mental do Evento: Contrato Desacoplado</a></li>
+          <li><a href="#definicao-vs-instancia">4. Definição vs. Instância e Ciclo de Vida</a></li>
+          <li><a href="#polifonia-stealing">5. Polifonia e Políticas de Roubo de Voz (Voice Stealing)</a></li>
+          <li><a href="#parametros-teoria">6. Parâmetros: O Sistema Nervoso do Som</a></li>
+          <li><a href="#locais-vs-globais">7. Parâmetros Locais vs. Globais</a></li>
+          <li><a href="#builtin-3d">8. Parâmetros Automáticos Built-in 3D</a></li>
+          <li><a href="#casos-de-uso">9. Casos de Uso Reais na Produção</a></li>
+          <li><a href="#armadilhas">10. Erros e Armadilhas Comuns</a></li>
+        </ul>
+      </nav>
+
+      <!-- 1. PARADIGMA -->
+      <h2 id="paradigma">1. O Paradigma do Áudio Interativo vs. Áudio Linear</h2>
+      <div class="theory-box box">
+        <div class="box-title">Linear vs. Reativo</div>
+        <p>
+          No cinema, o áudio é <strong>linear e determinístico</strong>: cada segundo de música, efeito e diálogo ocorre exatamente no mesmo instante temporal, com a mesma intensidade, em todas as exibições.
+        </p>
+        <p>
+          Em jogos digitais, o áudio é <strong>não-linear, estocástico e reativo</strong>. O jogador pode andar devagar, correr, pausar, entrar em combate ou passar horas explorando uma caverna. O ambiente sonoro precisa ser sintetizado, adaptado e orquestrado <em>em tempo real</em> pela CPU, reagindo a dados contínuos de física, telemetria e decisões narrativas.
+        </p>
+      </div>
+
+      <!-- 2. POR QUE EVENTOS -->
+      <h2 id="eventos-dor">2. Por que existem Eventos? A Dor do Áudio Estático</h2>
+      <p>
+        No desenvolvimento clássico, equipes costumavam tocar arquivos brutos diretamente pela engine:
+      </p>
+      <pre><code>// Abordagem arcaica em jogos:
+AudioSource.PlayClipAtPoint(tiroWav, posicaoArma);</code></pre>
+      <p>
+        Essa prática gera quatro problemas estruturais graves em qualquer produção de médio ou grande porte:
+      </p>
+      <ul>
+        <li>
+          <strong>Poluição e acoplamento de código:</strong> Se o designer quiser que o tiro soe abafado em ambientes fechados, o programador de gameplay precisa criar ramificações condicionais na classe da arma (<code>if (estaEmAmbienteFechado) Play(tiroInterno) else Play(tiroExterno)</code>). A lógica acústica polui a lógica do jogo.
+        </li>
+        <li>
+          <strong>O Efeito Metralhadora (<em>Machine-Gun Effect</em>):</strong> O sistema auditivo humano é altamente treinado para notar padrões repetitivos. Reproduzir exatamente o mesmo arquivo de áudio várias vezes seguidas destrói a sensação de realidade e gera fadiga auditiva no jogador em poucos minutos.
+        </li>
+        <li>
+          <strong>Complexidade de Camadas (<em>Layering</em>):</strong> Um efeito sonoro convincente nunca é um único arquivo. Um disparo de arma de fogo é a fusão de:
+          <ol>
+            <li>O clique seco e metálico do percussor;</li>
+            <li>A explosão do propelente com energia nos graves;</li>
+            <li>A reflexão ambiental (eco no vale ou reverberação em sala);</li>
+            <li>O cartucho de latão ejetado e estalando no solo após 200 ms.</li>
+          </ol>
+          Implementar essa sincronia por código exigiria múltiplos timers, corrotinas e referências em cada script do jogo.
+        </li>
+        <li>
+          <strong>Gargalo de CPU e Falta de Gestão de Vozes:</strong> Se 30 inimigos atirarem simultaneamente, 30 canais de áudio competirão por CPU e canais físicos de saída. Sem um orquestrador central, sons essenciais (como a voz do protagonista) podem ser cortados e a taxa de quadros (FPS) pode despencar.
+        </li>
+      </ul>
+
+      <!-- 3. MODELO MENTAL -->
+      <h2 id="modelo-mental-evento">3. O Modelo Mental do Evento: Contrato Desacoplado</h2>
+      <p>
+        O <strong>Evento</strong> (identificado pelo prefixo <code>event:/</code>) resolve esses problemas estabelecendo uma **fronteira de desacoplamento** entre a programação do jogo e o sound design:
+      </p>
+      <div class="purpose-box box">
+        <div class="box-title">O Contrato Semântico</div>
+        <p>
+          O programador comunica apenas a <strong>intenção semântica</strong> do jogo: <em>"O soldado disparou a espingarda"</em> e fornece dados físicos do mundo (posição tridimensional, velocidade, tipo de ambiente).
+        </p>
+        <p>
+          O <strong>OpenAudio Studio</strong> é a autoridade que decide como isso soa: quais camadas disparar, como randomizar afinação e volume, como modular os filtros e por qual barramento o som deve fluir.
+        </p>
+      </div>
+
+      <pre><code>+--------------------------------------------------------------------------+
+|  JOGO (Unity / Unreal / C#)                                              |
+|  Emite apenas a intenção semântica:                                      |
+|                                                                          |
+|  EventInstance tiro = AudioSystem.CreateInstance("event:/armas/espingarda"); |
+|  tiro.SetParameter("Ambiente", 0.7f); // 0 = Aberto, 1 = Fechado         |
+|  tiro.Set3DAttributes(posicaoInimigo);                                   |
+|  tiro.Start();                                                           |
+|  tiro.Release(); // Libera assim que o áudio terminar                     |
++------------------------------------+-------------------------------------+
+                                     |
+                                     v
++--------------------------------------------------------------------------+
+|  OPENAUDIO RUNTIME (Dentro do Evento)                                    |
+|                                                                          |
+|  [Pista 1: Mecânica]  --> [Multi-Sound: sorteia 1 de 4 cliques metálicos]|
+|  [Pista 2: Explosão]  --> [Single Sound com pitch aleatório +-2 semitons]|
+|  [Pista 3: Eco Cauda] --> [Volume modulado pelo parâmetro "Ambiente"]    |
+|  [Pista 4: Cartucho]  --> [Espera 220ms -> Toca estalo de casulo no solo]|
+|                                                                          |
+|  Polifonia: Máximo 6 vozes. Se exceder: rouba a instância mais antiga.   |
+|  Roteamento: Encaminhado para bus:/sfx/armas                             |
++--------------------------------------------------------------------------+</code></pre>
+
+      <!-- 4. DEFINIÇÃO VS INSTÂNCIA -->
+      <h2 id="definicao-vs-instancia">4. Definição vs. Instância e Ciclo de Vida</h2>
+      <p>
+        Para projetar áudio com eficiência, é indispensável dominar a separação arquitetural entre a <strong>Definição</strong> e a <strong>Instância</strong> de um evento:
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Conceito</th>
+            <th>O que é</th>
+            <th>Onde reside</th>
+            <th>Custo de Recursos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Event Definition (Definição)</strong></td>
+            <td>O molde, a receita do bolo. Contém a árvore de pistas, referências a samples, curvas de automação e regras lógicas.</td>
+            <td>Carregada no <code>Bank</code> em memória RAM. Existe apenas uma por evento cadastrado.</td>
+            <td>Metadados estáticos leves (poucos kilobytes).</td>
+          </tr>
+          <tr>
+            <td><strong>Event Instance (Instância)</strong></td>
+            <td>O objeto em execução real no mundo do jogo. Possui seu próprio cursor temporal (playhead), posição 3D, valores de parâmetros locais e envelopes de volume.</td>
+            <td>Criada dinamicamente pelo código do jogo no runtime (<code>oae_system</code>).</td>
+            <td>Consome canais virtuais de voz, processamento DSP e interpolação a cada bloco de mixagem.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>O Ciclo de Vida de uma Instância</h3>
+      <ol>
+        <li>
+          <strong>Criação (<code>CreateInstance</code>):</strong> Aloca o handle da instância e inicializa os parâmetros com seus valores padrão (<code>default</code>). O som ainda não produz áudio.
+        </li>
+        <li>
+          <strong>Reprodução (<code>Start</code>):</strong> Dispara o cursor da timeline. As pistas começam a ler as amostras e processar DSP.
+        </li>
+        <li>
+          <strong>Sustentação e Parada (<code>KeyOff</code> / <code>Stop</code>):</strong>
+          Se o evento tiver um envelope de soltura (Release no AHDSR) ou regiões de transição, <code>KeyOff</code> permite que a cauda do som termine naturalmente antes de silenciar. <code>Stop(Immediate)</code> corta o som abruptamente.
+        </li>
+        <li>
+          <strong>Liberação de Memória (<code>Release</code>):</strong> Informa ao motor que o jogo não precisa mais daquele handle. Quando a reprodução terminar (ou imediatamente se já tiver parado), o motor desaloca a instância da memória automaticamente.
+        </li>
+      </ol>
+
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/foundations-event-inspector.png" alt="Inspector de Eventos no OpenAudio Studio mostrando propriedades de volume, pitch, polifonia e roteamento">
+        </div>
+        <figcaption class="callout-caption">
+          O Inspector de Eventos do OpenAudio Studio: configure ganho, afinação, polifonia máxima, regras de roubo e o barramento de destino do evento selecionado.
+        </figcaption>
+      </figure>
+
+      <!-- 5. POLIFONIA -->
+      <h2 id="polifonia-stealing">5. Polifonia e Políticas de Roubo de Voz (Voice Stealing)</h2>
+      <p>
+        A <strong>Polifonia</strong> define quantas instâncias daquele mesmo evento podem soar ao mesmo tempo no jogo todo. Quando o número de solicitações ultrapassa o limite definido em <strong>Max Voices</strong>, a política de <strong>Voice Stealing</strong> determina qual som cederá lugar:
+      </p>
+      <ul>
+        <li>
+          <strong>Steal Oldest (Roubar a Mais Antiga):</strong> A instância que começou a tocar há mais tempo é interrompida para dar lugar à nova. É o padrão ideal para passos, tiros rápidos e impactos.
+        </li>
+        <li>
+          <strong>Steal Quietest (Roubar a Mais Baixa):</strong> A instância com menor amplitude percebida (por atenuação de distância ou ganho) é descartada. Ideal para sons de multidão ou explosões distantes.
+        </li>
+        <li>
+          <strong>Just Fail (Rejeitar Nova):</strong> A nova solicitação é descartada e as instâncias ativas continuam tocando intactas. Muito usado para falas de rádio ou frases de diálogo que não podem ser interrompidas no meio.
+        </li>
+        <li>
+          <strong>Virtualize (Voz Virtual):</strong> A instância continua avançando no tempo matematicamente, mas sem gastar processamento de DSP nem decodificação de áudio. Se a fonte voltar a ser audível (por aproximação da câmera), ela reaparece no ponto exato em que deveria estar.
+        </li>
+      </ul>
+
+      <!-- 6. PARÂMETROS TEORIA -->
+      <h2 id="parametros-teoria">6. Parâmetros: O Sistema Nervoso do Som</h2>
+      <p>
+        Se os eventos são os órgãos do corpo sonoro, os <strong>Parâmetros</strong> são as sinapses neurais. Um parâmetro é uma variável de controle que liga variáveis do jogo a propriedades do som (volume, pitch, frequência de corte de filtros, probabilidade de playlists ou posições na timeline).
+      </p>
+      <p>O OpenAudio Studio suporta três formatos de dados para parâmetros:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Tipo de Dado</th>
+            <th>Comportamento</th>
+            <th>Exemplo Típico</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Contínuo (Float)</strong></td>
+            <td>Valores fracionários contínuos entre um valor mínimo e máximo (ex: <code>0.0</code> a <code>100.0</code>).</td>
+            <td><code>Velocidade</code>, <code>RPM</code>, <code>Distancia</code>, <code>Altitude</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>Discreto (Integer)</strong></td>
+            <td>Passos inteiros fixos (ex: <code>0, 1, 2, 3, 4, 5</code>).</td>
+            <td><code>MarchaDoCarro</code>, <code>MembrosVivos</code>, <code>NivelDeDificuldade</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>Rotulado (Labeled / Enum)</strong></td>
+            <td>Nomes textuais indexados que mapeiam opções discretas.</td>
+            <td><code>TipoDePiso</code> (Grama, Concreto, Madeira, Metal, Lama, Neve).</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 7. LOCAIS VS GLOBAIS -->
+      <h2 id="locais-vs-globais">7. Parâmetros Locais vs. Globais</h2>
+      <p>
+        A distinção mais importante de arquitetura em parâmetros é o seu **escopo de atuação**:
+      </p>
+
+      <h3>Parâmetros Locais (Instance-Scoped)</h3>
+      <p>
+        O parâmetro pertence exclusivamente àquela **instância de evento**. Duas instâncias do mesmo evento podem ter valores completamente diferentes em seus parâmetros locais ao mesmo tempo.
+      </p>
+      <div class="example-box box">
+        <div class="box-title">Exemplo Prático: Jogo de Corrida</div>
+        <p>
+          Em uma corrida com 8 carros, cada veículo executa uma instância de <code>event:/veiculos/motor</code>. O parâmetro <code>RPM</code> precisa ser local: o carro do jogador pode estar a 6.000 RPM enquanto o oponente ao lado desacelera em uma curva a 2.500 RPM.
+        </p>
+      </div>
+
+      <h3>Parâmetros Globais (System-Scoped)</h3>
+      <p>
+        O parâmetro reside no nível do sistema central (<code>oae_system</code>). Existe **apenas um valor único** para toda a aplicação. Qualquer evento, barramento ou snapshot pode se inscrever para ler e reagir a esse valor.
+      </p>
+      <div class="example-box box">
+        <div class="box-title">Exemplo Prático: Ambiente e Estado do Mundo</div>
+        <p>
+          Imagine o parâmetro global <code>HoraDoDia</code> (0.0 a 24.0). Em vez de programar a engine para encontrar cada um dos 150 emissores de som na floresta e atualizar seus valores individualmente, o jogo atualiza uma única variável global:
+        </p>
+        <pre><code>AudioSystem.SetGlobalParameter("HoraDoDia", 19.5f); // 19h30: entardecer</code></pre>
+        <p>
+          Instantaneamente, a música de fundo entra em um arranjo mais calmo, os cantos de pássaros diurnos sofrem fade-out e os grilos e corujas ganham volume em todos os eventos do cenário, com zero overhead de varredura de código.
+        </p>
+      </div>
+
+      <!-- 8. BUILTIN 3D -->
+      <h2 id="builtin-3d">8. Parâmetros Automáticos Built-in 3D</h2>
+      <p>
+        O OpenAudio Studio calcula internamente grandezas geométricas e trigonométricas a cada quadro de áudio, expondo-as como parâmetros automáticos sem necessidade de cálculos matemáticos no código do jogo:
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Parâmetro Built-in</th>
+            <th>Grandeza Física</th>
+            <th>Uso Típico de Design</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Distance</code></td>
+            <td>Distância euclidiana tridimensional em metros entre o emissor e o ouvinte (Listener).</td>
+            <td>Curvas de atenuação de volume, aumento de reverberação e filtro de absorção do ar.</td>
+          </tr>
+          <tr>
+            <td><code>Direction</code></td>
+            <td>Ângulo horizontal (azimuth de -180° a +180°) da fonte em relação à orientação da cabeça do jogador.</td>
+            <td>Diferenciação tímbrica entre sons frontais e sons que vêm exatamente por trás.</td>
+          </tr>
+          <tr>
+            <td><code>Elevation</code></td>
+            <td>Ângulo vertical (-90° a +90°) da fonte acima ou abaixo do plano dos ouvidos.</td>
+            <td>Sensação de altura (passos de inimigo no andar superior vs. sótão).</td>
+          </tr>
+          <tr>
+            <td><code>EventConeAngle</code></td>
+            <td>Ângulo de dispersão do cone de emissão direcional do próprio som.</td>
+            <td>Simulação de megafones, alto-falantes e bocas humanas, que projetam agudos para frente e abafam para trás.</td>
+          </tr>
+          <tr>
+            <td><code>Speed</code></td>
+            <td>Velocidade relativa de aproximação ou afastamento entre o emissor e o ouvinte.</td>
+            <td>Deslocamento Doppler e intensificação do vento de passagem.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 9. CASOS DE USO -->
+      <h2 id="casos-de-uso">9. Casos de Uso Reais na Produção</h2>
+
+      <h3>Caso 1: O Sistema Adaptativo de Passos</h3>
+      <p>
+        Um único evento inteligente <code>event:/personagem/passos</code> substitui centenas de linhas de código:
+      </p>
+      <ul>
+        <li>
+          <strong>Parâmetro <code>Surface</code> (Rotulado):</strong> O jogo detecta o material da colisão (Raycast no solo) e envia <code>Concreto</code>, <code>Terra</code> ou <code>Metal</code>. O evento seleciona a pista ou multi-sound correto.
+        </li>
+        <li>
+          <strong>Parâmetro <code>Velocidade</code> (Contínuo):</strong> Modula o ganho das camadas de impacto e ajusta o tempo de intervalo entre passadas.
+        </li>
+        <li>
+          <strong>Modulação Estocástica:</strong> Cada passo sorteia aleatoriamente pitch de ±1.5 semitons e volume de ±1 dB, eliminando por completo o efeito metralhadora.
+        </li>
+      </ul>
+
+      <!-- 10. ARMADILHAS -->
+      <h2 id="armadilhas">10. Erros e Armadilhas Comuns</h2>
+      <div class="warning-box box">
+        <div class="box-title">Armadilha 1: O Vazamento de Instâncias (Memory Leak)</div>
+        <p>
+          Criar instâncias de eventos com <code>CreateInstance()</code> sem chamar <code>Release()</code> após o <code>Start()</code> faz com que o handle da instância fique retido indefinidamente na tabela do sistema, mesmo após o áudio ter chegado ao fim. Para eventos do tipo <em>one-shot</em> (tiros, moedas, passos), chame sempre <code>Release()</code> logo após o disparo.
+        </p>
+      </div>
+
+      <div class="warning-box box">
+        <div class="box-title">Armadilha 2: Escopo Incorreto de Parâmetro</div>
+        <p>
+          Criar o parâmetro de rotação do motor (<code>RPM</code>) como <strong>Global</strong> fará com que acelerar o carro do jogador acelere instantaneamente o som do motor de todos os oponentes na pista. Use parâmetros globais apenas para variáveis sistêmicas ou ambientais que realmente pertencem ao mundo como um todo.
+        </p>
+      </div>
+
+      <div class="chapter-footer">
+        <a href="00-conceitos-basicos.html">← Cap. 0 — Conceitos Básicos</a>
+        <a href="fundamentos-mixagem-buses-vcas-snapshots.html">Próximo: Topologia de Mixagem, Buses, VCAs e Snapshots →</a>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/manual.js"></script>
+</body>
+</html>

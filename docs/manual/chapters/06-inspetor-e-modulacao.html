@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 6 — Inspetor em Cards e Modulação | OpenAudio Studio</title>
+  <link rel="stylesheet" href="../assets/css/manual.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="manual-sidebar"></aside>
+
+    <main class="main-content">
+      <div class="breadcrumbs"><a href="../index.html">Manual</a> › Cap. 6 — Inspetor e Modulação</div>
+      <h1>Capítulo 6 — Inspetor em Cards e Modulação</h1>
+      <p class="lead">
+        O painel direito (<code>InspectorPanel</code>) exibe todas as propriedades tipadas do item selecionado organizadas em <strong>Cards Visuais</strong> modernos, com sliders de controle 1:1, ajuste fino por <kbd>Shift</kbd>, reset por duplo-clique, envelopes <strong>AHDSR</strong> e <strong>Curvas de Automação</strong>.
+      </p>
+
+      <div class="purpose-box box">
+        <div class="box-title">Teoria dos Parâmetros e Automação</div>
+        <p>
+          Para entender como parâmetros locais e globais operam na CPU e conduzem envelopes e curvas de automação, consulte o capítulo conceitual de <a href="fundamentos-eventos-e-parametros.html">Fundamentos: Eventos e Parâmetros</a>.
+        </p>
+      </div>
+
+      <!-- MAPA DO INSPECTOR -->
+      <h2>1. O Novo Layout em Cards do Inspector</h2>
+      <figure class="callout-figure callout-figure--split">
+        <div class="callout-stage">
+          <img src="../assets/img/studio-inspector.png" alt="Captura real do Property Inspector do OpenAudio Studio atualizado com layout em cards">
+        </div>
+        <div>
+          <h3 style="margin-top:0;">Organização Modular em Cards (ValueBox)</h3>
+          <p>
+            O cabeçalho único <strong>PROPERTY INSPECTOR</strong> (24 px) integra o botão de cadeado (<code>Lock Inspector</code>) à direita. Cada card (<code>Clip</code>, <code>Track</code>, <code>MÁSCARA &amp; TRANSIÇÃO</code> contextual no modo <em>Layers</em> ou quando há máscara ativa, e <code>Event</code>) usa cabeçalhos de 28 px com menu <code>...</code> (<code>Reset / Copy / Paste</code>) e caixas numéricas <code>ValueBox</code>.
+          </p>
+          <p>
+            O Inspetor agrupa controles relacionados em cartões visuais limpos com cantos arredondados e tipografia hierárquica clara:
+          </p>
+          <ul class="callout-legend">
+            <li>
+              <span class="legend-num">1</span>
+              <div><strong>Card de Propriedades Base:</strong> Identificação do item, modo 2D/3D, seletor de saída <em>Bus Route</em> (ex: <code>bus:/sfx</code>), fader de Volume nominal em dB, Pitch em semitons e Pan estéreo.</div>
+            </li>
+            <li>
+              <span class="legend-num">2</span>
+              <div><strong>Card de Polifonia &amp; Vozes:</strong> Limite de instâncias (<code>Max Inst</code>), política de roubo (<code>Steal Mode</code>: Oldest, Quietest, Fail), janela de <code>Cooldown</code> em ms e tempo de <code>Stop Fade</code>.</div>
+            </li>
+            <li>
+              <span class="legend-num">3</span>
+              <div><strong>Cards de Faixa e Clipe:</strong> ganho de pista, swatches de cor, tipo de instrumento, sample ou alvo associado e propriedades do clipe selecionado.</div>
+            </li>
+          </ul>
+        </div>
+      </figure>
+
+      <h3 id="ordenacao-hierarquica">1.0 Ordenação Contextual e Princípio do Pai Imediato</h3>
+      <p>
+        O <code>InspectorPanel</code> adapta a pilha de cards ao nível exato da seleção atual, colocando sempre o alvo selecionado no topo e mantendo os ancestrais recolhidos logo abaixo para consulta rápida sem excesso de rolagem:
+      </p>
+      <ul>
+        <li><strong>Evento selecionado:</strong> Exibe exclusivamente o card <strong>Event</strong> (<code>EventHeaderCard</code>) expandido no topo, sem exibir cards de faixa ou clipe.</li>
+        <li><strong>Faixa selecionada:</strong> Exibe o card <strong>Track</strong> (<code>TrackCard</code>) expandido no topo, com o card <strong>Event</strong> recolhido abaixo.</li>
+        <li><strong>Clipe selecionado:</strong> Exibe o card <strong>Clip</strong> (<code>ClipCard</code>) expandido no topo, seguido pelos cards <strong>Track</strong> e <strong>Event</strong> recolhidos abaixo.</li>
+      </ul>
+      <p>
+        As ações de adição seguem o <strong>princípio do pai imediato</strong>: o card <strong>Event</strong> fornece <code>+ Add Track</code> e <code>+ Add Local Param</code>; o card <strong>Track</strong> fornece exclusivamente <code>+ Add Inst</code> para inserir instrumentos naquela faixa; e os controles de playlist/sons ficam no card do clipe ou no deck de playlist associado.
+      </p>
+
+      <h3 id="lock-inspector">1.1 Barra de Ferramentas Superior e Bloqueio de Inspeção (Lock Inspector)</h3>
+      <p>
+        O topo do <code>InspectorPanel</code> possui uma barra de ferramentas fixa com o botão de <strong>Lock Inspector</strong> (ícone vetorial de cadeado):
+      </p>
+      <ul>
+        <li>
+          <strong>Congelamento de Seleção:</strong> Ao ativar o cadeado, o item atualmente inspecionado é congelado. Você pode clicar na Timeline, reposicionar a régua de reprodução ou selecionar outros eventos no navegador sem que o painel mude de contexto.
+        </li>
+        <li>
+          <strong>Edição Plena Durante o Lock:</strong> Todos os sliders, knobs, campos numéricos e curvas continuam 100% interativos no item congelado, permitindo afinar o som enquanto você ouve ou navega em outras partes da sessão.
+        </li>
+        <li>
+          <strong>Ressincronização Automática:</strong> Ao desativar o cadeado, o Inspetor atualiza imediatamente seus cartões para exibir o elemento que estiver atualmente selecionado na interface.
+        </li>
+      </ul>
+
+      <h3>1.2 Cabeçalhos Padronizados e Menu de Ações de Cartão (<code>...</code>)</h3>
+      <p>
+        Cada cartão do Inspetor utiliza um cabeçalho unificado (<code>InspectorCardHeader</code>) equipado com recursos rápidos de autoria:
+      </p>
+      <ul>
+        <li>
+          <strong>Chevron Colapsável:</strong> Clique no ícone de seta (<code>▼</code> / <code>►</code>) para expandir ou recolher o corpo do cartão, mantendo seu espaço de trabalho enxuto e preservando a posição de rolagem.
+        </li>
+        <li>
+          <strong>Badge Semântica:</strong> Identifica de relance o tipo do componente inspecionado (ex.: <code>EVENT</code>, <code>TRACK</code>, <code>CLIP — SINGLE</code>, <code>BUS</code>, <code>VCA</code>).
+        </li>
+        <li>
+          <strong>Menu de Ações (<code>...</code>):</strong> O botão com três pontos no canto direito do cabeçalho abre um menu contextual com três operações essenciais:
+          <ul>
+            <li><strong>Reset to Default:</strong> Restaura todos os controles do cartão para os valores padrão de fábrica em uma única transação atômica no histórico de Desfazer (<kbd>Ctrl</kbd>+<kbd>Z</kbd>).</li>
+            <li><strong>Copy Values:</strong> Copia todas as propriedades configuradas no cartão para uma área de transferência dedicada em memória (<code>InspectorClipboard</code>), sem afetar o clipboard do sistema operacional.</li>
+            <li><strong>Paste Values:</strong> Cola as propriedades salvas no cartão correspondente em uma operação atômica de Undo. A opção permanece desabilitada quando o tipo de dados no clipboard for incompatível com o cartão aberto.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <!-- CARDS DE INSTRUMENTOS AVANÇADOS -->
+      <h2>2. Cards Específicos por Tipo de Instrumento</h2>
+      <p>
+        Ao selecionar um clipe na timeline, o Inspector adapta dinamicamente seus cards para expor os parâmetros especializados de cada tipo de instrumento:
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Instrumento</th>
+            <th>Controles Disponíveis no Card</th>
+            <th>Finalidade e Comportamento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Command Instrument</strong></td>
+            <td><code>Command Type</code>, <code>Command Target</code></td>
+            <td>Selecione o tipo de ordem (<code>start_event</code>, <code>stop_event</code>, <code>snapshot_on</code>, <code>snapshot_off</code>) e o alvo específico na lista suspensa do projeto.</td>
+          </tr>
+          <tr>
+            <td><strong>Multi Instrument</strong></td>
+            <td><code>Playlist Mode</code> (Random, Shuffle, Sequential), <code>Selection Scope</code>; entradas e pesos na aba <code>Playlist / Weights</code></td>
+            <td>Sorteia ou itera entradas da playlist a cada disparo. Suporta amostras e eventos aninhados, com alvos cíclicos indisponíveis para evitar recursão infinita.</td>
+          </tr>
+          <tr>
+            <td><strong>Scatterer Spawner</strong></td>
+            <td><code>Int Min</code>, <code>Int Max</code>, <code>Polyphony</code>, <code>Total</code>, <code>Dist Min</code>, <code>Dist Max</code>; entradas de áudio na aba <code>Playlist / Weights</code></td>
+            <td>Define a faixa aleatória entre spawns (ms), o limite de vozes simultâneas (polifonia), o total de disparos (0 = contínuo) e a dispersão espacial. A playlist de grãos é preenchida no Deck inferior, rejeitando alvos cíclicos.</td>
+          </tr>
+          <tr>
+            <td><strong>Programmer Instrument</strong></td>
+            <td><code>Key</code>, <code>Table Sample</code></td>
+            <td>Mapeia a chave de áudio para um sample do projeto cadastrado na tabela de áudio (<code>audio_table</code>). A prévia local do Studio resolve a chave diretamente pela tabela e reproduz o sample; a rota dinâmica alternativa usa callbacks nativos.</td>
+          </tr>
+          <tr>
+            <td><strong>Opção Async</strong></td>
+            <td>Caixa <code>Async</code> no card do clipe</td>
+            <td>Deixa a voz disparada avançar independentemente do cursor. Disponível em Single, Multi, Scatterer, Programmer e Event. O exemplo combina a opção com loop, Sustain Point e Key Off.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 id="multi-scatterer-inspector">Configuração de Multi e Scatterer no Inspector</h3>
+      <p>
+        Ao trabalhar com instrumentos estocásticos (Multi e Scatterer), a autoria divide-se entre dois painéis integrados:
+      </p>
+      <ul>
+        <li>
+          <strong>Card do Inspector:</strong> Gerencia as regras de disparo. No Multi Instrument, define o modo de seleção (<code>Random (Weighted)</code>, <code>Shuffle</code> ou <code>Sequential</code>) e o escopo (<code>Global</code> compartilhado ou <code>Instance</code> isolado). No Scatterer, define a cadência com <strong>Int Min</strong> e <strong>Int Max</strong> (janela temporal de spawn em milissegundos), o limite de <strong>Polyphony</strong> (teto de grãos simultâneos ativos para evitar sobrecarga de vozes) e o <strong>Total</strong> de disparos desejados (ou <code>0</code> para contínuo).
+        </li>
+        <li>
+          <strong>Aba Playlist / Weights (Bottom Deck):</strong> Exibe a lista de fontes sonoras que alimentam o instrumento. Cada entrada pode ser uma amostra (WAV cadastrado em <code>assets/</code>) ou um evento aninhado do projeto. O seletor de eventos filtra automaticamente o evento pai e qualquer descendente que gere ciclos na árvore hierárquica, marcando alvos cíclicos como indisponíveis.
+        </li>
+      </ul>
+
+      <h2 id="parameter-trigger-sheet">Vincular um instrumento a um parâmetro</h2>
+      <p>Selecione um instrumento na Timeline e use o card do clipe no Inspector. O campo <strong>Trigger Sheet</strong> lista parâmetros locais do evento e parâmetros globais do projeto. Depois de escolher um deles, ajuste <strong>Sheet Min</strong> e <strong>Sheet Max</strong> dentro do domínio exibido para o parâmetro; os limites são inclusivos. O instrumento é elegível quando o valor está na faixa e deixa de ser elegível quando sai dela.</p>
+      <p>O projeto distribuído declara o parâmetro global contínuo <code>MasterVolume</code> (mínimo <code>0</code>, máximo <code>1</code>, padrão <code>0.8</code>). Para experimentar um parâmetro local, crie-o no evento antes de selecioná-lo em <strong>Trigger Sheet</strong>. Ganho de faixa/evento e fades são controles separados e podem suavizar a soma dos instrumentos sobrepostos; eles não alteram o intervalo do trigger.</p>
+      <p>Veja os passos com <code>event:/music/theme</code> e <code>theme.wav</code> no <a href="05-timeline-e-waveforms.html#parameter-sheets">procedimento de Parameter Sheet</a>.</p>
+
+      <!-- SLIDERS E GESTOS -->
+      <h2>3. Sliders 1:1 e Gestual de Alta Precisão</h2>
+      <div class="theory-box box">
+        <div class="box-title">Ergonomia e Controle Fino de Sliders</div>
+        <p>
+          Todos os sliders e knobs do OpenAudio Studio respondem a três gestos fundamentais projetados para máxima velocidade e exatidão durante a mixagem:
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>Gesto do Usuário</th>
+              <th>Comportamento Técnico</th>
+              <th>Aplicação Recomendada</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Arraste Normal (1:1)</strong></td>
+              <td>O valor segue a velocidade natural do cursor do mouse.</td>
+              <td>Ajustes rápidos de volume geral, pan e busca de valores aproximados.</td>
+            </tr>
+            <tr>
+              <td><strong>Segurar <kbd>Shift</kbd> + Arraste</strong></td>
+              <td>Reduz a sensibilidade em 10 vezes para <strong>Ajuste Fino</strong>.</td>
+              <td>Calibrar pequenos deltas de <code>0.1 dB</code>, afinações sutis de <code>0.1 st</code> ou tempos de milissegundo.</td>
+            </tr>
+            <tr>
+              <td><strong>Duplo-Clique no Controle</strong></td>
+              <td>Restaura instantaneamente o controle para o <strong>Valor Padrão (Default)</strong>.</td>
+              <td>Retornar faders para <code>0.0 dB</code>, pan para o centro (<code>0.0</code>) ou pitch para <code>0 st</code> sem precisar digitar. Registrado no histórico de Undo.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- AHDSR -->
+      <h2>4. Envelope AHDSR (As 5 Fases Temporais do Som)</h2>
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/inspector-ahdsr.svg" alt="Diagrama teórico do envelope AHDSR e moduladores">
+        </div>
+        <ul class="callout-legend">
+          <li><strong>Attack (ms):</strong> Tempo que o som leva para subir do silêncio (0%) até o pico máximo (100%).</li>
+          <li><strong>Hold (ms):</strong> Duração em que o som permanece travado no nível de pico antes de decair.</li>
+          <li><strong>Decay (ms):</strong> Tempo necessário para cair do pico até o patamar de sustentação.</li>
+          <li><strong>Sustain (%):</strong> Nível percentual de volume em que o som permanece enquanto a tecla/instância estiver ativa.</li>
+          <li><strong>Release (ms):</strong> Tempo de atenuação suave após o comando de parada (<code>KeyOff</code> / <code>Stop</code>).</li>
+        </ul>
+      </figure>
+
+      <div class="example-box box">
+        <div class="box-title">Exemplo Prático — Comparando Attack e Release</div>
+        <div class="before-after">
+          <div class="ba-card">
+            <strong>Impacto Seco: Attack <code>0 ms</code> · Release <code>30 ms</code></strong>
+            O som atinge a potência imediatamente e corta rápido ao soltar (ideal para tiros, cliques e golpes metálicos).
+          </div>
+          <div class="ba-card">
+            <strong>Ambiência Suave: Attack <code>400 ms</code> · Release <code>1200 ms</code></strong>
+            O som surge gradualmente como uma névoa e dissolve lentamente ao terminar (ideal para pads, ventos e coros).
+          </div>
+        </div>
+      </div>
+
+      <!-- CURVAS -->
+      <h2 id="curvas-automacao-parametro">5. Curvas por Parâmetro no Inspetor</h2>
+      <p>
+        Com a pista selecionada no Inspector, em <strong>TRACK PARAM CURVES</strong> clique em <strong>+ Add Curve</strong> e escolha <code>[G] MasterVolume → volume</code>. Também é possível escolher <code>pitch</code> ou <code>pan</code> como propriedade de destino. O eixo horizontal representa o valor do parâmetro e o vertical representa o ajuste aplicado à propriedade de destino; assim, a curva mapeia valores do parâmetro global para o volume da pista.
+      </p>
+      <p>A automação da Timeline é outro controle: <strong>Volume Automation</strong> edita o ganho da pista em pontos de tempo (ms) e volume (dB). As duas formas podem coexistir; consulte <a href="05-timeline-e-waveforms.html#automacao-volume-tempo">Automação de volume no tempo na Timeline</a> para inserir e arrastar esses pontos.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Tipo de Curva</th>
+            <th>Comportamento Matemático</th>
+            <th>Melhor Uso em Jogos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>LINEAR</code></td>
+            <td>Reta com taxa de variação constante entre os dois pontos.</td>
+            <td>Controles de volume proporcionais ou faders de VCA.</td>
+          </tr>
+          <tr>
+            <td><code>HOLD</code></td>
+            <td>Mantém o valor inicial fixo até cruzar o próximo ponto, onde salta abruptamente.</td>
+            <td>Trocas de estado de engrenagem (marcha de carro) ou tipos de superfície.</td>
+          </tr>
+          <tr>
+            <td><code>EASE_IN</code></td>
+            <td>Inicia com variação lenta e acelera exponencialmente ao final.</td>
+            <td>Sensação de acúmulo de energia (build-up ou aceleração de turbina).</td>
+          </tr>
+          <tr>
+            <td><code>EASE_OUT</code></td>
+            <td>Variação rápida no início que desacelera suavemente ao chegar ao destino.</td>
+            <td>Decaimento natural de ecos e desaceleração de veículos.</td>
+          </tr>
+          <tr>
+            <td><code>S_CURVE</code></td>
+            <td>Curva sigmoide em "S": suave na saída e suave na chegada.</td>
+            <td>Crossfades musicais orgânicos e transições de volume imperceptíveis.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- MODIFICADORES PMOD -->
+      <h2 id="pmod">6. Modificadores de Parâmetros (PMOD)</h2>
+      <div class="theory-box box">
+        <div class="box-title">O que são Modificadores de Parâmetro?</div>
+        <p>
+          Modificadores (<code>PMOD</code>) são comportamentos embutidos nos parâmetros que alteram como o valor do parâmetro é consumido pelas vozes de áudio em tempo real:
+        </p>
+      </div>
+      <ul>
+        <li>
+          <strong><code>velocity</code>:</strong> Define a velocidade de mudança do parâmetro por segundo. Com <code>velocity: 0</code>, uma atualização não recebe essa rampa; um valor maior faz o valor caminhar até o novo alvo ao longo do tempo indicado pela taxa.
+        </li>
+        <li>
+          <strong><code>hold_during_playback</code>:</strong> Mantém, para a instância em reprodução, o valor do parâmetro que ela leu ao iniciar. Compare duas execuções de um sample curto em valores diferentes: com a opção desligada, mudanças podem afetar a instância ativa; ligada, a instância conserva a leitura inicial até terminar.
+        </li>
+      </ul>
+      <p>Os controles relacionados do parâmetro incluem <strong>Seek Up</strong>, <strong>Seek Down</strong> e <strong>Velocity</strong>; observe a mudança ao automatizar ou alterar o valor durante a audição. Para um instrumento em sustain, confira o passo a passo de <a href="11-tutoriais-praticos.html#async">Async, Sustain Point e Key Off</a>.</p>
+
+      <!-- POLIFONIA -->
+      <h2>7. Gestão de Polifonia e Cooldown</h2>
+      <p>
+        Para garantir que eventos frequentes não consumam ciclos desnecessários de CPU:
+      </p>
+      <ul>
+        <li><strong>Max Instances:</strong> Limita a quantidade de vozes simultâneas no jogo todo (ex.: 4 para passos, 6 para tiros).</li>
+        <li><strong>Cooldown (ms):</strong> Intervalo mínimo entre disparos (ex.: 50 ms impede que um clique duplo acidental dispare dois sons colados).</li>
+        <li><strong>Steal Mode:</strong> Escolha entre <code>Steal Oldest</code> (rouba a voz mais antiga) ou <code>Steal Quietest</code> (rouba a mais inaudível).</li>
+      </ul>
+
+      <div class="chapter-footer">
+        <a href="05-timeline-e-waveforms.html">← Cap. 5 — Timeline e Waveforms</a>
+        <a href="07-deck-inferior-mixer-efeitos.html">Próximo: Cap. 7 — Bottom Deck e Logs →</a>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/manual.js"></script>
+</body>
+</html>

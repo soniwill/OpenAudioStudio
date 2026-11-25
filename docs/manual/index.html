@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual Oficial — OpenAudio Studio &amp; Unity SDK</title>
+  <link rel="stylesheet" href="assets/css/manual.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-badge">OA</div>
+        <div>
+          <div class="brand-title">OpenAudio Studio</div>
+          <div class="brand-sub">Manual Completo + Unity</div>
+        </div>
+      </div>
+
+      <div class="search-box">
+        <input id="manual-search" type="search" aria-label="Buscar no manual" placeholder="Buscar controle, termo ou capítulo..." autocomplete="off">
+        <div id="manual-search-results" class="search-results" aria-live="polite"></div>
+      </div>
+
+      <div class="nav-group-label">Fundamentos &amp; Studio</div>
+      <ul class="nav-list">
+        <li><a href="index.html">Início &amp; Mapa do Manual</a></li>
+        <li><a href="chapters/fundamentos-eventos-e-parametros.html">Fundamentos: Eventos &amp; Parâmetros</a></li>
+        <li><a href="chapters/fundamentos-mixagem-buses-vcas-snapshots.html">Fundamentos: Buses, VCAs &amp; Snapshots</a></li>
+        <li><a href="chapters/00-conceitos-basicos.html">Cap. 0 — Conceitos Básicos</a></li>
+        <li><a href="chapters/14-barramentos-vcas-snapshots.html">Barramentos, VCAs e snapshots</a></li>
+        <li><a href="chapters/01-visao-geral-interface.html">Cap. 1 — Visão Geral da Interface</a></li>
+        <li><a href="chapters/02-projetos-e-publicacao.html">Cap. 2 — Projetos e Publicação</a></li>
+        <li><a href="chapters/03-transporte-e-audicao.html">Cap. 3 — Transporte e Audição</a></li>
+        <li><a href="chapters/04-navegador-projeto.html">Cap. 4 — Navegador do Projeto</a></li>
+        <li><a href="chapters/05-timeline-e-waveforms.html">Cap. 5 — Timeline e Waveforms</a></li>
+        <li><a href="chapters/06-inspetor-e-modulacao.html">Cap. 6 — Inspetor e Modulação</a></li>
+        <li><a href="chapters/07-deck-inferior-mixer-efeitos.html">Cap. 7 — Bottom Deck e Logs</a></li>
+      </ul>
+
+      <div class="nav-group-label">Integração Unity</div>
+      <ul class="nav-list">
+        <li><a href="chapters/08-unity-instalacao-e-workflow.html">Cap. 8 — Studio ↔ Unity</a></li>
+        <li><a href="chapters/09-unity-componentes-inspector.html">Cap. 9 — Componentes na Unity</a></li>
+        <li><a href="chapters/10-unity-api-csharp-e-live.html">Cap. 10 — API C# e Live-Linking</a></li>
+        <li><a href="chapters/13-unity-timeline-e-bancos.html">Unity — Integração avançada</a></li>
+      </ul>
+
+      <div class="nav-group-label">Prática &amp; Referência</div>
+      <ul class="nav-list">
+        <li><a href="chapters/11-tutoriais-praticos.html">Cap. 11 — Tutoriais Práticos</a></li>
+        <li><a href="chapters/12-glossario-e-atalhos.html">Cap. 12 — Glossário A–Z e Atalhos</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="breadcrumbs">Manual do Usuário · OpenAudio Studio &amp; com.openaudio.core</div>
+      <h1>Manual do OpenAudio Studio e da integração Unity</h1>
+      <p class="lead">
+        Crie e ouça seu primeiro evento, acompanhe o sinal no mixer e leve o som ao jogo. Os exercícios indicam onde
+        clicar, o que observar e como comparar os resultados.
+      </p>
+      <p><a href="chapters/02-projetos-e-publicacao.html#criar">Criar um projeto do zero</a> ·
+        <a href="chapters/02-projetos-e-publicacao.html#abrir">Abrir um projeto existente</a> ·
+        <a href="chapters/14-barramentos-vcas-snapshots.html">Entender barramentos e VCAs</a></p>
+
+      <h2 id="tarefas">O que você quer fazer?</h2>
+      <ul>
+        <li><a href="chapters/03-transporte-e-audicao.html#primeira-audicao">Ouvir o primeiro evento</a></li>
+        <li><a href="chapters/02-projetos-e-publicacao.html#publicar">Publicar um banco</a></li>
+        <li><a href="chapters/11-tutoriais-praticos.html#logic-transition">Criar uma transição musical</a></li>
+        <li><a href="chapters/09-unity-componentes-inspector.html#listener">Configurar um emissor 3D na Unity</a></li>
+      </ul>
+
+      <div class="purpose-box box">
+        <div class="box-title">Como usar este manual</div>
+        <p>
+          Se você <strong>nunca usou um programa de áudio interativo</strong> antes, comece pelo
+          <a href="chapters/00-conceitos-basicos.html">Capítulo 0 — Conceitos Básicos</a>. Se você já conhece o básico e quer
+          entender um painel específico do <code>OpenAudio Studio.exe</code> ou um componente da Unity, use o menu lateral ou a
+          <strong>busca instantânea</strong> acima.
+        </p>
+      </div>
+
+      <h2>Mapa dos Capítulos</h2>
+      <div class="card-grid">
+        <a class="nav-card" href="chapters/fundamentos-eventos-e-parametros.html">
+          <div class="nav-card-num">Fundamentos Teóricos</div>
+          <div class="nav-card-title">Eventos &amp; Parâmetros</div>
+          <div class="nav-card-desc">A ontologia do áudio interativo: por que eventos existem, desacoplamento semântico, instâncias e parâmetros locais vs. globais.</div>
+        </a>
+        <a class="nav-card" href="chapters/fundamentos-mixagem-buses-vcas-snapshots.html">
+          <div class="nav-card-num">Fundamentos de Mixagem</div>
+          <div class="nav-card-title">Buses, VCAs &amp; Snapshots</div>
+          <div class="nav-card-desc">Caminho do sinal (Signal Flow), soma PCM em buffers de Bus vs. multiplicação escalar de VCA, e estados dinâmicos com Snapshots.</div>
+        </a>
+        <a class="nav-card" href="chapters/00-conceitos-basicos.html">
+          <div class="nav-card-num">Capítulo 0</div>
+          <div class="nav-card-title">Conceitos Básicos</div>
+          <div class="nav-card-desc">O que é dB, Pan, Semitons, Loop, Fade, Evento, Bus, Parâmetro e Bank — explicado do zero.</div>
+        </a>
+        <a class="nav-card" href="chapters/14-barramentos-vcas-snapshots.html">
+          <div class="nav-card-title">Barramentos, VCAs e snapshots</div>
+          <div class="nav-card-desc">Siga o caminho do áudio, compare faders e controle grupos sem mudar suas rotas.</div>
+        </a>
+        <a class="nav-card" href="chapters/01-visao-geral-interface.html">
+          <div class="nav-card-num">Capítulo 1</div>
+          <div class="nav-card-title">Visão Geral da Interface</div>
+          <div class="nav-card-desc">Painéis da janela principal, encaixes, layouts e atalhos de teclado.</div>
+        </a>
+        <a class="nav-card" href="chapters/02-projetos-e-publicacao.html">
+          <div class="nav-card-num">Capítulo 2</div>
+          <div class="nav-card-title">Projetos e Publicação</div>
+          <div class="nav-card-desc">Criar do zero, abrir, salvar, duplicar ou renomear projetos e compilar bancos <code>.bank</code> com segurança.</div>
+        </a>
+        <a class="nav-card" href="chapters/03-transporte-e-audicao.html">
+          <div class="nav-card-num">Capítulo 3</div>
+          <div class="nav-card-title">Transporte e Audição</div>
+          <div class="nav-card-desc">Play, Pause, Stop, Loop, Key Off, Timecode e sliders de parâmetros em tempo real.</div>
+        </a>
+        <a class="nav-card" href="chapters/04-navegador-projeto.html">
+          <div class="nav-card-num">Capítulo 4</div>
+          <div class="nav-card-title">Navegador do Projeto</div>
+          <div class="nav-card-desc">Events, Snapshots, Buses, VCAs, Audio Assets e Global Parameters.</div>
+        </a>
+        <a class="nav-card" href="chapters/05-timeline-e-waveforms.html">
+          <div class="nav-card-num">Capítulo 5</div>
+          <div class="nav-card-title">Timeline e Waveforms</div>
+          <div class="nav-card-desc">Minimapa, régua dual, 12 modos de snap, faixas, clipes, fades e formas de onda.</div>
+        </a>
+        <a class="nav-card" href="chapters/06-inspetor-e-modulacao.html">
+          <div class="nav-card-num">Capítulo 6</div>
+          <div class="nav-card-title">Inspetor e Modulação</div>
+          <div class="nav-card-desc">Propriedades tipadas, variação RANDOM, envelope AHDSR e curvas de automação.</div>
+        </a>
+        <a class="nav-card" href="chapters/07-deck-inferior-mixer-efeitos.html">
+          <div class="nav-card-num">Capítulo 7</div>
+          <div class="nav-card-title">Bottom Deck e Logs</div>
+          <div class="nav-card-desc">Mixer, 7 efeitos DSP, Playlist/Pesos, Lógica/Transições, Espacializador 3D e Diagnóstico.</div>
+        </a>
+        <a class="nav-card" href="chapters/08-unity-instalacao-e-workflow.html">
+          <div class="nav-card-num">Capítulo 8</div>
+          <div class="nav-card-title">Studio ↔ Unity</div>
+          <div class="nav-card-desc">Como os dois programas trabalham juntos, instalação UPM, <code>StreamingAssets</code> e CRC-32.</div>
+        </a>
+        <a class="nav-card" href="chapters/09-unity-componentes-inspector.html">
+          <div class="nav-card-num">Capítulo 9</div>
+          <div class="nav-card-title">Componentes na Unity</div>
+          <div class="nav-card-desc">AudioManager, BankLoader, EventEmitter, Listener, <code>[EventRef]</code> e DiagnosticsOverlay.</div>
+        </a>
+        <a class="nav-card" href="chapters/10-unity-api-csharp-e-live.html">
+          <div class="nav-card-num">Capítulo 10</div>
+          <div class="nav-card-title">API C# e Live-Linking</div>
+          <div class="nav-card-desc">Controle via scripts C#, callbacks musicais e mixagem ao vivo com Live-Linking.</div>
+        </a>
+        <a class="nav-card" href="chapters/13-unity-timeline-e-bancos.html">
+          <div class="nav-card-title">Integração avançada</div>
+          <div class="nav-card-desc">Unity Timeline, bancos sob demanda, retornos e efeitos por faixa.</div>
+        </a>
+        <a class="nav-card" href="chapters/11-tutoriais-praticos.html">
+          <div class="nav-card-num">Capítulo 11</div>
+          <div class="nav-card-title">Tutoriais Práticos</div>
+          <div class="nav-card-desc">Publique a moeda, experimente um snapshot de pausa e explore o AudioPlayground.</div>
+        </a>
+      </div>
+
+      <div class="chapter-footer">
+        <span></span>
+        <a href="chapters/00-conceitos-basicos.html">Começar: Cap. 0 — Conceitos Básicos →</a>
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/js/manual.js"></script>
+</body>
+</html>

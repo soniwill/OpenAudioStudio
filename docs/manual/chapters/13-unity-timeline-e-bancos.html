@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unity Timeline, bancos sob demanda e mixagem avançada | OpenAudio Studio</title>
+  <link rel="stylesheet" href="../assets/css/manual.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="manual-sidebar"></aside>
+
+    <main class="main-content">
+      <div class="breadcrumbs"><a href="../index.html">Manual</a> › Integração avançada</div>
+      <h1>Unity Timeline, bancos sob demanda e mixagem avançada</h1>
+
+      <p class="lead">Use estes recursos quando o projeto precisar sincronizar sons com uma cinemática, carregar áudio conforme a fase ou controlar o roteamento de uma instância.</p>
+      <h2 id="timeline">Um evento disparado pela Unity Timeline</h2>
+      <p>A timeline do Studio descreve o que acontece <em>dentro</em> do evento. Na Unity, um clipe <code>OaeEventClip</code> na faixa <code>OaeEventTrack</code> dispara o evento em um ponto da sequência do jogo. Essa integração é opcional: instale o pacote <code>com.unity.timeline</code> e confirme que a assembly <code>OpenAudio.Runtime</code> tem referência a <code>Unity.Timeline</code>. O <code>OAE_UNITY_TIMELINE</code> é um define condicional do <code>OpenAudio.Runtime.asmdef</code>; a instalação do pacote, sozinha, não substitui a referência de assembly. A configuração base de <code>OpenAudioUnity</code> não inclui Timeline.</p>
+
+      <figure class="callout-figure"><div class="callout-stage"><img src="../assets/img/unity-timeline-integration.svg" alt="Integração da Unity Timeline com OaeEventTrack e OaeEventClip"></div><figcaption class="callout-caption">Na janela Timeline da Unity, a faixa <code>OaeEventTrack</code> (destacada em ciano <code>#26b7d9</code>) hospeda clipes <code>OaeEventClip</code>. Quando o Playable Director atinge <code>1.0 s</code> (ou <code>2.0 s</code>), a sequência dispara o evento publicado (ex.: <code>event:/sfx/coin</code>). O Inspector lateral permite ajustar volume, modo de parada e curvas de parâmetros em tempo relativo.</figcaption></figure>
+
+      <ol>
+<li>Com Audio Manager e banco carregado, prepare uma Timeline Asset ligada a um Playable Director na cena.</li>
+<li>No editor da Timeline, clique com o botão direito na lista de faixas e adicione a faixa <strong>Audio (OAE)</strong> (<code>OaeEventTrack</code>). Arraste ou crie um clipe <code>OaeEventClip</code> na faixa. No Inspector do clipe, escolha um evento incluído no banco carregado — por exemplo <code>event:/sfx/coin</code> se publicou o projeto de exemplo — e posicione o clipe em <code>1 s</code>.</li>
+<li>Entre em Play Mode e inicie o Director. O evento deve disparar exatamente quando o playhead da sequência entrar no clipe (<code>OnClipEnter()</code>). Mova o clipe para <code>2 s</code> na régua e confirme que o disparo acompanha a nova posição; teste também o controle <strong>Volume</strong> do Inspector em <code>1</code> e <code>0.5</code> para confirmar a atenuação de 6 dB.</li>
+<li>Com um evento sustentado (como <code>event:/music/theme</code> ou <code>event:/sfx/charge_sustain_async</code>), compare o campo <strong>Stop Mode</strong>:
+  <ul>
+    <li><strong>AllowFadeout:</strong> Permite que a cauda de release do som termine naturalmente ao cruzar a borda final do clipe.</li>
+    <li><strong>Immediate:</strong> Corta o áudio instantaneamente ao sair do clipe.</li>
+  </ul>
+</li>
+<li>Para testar <strong>Parameter Curves</strong>, clique em <strong>+</strong> em Parameter Curves no Inspector, escreva o nome de um parâmetro (ex.: <code>Intensity</code> ou <code>MasterVolume</code>) e desenhe a curva de animação em segundos relativos ao clipe. Durante a reprodução, <code>OnClipEvaluate()</code> aplica os valores interpolados a cada quadro ao evento ativo.</li>
+</ol>
+      <h2 id="loading">Carregamento sob demanda</h2>
+      <figure class="callout-figure manual-photo"><div class="callout-stage"><img src="../assets/img/unity-bank-loader.svg" alt="Inspector do Bank Loader com um banco configurado"><span class="manual-highlight" aria-hidden="true" style="left:2%;top:40%;width:97%;height:14%"></span></div><figcaption class="callout-caption">O Bank Loader ilustra a carga a partir de StreamingAssets. O exemplo abaixo usa a API para manter um banco de conteúdo sob demanda.</figcaption></figure>
+      <p>Guarde áudio específico de fase em um banco de conteúdo. Carregue o Master antes dos bancos dependentes. Use um único <code>OaeBankReferenceManager</code> por sistema. Cada <code>AcquireBankAsync</code> bem-sucedido pede um <code>ReleaseBank</code> com a mesma chave. Duas aquisições da mesma chave compartilham a carga. Depois da última liberação, o banco pode ser descarregado. Pare e libere suas instâncias antes de soltar a última referência.</p>
+      <pre><code>using var bancos = new OaeBankReferenceManager(sistema);
+var banco = await bancos.AcquireBankAsync(&quot;bonus&quot;, _ =&gt;
+    System.Threading.Tasks.Task.FromResult(new OaeBankPayload
+    {
+        BankBytes = System.IO.File.ReadAllBytes(caminhoDoBanco),
+        ExpectedCrc32 = crcDoCatalogo
+    }));
+try
+{
+    // Enquanto esta referência estiver ativa, use os eventos do banco.
+}
+finally
+{
+    bancos.ReleaseBank(&quot;bonus&quot;);
+}</code></pre>
+      <p>O exemplo pressupõe um método <code>async</code> na thread principal, com o sistema ativo, o caminho completo e o CRC do catálogo disponível. Para observar a contagem, adquira a mesma chave em dois consumidores e compare <code>GetRefCount("bonus")</code> antes e depois das liberações. A aquisição pode lançar exceções se os bytes forem inválidos ou o CRC divergir. O carregamento síncrono dos bytes no exemplo é apropriado para um banco pequeno de teste.</p>
+      <table><thead><tr><th>Origem</th><th>Como fornecer os bytes</th><th>Chave de liberação</th></tr></thead><tbody>
+<tr><td>Arquivo ou bytes próprios</td><td><code>OaeSystem.LoadBankFile</code>, <code>LoadBankFileAsync</code> ou <code>LoadBankMemory</code> se o jogo gerencia a vida útil diretamente. Use <code>AcquireBankAsync</code> para referência compartilhada e CRC esperado.</td><td>A mesma chave de aquisição quando usar o gerenciador.</td></tr>
+<tr><td>AssetBundle</td><td>Importe uma cópia do banco como <code>.bytes</code> para obter um TextAsset, inclua-o no bundle e chame <code>OaeAssetBundleBankProvider.LoadFromAssetBundleAsync</code> com o bundle carregado.</td><td><code>bundle.name + ":" + assetName</code></td></tr>
+<tr><td>Addressables</td><td>Importe o banco como TextAsset e marque-o como endereçável. Com a assembly resolvendo <code>Unity.Addressables</code> e <code>Unity.ResourceManager</code> e o define <code>OAE_UNITY_ADDRESSABLES</code>, chame <code>OaeAddressablesBankProvider.LoadFromAddressablesAsync</code>.</td><td>O endereço do TextAsset.</td></tr>
+</tbody></table>
+      <p>Os dois provedores prontos passam os bytes ao gerenciador. Para exigir um CRC específico do catálogo, passe-o em um <code>OaeBankPayload</code> próprio. Faça o primeiro teste com os bancos locais do exemplo e examine o Console ao configurar pacotes opcionais.</p>
+      <h2 id="routing">Envios, retornos e efeitos por faixa</h2>
+      <figure class="callout-figure manual-photo"><div class="callout-stage"><img src="../assets/img/deck-tab1-mixer.png" alt="Mixer Deck do Studio com os barramentos"></div><figcaption class="callout-caption">No Studio, identifique o barramento de origem pelo caminho no Mixer Deck. O exemplo configura um retorno pela API do jogo.</figcaption></figure>
+      <p>Um <strong>send</strong> envia parte do sinal a um retorno. Um <strong>insert</strong> processa o sinal que já passa naquele canal. Por exemplo, duas fontes podem compartilhar um retorno de reverberação. No pós-fader, abaixar a fonte reduz também o envio. No pré-fader, o nível de envio independe desse ajuste.</p>
+      <pre><code>var fonte = sistema.GetBus(&quot;bus:/sfx&quot;);
+var retorno = sistema.CreateReturnBus(&quot;ambiente&quot;);
+retorno.AddEffect(OaeEffectType.Reverb);
+fonte.AddSend(retorno, 0.25f, OaeEffectPosition.PostFader);
+
+// Durante a reprodução, compare o sinal seco com o retorno mudo.
+fonte.SetSendMute(retorno, true);
+fonte.SetSendMute(retorno, false);
+
+// Ao encerrar o teste, retire o envio antes de liberar o retorno.
+fonte.RemoveSend(retorno);
+retorno.Release();</code></pre>
+      <p>Um roteamento que retorna a si mesmo é rejeitado. Para ajustar a primeira faixa de uma única instância, obtenha <code>instancia.GetTrackBus(0)</code> e mude seu ganho ou adicione um efeito. Compare duas instâncias do mesmo evento e altere apenas uma delas. O barramento de faixa pertence à instância. Use-o enquanto ela existir.</p>
+      <h2 id="authored">Recursos de autoria avançada e API nativa</h2>
+      <table><thead><tr><th>Recurso</th><th>O que observar</th></tr></thead><tbody>
+<tr><td>Instrumento assíncrono</td><td>Um som pode atravessar um salto de timeline. Ao retornar ao ponto de disparo, as políticas permitem sobrepor, ignorar enquanto toca ou cortar a voz anterior. Compare uma cauda longa com uma região de loop curta.</td></tr>
+<tr><td>Região de parâmetro</td><td>O runtime pode ativar um instrumento quando um parâmetro entra em um intervalo. Imagine um motor auxiliar ativo entre 0,6 e 1. Compare valores logo abaixo e acima de 0,6.</td></tr>
+<tr><td>Programmer Instrument e Audio Table</td><td>Para a rota gerenciada pela Unity, publique uma chave de Programmer na <code>audio_table</code> associada a um <code>sample_id</code> válido; o runtime resolve esse som ao reproduzir o evento. A rota alternativa usa callbacks nativos <code>CREATE_PROGRAMMER_SOUND</code> e <code>DESTROY_PROGRAMMER_SOUND</code> para escolher e liberar áudio personalizado. O pacote Unity declara os tipos de callback, mas seu <code>EventInstance</code> gerenciado não expõe esse fluxo de criação; callbacks personalizados exigem integração nativa.</td></tr>
+<tr><td>Loops sobrepostos e pitch da timeline</td><td>O runtime pode escolher loops sobrepostos por prioridade e usar a menor região em empate. Com o modo de pitch temporal ativo, +12 semitons dobram o avanço da timeline. Use marcadores para comparar o tempo transcorrido.</td></tr>
+</tbody></table>
+
+      <h3 id="programmer-routes">Programmer Instrument: Tabela Publicada vs. Callbacks Nativos</h3>
+      <p>O Programmer Instrument permite que o som reproduzido seja determinado dinamicamente no jogo em vez de fixado na autoria. O OpenAudio oferece duas rotas com complexidades e pré-requisitos distintos:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Característica</th>
+            <th>Rota 1: Tabela de Áudio Publicada (Gerenciada / Studio + Unity)</th>
+            <th>Rota 2: Callbacks Nativos (C ABI de Baixo Nível)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Mecanismo</strong></td>
+            <td>O instrumento aponta para uma chave da <code>audio_table</code> (ex.: <code>coin_demo</code>). O compilador do Studio empacota a tabela no catálogo binário (<code>.bank</code> e <code>catalog.json</code>) mapeando a chave ao <code>sample_id</code> do WAV.</td>
+            <td>O motor intercepta o disparo na timeline chamando um callback C (<code>CREATE_PROGRAMMER_SOUND</code>) que entrega o handle do som alocado dinamicamente pelo código do usuário.</td>
+          </tr>
+          <tr>
+            <td><strong>Uso no Jogo</strong></td>
+            <td>Totalmente automático no C# de alto nível: <code>sistema.PlayOneShot("event:/sfx/dialogo")</code> ou <code>GetEvent(...).CreateInstance()</code>. O motor C++ resolve e decodifica o sample da tabela diretamente.</td>
+            <td>Exige implementar ponte C/C++ ou P/Invoke para <code>oae_event_instance_set_programmer_callback</code>, alocando o handle nativo <code>OaeSound</code> com <code>oae_sound_create</code> e liberando em <code>DESTROY_PROGRAMMER_SOUND</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>Suporte no Pacote Unity</strong></td>
+            <td><strong style="color:#00f5d4;">Totalmente suportado</strong> via <code>com.openaudio.core</code>, sem necessidade de código nativo ou plugins adicionais.</td>
+            <td><strong style="color:#ffb703;">Apenas nativo</strong>: os delegates existem em C#, mas <code>EventInstance.cs</code> gerenciado não expõe a fábrica de ponteiros de som nativos.</td>
+          </tr>
+          <tr>
+            <td><strong>Caso de Uso Típico</strong></td>
+            <td>Localização de diálogos empacotados, variações de som conhecidas na publicação, skins de efeitos sonoros.</td>
+            <td>Áudio procedural em tempo real, streaming de arquivos externos fora de bancos, bibliotecas externas de síntese de voz (TTS).</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Esses exemplos descrevem capacidades do runtime. Para usar cada recurso a partir do Studio, confirme a presença do campo no editor, o valor exportado e o comportamento no banco final. O teste desta seção precisa de um banco publicado com o evento escolhido; a Unity Timeline também precisa estar instalada e referenciada pela assembly do pacote.</p>
+
+      <h2 id="requisitos">Pré-requisitos das integrações opcionais</h2>
+      <p>O pacote base <code>com.openaudio.core</code> funciona sem dependências externas. As integrações abaixo adicionam capacidades adicionais e exigem pré-requisitos específicos de montagem:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Integração Opcional</th>
+            <th>Pacotes Unity Necessários</th>
+            <th>Referência em Assembly (.asmdef)</th>
+            <th>Defines de Compilação</th>
+            <th>Configuração do Projeto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Unity Timeline</strong></td>
+            <td><code>com.unity.timeline</code> (via Package Manager)</td>
+            <td>Adicionar <code>"Unity.Timeline"</code> no array <code>references</code> de <code>OpenAudio.Runtime.asmdef</code></td>
+            <td><code>OAE_UNITY_TIMELINE</code> (gerado via <code>versionDefines</code>)</td>
+            <td>Playable Director com Timeline Asset contendo <code>OaeEventTrack</code> e <code>OaeEventClip</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>AssetBundles</strong></td>
+            <td><code>com.unity.modules.assetbundle</code> (módulo nativo da Unity)</td>
+            <td>Nenhuma referência extra necessária</td>
+            <td>Disponível nativamente no runtime</td>
+            <td>Importar o arquivo <code>.bank</code> como <code>.bytes</code> para gerar <code>TextAsset</code> empacotável em bundles.</td>
+          </tr>
+          <tr>
+            <td><strong>Addressables</strong></td>
+            <td><code>com.unity.addressables</code> e <code>com.unity.scriptablebuildpipeline</code></td>
+            <td>Adicionar <code>"Unity.Addressables"</code> e <code>"Unity.ResourceManager"</code> em <code>references</code></td>
+            <td><code>OAE_UNITY_ADDRESSABLES</code> (via <code>versionDefines</code>)</td>
+            <td>Banco importado como <code>.bytes</code>, marcado como Addressable e chamado via <code>OaeAddressablesBankProvider</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>Física 2D / 3D (Doppler e Velocidade)</strong></td>
+            <td><code>com.unity.modules.physics</code> e <code>com.unity.modules.physics2d</code></td>
+            <td>Módulos nativos integrados ao asmdef base</td>
+            <td><code>OAE_UNITY_PHYSICS</code>, <code>OAE_UNITY_PHYSICS2D</code></td>
+            <td>Adicionar <code>Rigidbody</code> ou <code>Rigidbody2D</code> ao mesmo GameObject do <code>StudioEventEmitter</code> para cálculo automático de velocidade.</td>
+          </tr>
+          <tr>
+            <td><strong>Programmer Callbacks Nativos</strong></td>
+            <td>Nenhum pacote Unity</td>
+            <td>Não acessível pela API C# pura de <code>com.openaudio.core</code></td>
+            <td>N/A (C ABI nativa)</td>
+            <td>Implementação de ponte C/C++ vinculada a <code>oae_audio.dll</code> para registrar callbacks e gerenciar handles de <code>OaeSound</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 id="decisao">Escolha a forma de integração</h2>
+      <table><thead><tr><th>Necessidade</th><th>Fluxo inicial</th><th>Como verificar</th></tr></thead><tbody>
+      <tr><td>Banco pequeno presente desde o início.</td><td>Studio Bank Loader em StreamingAssets.</td><td>Carregue antes do primeiro disparo e confirme o caminho publicado.</td></tr>
+      <tr><td>Duas partes da fase usam o mesmo banco de bônus.</td><td>Gerenciador de referências com uma chave comum.</td><td>Adquira duas vezes, solte uma e confira o segundo consumidor. Solte a última após parar suas instâncias.</td></tr>
+      <tr><td>Disparo em uma cinemática.</td><td>Faixa de evento da Unity Timeline, com banco pronto antes do Director.</td><td>Mova o clipe de 1 s para 2 s e observe o instante do disparo.</td></tr>
+      <tr><td>Duas fontes precisam da mesma reverberação.</td><td>Envios para um retorno compartilhado.</td><td>Silencie um envio por vez. Compare a contribuição do retorno com o sinal direto.</td></tr></tbody></table>
+
+      <h2>Termos de integração avançada</h2>
+      <dl><dt>Playable Director</dt><dd>Componente Unity que executa uma sequência Timeline.</dd><dt>TextAsset</dt><dd>Ativo Unity que expõe os bytes importados de um arquivo.</dd><dt>Contagem de referências</dt><dd>Número de consumidores que mantêm uma carga compartilhada ativa.</dd><dt>Send / Return</dt><dd>Envio paralelo de áudio e barramento que recebe esse sinal.</dd></dl>
+      <div class="chapter-footer"><a href="10-unity-api-csharp-e-live.html">← API C# e Live-Linking</a><a href="11-tutoriais-praticos.html">Tutoriais →</a></div>
+    </main>
+  </div>
+  <script src="../assets/js/manual.js"></script>
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 5 — Timeline, Faixas e Waveforms | OpenAudio Studio</title>
+  <link rel="stylesheet" href="../assets/css/manual.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="manual-sidebar"></aside>
+
+    <main class="main-content">
+      <div class="breadcrumbs"><a href="../index.html">Manual</a> › Cap. 5 — Timeline e Waveforms</div>
+      <h1>Capítulo 5 — Timeline, Faixas e Formas de Onda</h1>
+      <p class="lead">
+        A Timeline é o coração da autoria temporal do evento: posicione clipes ao milissegundo, defina camadas simultâneas em faixas coloridas, navegue em sub-eventos via breadcrumbs e molde o volume ao longo do tempo com automação e visualize waveforms poligonais.
+      </p>
+
+      <nav aria-label="Nesta página">
+        <ul>
+          <li><a href="#mapa-timeline">1. Anatomia da Timeline</a></li>
+          <li><a href="#breadcrumbs">2. Navegação Hierárquica por Breadcrumbs</a></li>
+          <li><a href="#cores-faixas">3. Cores de Pista Customizáveis e Cabeçalhos</a></li>
+          <li><a href="#waveforms-poligonais">4. Waveforms Poligonais e Tipos de Instrumentos</a></li>
+          <li><a href="#command-instruments">5. Command Instruments e Orquestração</a></li>
+          <li><a href="#parameter-sheets">6. Parameter Sheets (PSHT): Timelines por Parâmetro</a></li>
+          <li><a href="#automacao-volume-tempo">7. Automação de volume no tempo</a></li>
+          <li><a href="#snap-edicao">8. Snap Magnético e Gestos de Edição de Clipes</a></li>
+          <li><a href="#drag-drop-timeline">9. Importação de Áudio por Drag-and-Drop Direto</a></li>
+          <li><a href="#fita-parametros-contextuais">10. Fita Retrátil de Parâmetros Contextuais (Timeline Parameter Strip)</a></li>
+          <li><a href="#modo-layers-stems">11. Modo Layers (LayerStackView): Stems e Máscaras por Parâmetro</a></li>
+        </ul>
+      </nav>
+
+      <!-- MAPA DA TIMELINE -->
+      <h2 id="mapa-timeline">1. Anatomia da Timeline</h2>
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/studio-timeline.png" alt="Captura real da Timeline atualizada com breadcrumbs, swatches de cores e waveforms poligonais">
+        </div>
+        <figcaption class="callout-caption">
+          A Timeline do OpenAudio Studio: minimapa superior com régua dual, barra de breadcrumbs para eventos aninhados, cabeçalhos com cores de pista e curvas de automação ribbon.
+        </figcaption>
+      </figure>
+
+      <!-- BREADCRUMBS -->
+      <h2 id="breadcrumbs">2. Navegação Hierárquica por Breadcrumbs</h2>
+      <figure class="callout-figure">
+        <div class="callout-stage"><img src="../assets/img/studio-nested-breadcrumb.png" alt="Timeline do evento filho coin com breadcrumb nested seguido de coin"></div>
+        <figcaption class="callout-caption">Ao abrir o clipe Event do pai <code>nested</code>, a barra mostra o evento filho <code>coin</code>. Clique no nome do pai ou em <strong>&lt;</strong> para voltar.</figcaption>
+      </figure>
+      <div class="theory-box box">
+        <div class="box-title">O que são Breadcrumbs de Timeline?</div>
+        <p>
+          No OpenAudio Studio, um evento pode conter clipes do tipo <strong>Event Instrument</strong> (que apontam para outros eventos do projeto). Em vez de trocar de seleção no navegador e perder a referência do evento pai, a Timeline inclui uma <strong>trilha de navegação (Breadcrumbs)</strong> no topo esquerdo.
+        </p>
+      </div>
+
+      <p><strong>Como navegar em eventos aninhados:</strong></p>
+      <ol>
+        <li>
+          <strong>Duplo-clique no clipe:</strong> Dê duplo-clique sobre qualquer clipe com o badge <code>[EVT]</code> na timeline. O Studio entra imediatamente no evento filho referenciado.
+        </li>
+        <li>
+          <strong>Leitura da Trilha:</strong> A barra superior exibirá o caminho hierárquico (ex: <code>event:/music/theme &gt; event:/music/stinger</code>).
+        </li>
+        <li>
+          <strong>Retorno em 1 Clique:</strong> Clique no botão voltar <code>←</code> ou no nome do evento pai no breadcrumb para retornar imediatamente à timeline original.
+        </li>
+      </ol>
+
+      <!-- CORES DE PISTA -->
+      <h2 id="cores-faixas">3. Cores de Pista Customizáveis e Cabeçalhos</h2>
+      <p>
+        Em projetos complexos com dezenas de camadas simultâneas (como trilhas orquestrais ou veículos com 10 faixas de áudio), a organização visual é indispensável:
+      </p>
+      <ul>
+        <li>
+          <strong>Swatch de Cor:</strong> Cada cabeçalho de pista (<code>TrackHeaderPanel</code>) possui um seletor retangular de cor à esquerda.
+        </li>
+        <li>
+          <strong>Personalização de Cores:</strong> Clique sobre o swatch para abrir a paleta de cores. A cor escolhida tinge suavemente o cabeçalho e a linha de fundo da pista, permitindo categorizar rapidamente seções (por exemplo: verde para percussão, roxo para sintetizadores, azul para ventos e amarelo para foleys).
+        </li>
+        <li>
+          <strong>Controles de Audição em Tempo Real (<code>M</code>, <code>S</code>, <code>Volume</code> e <code>Pan</code>):</strong>
+          <ul>
+            <li><strong>Botões <code>M</code> (Mute) e <code>S</code> (Solo):</strong> aplicam silenciamento instantâneo (<code>0 ms</code>) nos barramentos nativos de cada faixa durante a audição local (sincronizados com o modo <em>Layers</em> e com o <em>Inspector</em>). Seguindo a convenção do FMOD Studio e do Mixer Deck, <strong>Mute vence Solo</strong> (uma faixa com <code>M</code> ativo permanece muda mesmo com <code>S</code> ligado, preservando apenas ancestrais na cadeia <code>output_track</code> quando há <code>S</code> ativo).</li>
+            <li><strong>Escopo exclusivo de audição:</strong> <code>M</code> e <code>S</code> existem apenas para isolar e comparar faixas no Studio; eles não disparam recompilação de prévia e não alteram os arquivos <code>.bank</code> publicados para o jogo.</li>
+            <li><strong>Sliders de <code>Volume</code> (<code>-80..10 dB</code>) e <code>Pan</code> (<code>-1.0..1.0</code>):</strong> refletem imediatamente no áudio em reprodução (incluindo via Undo/Redo, Play/Resume e reinício de loop) enquanto arrasta, adiando a recompilação definitiva da prévia até você soltar o controle.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <!-- WAVEFORMS POLIGONAIS E TIPOS DE INSTRUMENTOS -->
+      <h2 id="waveforms-poligonais">4. Waveforms Poligonais e Tipos de Instrumentos</h2>
+      <p>
+        O motor gráfico da Timeline desenha <strong>formas de onda vetoriais poligonais</strong> de alta fidelidade em duas camadas (silhueta de pico semitransparente e núcleo RMS interno) para todos os instrumentos sonoros:
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Tipo de Instrumento</th>
+            <th>Badge</th>
+            <th>Comportamento Técnico e Gráfico</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Single Instrument</strong></td>
+            <td>—</td>
+            <td>Reproduz uma amostra de áudio WAV fixa. Renderiza a waveform real com visualização precisa de transientes e silêncios.</td>
+          </tr>
+          <tr>
+            <td><strong>Multi Instrument</strong></td>
+            <td><code>[MLT]</code></td>
+            <td>Contém uma playlist estocástica com pesos de probabilidade, variação aleatória de pitch/volume e lógica anti-repetição.</td>
+          </tr>
+          <tr>
+            <td><strong>Event Instrument</strong></td>
+            <td><code>[EVT]</code></td>
+            <td>Dispara outro evento do projeto como sub-evento aninhado. <strong>Resolve recursivamente a waveform</strong> dos instrumentos filhos na timeline pai.</td>
+          </tr>
+          <tr>
+            <td><strong>Scatterer Instrument</strong></td>
+            <td><code>[SCT]</code></td>
+            <td>Dispara entradas da playlist em intervalos sorteados, com limite de polifonia, variação por disparo e dispersão de ganho e pan.</td>
+          </tr>
+          <tr>
+            <td><strong>Opção Async</strong></td>
+            <td>Rótulo do tipo de instrumento</td>
+            <td>Em instrumentos compatíveis, marque <strong>Async</strong> no card do clipe, no Inspector. Depois do disparo, a voz pode avançar independentemente da posição do cursor. Configure o loop e a lógica de sustentação conforme o exercício de <a href="11-tutoriais-praticos.html#async">Sustain Point e Key Off</a>.</td>
+          </tr>
+          <tr>
+            <td><strong>Programmer Instrument</strong></td>
+            <td><code>[PRG]</code></td>
+            <td>Carrega amostras dinamicamente via chave de texto apontando para a <code>audio_table</code> ou atribuída em tempo de execução via API C# na Unity.</td>
+          </tr>
+          <tr>
+            <td><strong>Command Instrument</strong></td>
+            <td><code>[CMD]</code></td>
+            <td>Instrumento sem áudio direto: executa comandos de disparo ou parada de outros eventos e ativação/desativação de snapshots.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- COMMAND INSTRUMENTS -->
+      <h2 id="command-instruments">5. Command Instruments e Orquestração</h2>
+      <div class="theory-box box">
+        <div class="box-title">O que é um Command Instrument?</div>
+        <p>
+          Um <strong>Command Instrument</strong> agenda uma ação de evento ou snapshot na posição do clipe. Selecione-o para escolher a ação em <strong>Command Type</strong> e o destino válido em <strong>Command Target</strong>; o tipo de destino muda conforme a ação.
+        </p>
+      </div>
+
+      <p><strong>Os 4 Tipos de Comandos Disponíveis:</strong></p>
+      <ul>
+        <li>
+          <strong><code>start_event</code>:</strong> Dispara uma nova instância do evento alvo especificado em <code>command_target</code>. Útil para disparar cápsulas de bala ao atirar, partículas secundárias ou stingers musicais.
+        </li>
+        <li>
+          <strong><code>stop_event</code>:</strong> Solicita a parada (com fadeout suave ou imediato) das instâncias ativas do evento alvo.
+        </li>
+        <li>
+          <strong><code>snapshot_on</code>:</strong> Ativa um snapshot de mixagem na hierarquia do mixer (ex.: ativar o snapshot de menu de pausa ou ducking de combate).
+        </li>
+        <li>
+          <strong><code>snapshot_off</code>:</strong> Desativa o snapshot de mixagem, restaurando os faders e parâmetros do mixer aos seus valores nominais.
+        </li>
+      </ul>
+      <p>
+        Os valores acima são os rótulos de autoria. Para um exercício executável, use <code>event:/music/theme</code> como evento de origem, <code>event:/sfx/coin</code> como alvo de <code>start_event</code> e <code>snapshot:/pause_menu</code> como alvo de <code>snapshot_on</code>/<code>snapshot_off</code>; esses recursos e os samples <code>theme.wav</code> e <code>coin.wav</code> vêm em <code>example_project</code>. O passo a passo está no <a href="11-tutoriais-praticos.html#command-orquestracao">tutorial de Command Instruments</a>.
+      </p>
+
+      <!-- PARAMETER SHEETS -->
+      <h2 id="parameter-sheets">6. Parameter Sheets (PSHT): Timelines Guiadas por Parâmetros</h2>
+      <div class="theory-box box">
+        <div class="box-title">Diferença entre Time Timeline e Parameter Sheets</div>
+        <p>
+          Uma <strong>Parameter Sheet (<code>PSHT</code>)</strong> delimita em qual faixa de um parâmetro um instrumento pode disparar. O vínculo é feito no instrumento selecionado pelo <strong>Inspector</strong>, com <strong>Trigger Sheet</strong>, <strong>Sheet Min</strong> e <strong>Sheet Max</strong>; não se cria uma aba de Timeline separada.
+        </p>
+      </div>
+
+      <p><strong>Exemplos de aplicação:</strong></p>
+      <ul>
+        <li>
+          <strong>Veículos e Motores:</strong> Vincule instrumentos a faixas de um parâmetro local <code>RPM</code> (0 a 8000). Instrumentos sobrepostos podem tocar simultaneamente nas regiões configuradas; use fades para suavizar a soma.
+        </li>
+        <li>
+          <strong>Velocidade de Movimento:</strong> O parâmetro <code>Speed</code> transita entre passos calmos, caminhada e corrida frenética.
+        </li>
+        <li>
+          <strong>Saúde / Tensão:</strong> O parâmetro <code>Health</code> (100 a 0) faz surgir gradualmente batimentos cardíacos e respiração ofegante conforme a vida do personagem cai.
+        </li>
+      </ul>
+
+      <p><strong>Como criar e vincular um Trigger Sheet:</strong></p>
+      <ol>
+        <li>Abra uma cópia de <code>example_project/project.json</code> e selecione o instrumento <code>theme.wav</code> no evento <code>event:/music/theme</code>. Esse projeto já declara o parâmetro global contínuo <code>MasterVolume</code>, de <code>0</code> a <code>1</code>, com valor padrão <code>0.8</code>.</li>
+        <li>No <strong>Inspector</strong> do instrumento selecionado, escolha <code>MasterVolume</code> no campo <strong>Trigger Sheet</strong>. O vínculo passa a usar por padrão o domínio do parâmetro.</li>
+        <li>Defina <strong>Sheet Min</strong> como <code>0.4</code> e <strong>Sheet Max</strong> como <code>0.8</code>. A faixa é inclusiva: o instrumento é elegível entre os dois limites e deixa de sê-lo quando o valor sai da faixa.</li>
+        <li>Na prévia, compare o instrumento com o valor de <code>MasterVolume</code> dentro e fora da faixa e depois restaure <code>0.8</code>. Para exercitar um parâmetro local, selecione o evento no Inspector, use <strong>+ Add Local Param</strong> → <strong>Continuous</strong>, nomeie-o <code>RPM</code> e defina <strong>Min</strong> <code>0</code>, <strong>Max</strong> <code>8000</code> e <strong>Default</strong> <code>800</code>. Selecione o instrumento de novo e escolha <code>RPM</code> em <strong>Trigger Sheet</strong>.</li>
+        <li>Para transições suaves entre instrumentos sobrepostos, ajuste separadamente seus faders de ganho e fades. O intervalo <strong>Sheet Min/Max</strong> controla elegibilidade do instrumento; não é uma curva de automação de ganho.</li>
+      </ol>
+      <p>Veja também os <a href="06-inspetor-e-modulacao.html#parameter-trigger-sheet">controles e o efeito do vínculo no Inspector</a> e o <a href="11-tutoriais-praticos.html#parameter-sheet-veiculo">exercício com os assets distribuídos</a>.</p>
+
+      <!-- AUTOMAÇÃO BEZIER -->
+      <span id="automacao-bezier"></span>
+      <h2 id="automacao-volume-tempo">7. Automação de volume no tempo</h2>
+      <p>
+        O botão <kbd>A</kbd> no cabeçalho da pista mostra ou recolhe a faixa de automação temporal de volume abaixo dos clipes. Essa faixa edita o ganho da pista ao longo do tempo; ela não exibe as curvas dirigidas por parâmetros configuradas no Inspetor.
+      </p>
+      <ol>
+        <li>Na pista que deseja automatizar, clique em <kbd>A</kbd>. O botão fica destacado e aparece a faixa <strong>Volume Automation</strong>. Ela representa o volume da pista ao longo do tempo: a posição horizontal é o tempo em milissegundos e a posição vertical é o ganho em dB.</li>
+        <li>Na faixa, dê duplo-clique na grade para inserir um ponto. Arraste um ponto existente para mudar seu tempo e valor em dB. Clique novamente em <kbd>A</kbd> para recolher a faixa; ao expandi-la, os pontos continuam disponíveis.</li>
+        <li>Em uma pista sem automação temporal de volume, clique em <kbd>A</kbd> para abrir a grade vazia e dê duplo-clique para criar o primeiro ponto. Isso cria a curva temporal de volume sem substituir curvas por parâmetro do Inspetor.</li>
+        <li>Para excluir um ponto, clique nele e pressione <kbd>Delete</kbd> ou <kbd>Backspace</kbd>. A tecla atua na faixa enquanto ela estiver focada e o mesmo resultado aparece no menu de contexto do ponto, na opção <strong>Delete Point</strong>.</li>
+        <li>Excluir o último ponto remove a curva temporal de volume da pista e devolve a faixa à grade vazia. Clique em um clipe antes de pressionar <kbd>Delete</kbd> quando quiser remover o clipe: a tecla age sobre o último alvo clicado, não sobre a automação.</li>
+      </ol>
+      <ul>
+        <li>
+          <strong>Leitura da curva:</strong> A faixa usa uma representação visual em fita (<em>ribbon</em>) para mostrar a evolução do ganho da pista; a cor e o preenchimento são recursos visuais, não representam uma segunda curva.
+        </li>
+        <li>
+          <strong>Interpolação:</strong> Arraste um ponto existente para ajustar seu tempo e valor. A linha segue o formato configurado para o segmento; os pontos definem valores em tempo e dB.
+        </li>
+        <li>
+          <strong>Undo/Redo Integrado:</strong> Cada arraste, inserção ou exclusão de ponto é registrado como uma ação no histórico (<kbd>Ctrl</kbd> + <kbd>Z</kbd>). Uma exclusão desfeita devolve o ponto; a remoção da curva pelo último ponto é restaurada inteira com um único <kbd>Ctrl</kbd> + <kbd>Z</kbd>.
+        </li>
+      </ul>
+      <p>Para curvas dirigidas por um parâmetro (por exemplo, <code>MasterVolume → volume</code>, <code>pitch</code> ou <code>pan</code>), consulte <a href="06-inspetor-e-modulacao.html#curvas-automacao-parametro">Curvas por parâmetro no Inspetor</a>.</p>
+
+      <!-- SNAP E EDIÇÃO -->
+      <h2 id="snap-edicao">8. Snap Magnético e Gestos de Edição de Clipes</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Gesto do Mouse</th>
+            <th>Ação na Timeline</th>
+            <th>Comportamento com Snap</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Arrastar o corpo do clipe</td>
+            <td>Move a posição de início (Start Time) do som.</td>
+            <td>Gruda no marcador de tempo, compasso ou batida mais próximo conforme o modo de Snap selecionado.</td>
+          </tr>
+          <tr>
+            <td>Arrastar as bordas laterais</td>
+            <td>Redimensiona a duração visível da região do clipe.</td>
+            <td>Corta ou estende a janela de reprodução da amostra.</td>
+          </tr>
+          <tr>
+            <td>Arrastar canto superior interno</td>
+            <td>Ajusta a duração do Fade In (início) ou Fade Out (fim).</td>
+            <td>Calcula a atenuação exponencial suave da entrada ou saída.</td>
+          </tr>
+          <tr>
+            <td>Botão direito na régua</td>
+            <td>Abre o menu contextual de marcadores e lógica.</td>
+            <td>Permite adicionar Markers, Loops, Transition Markers e Sustain Points na posição clicada.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- DRAG-AND-DROP DIRETO NA TIMELINE -->
+      <h2 id="drag-drop-timeline">9. Importação de Áudio por Drag-and-Drop Direto</h2>
+      <p>
+        O fluxo de trabalho ágil de sound design no OpenAudio Studio permite arrastar arquivos de áudio diretamente do sistema operacional para a Timeline:
+      </p>
+      <ul>
+        <li>
+          <strong>Formatos Aceitos:</strong> Arquivos <code>.wav</code>, <code>.ogg</code>, <code>.mp3</code> e <code>.flac</code>. Arquivos não suportados são rejeitados sem alterar o projeto.
+        </li>
+        <li>
+          <strong>Criação Instantânea de Instrumento:</strong> Ao soltar um arquivo sobre qualquer pista (<code>TimelineTrackLane</code>), o Studio copia o arquivo para <code>assets/</code> (caso não esteja lá), registra o sample no <code>project.json</code> e insere um <strong>Single Instrument</strong> exatamente na posição temporal do mouse, com a duração exata do arquivo de áudio e visualização imediata da forma de onda poligonal.
+        </li>
+        <li>
+          <strong>Múltiplos Arquivos em Sequência:</strong> Arrastar múltiplos arquivos cria os respectivos instrumentos encadeados a partir da posição inicial do cursor.
+        </li>
+        <li>
+          <strong>Undo/Redo Atômico:</strong> Toda a operação (cópia de arquivo, cadastro de sample e inserção de clipe) é consolidada em um único passo de desfazer/refazer (<kbd>Ctrl</kbd>+<kbd>Z</kbd> e <kbd>Ctrl</kbd>+<kbd>Y</kbd>).
+        </li>
+      </ul>
+
+      <h3 id="criacao-contextual-raia">9.1 Seleção de Pista e Criação Contextual na Raia da Timeline</h3>
+      <p>
+        Além do arraste de arquivos e dos botões do Inspector, você pode selecionar pistas e inserir qualquer tipo de instrumento diretamente sobre a área vazia da raia (<code>TimelineTrackLane</code>):
+      </p>
+      <ul>
+        <li>
+          <strong>Seleção Rápida de Pista:</strong> Um <strong>clique esquerdo</strong> em qualquer área vazia da raia seleciona a pista correspondente no modelo de autoria e traz o <strong>TrackCard</strong> para o topo do Inspector.
+        </li>
+        <li>
+          <strong>Criação na Posição Temporal Exata:</strong> Um <strong>clique direito</strong> em área vazia da raia abre o menu contextual com o submenu <code>Add Instrument</code> (<code>Single</code>, <code>Multi</code>, <code>Scatterer</code>, <code>Programmer</code>, <code>Event</code>, <code>Command</code> e <code>Silence</code>). O novo instrumento é criado com seu início (<code>offset_ms</code>) posicionado exatamente no instante horizontal clicado.
+        </li>
+      </ul>
+
+      <!-- FITA RETRÁTIL DE PARÂMETROS CONTEXTUAIS -->
+      <h2 id="fita-parametros-contextuais">10. Fita Retrátil de Parâmetros Contextuais (Timeline Parameter Strip)</h2>
+      <p>
+        Durante a edição e audição de eventos na Timeline, o sound designer frequentemente precisa testar como o áudio responde a parâmetros de controle — como a intensidade do combate, a aceleração de um veículo ou o tipo de terreno sob os passos — enquanto acompanha simultaneamente o avanço da agulha (playhead) sobre os clipes.
+      </p>
+      <p>
+        Para isso, a <strong>Timeline Parameter Strip</strong> foi posicionada estrategicamente entre o minimapa superior e a régua de tempo. Ela exibe <em>exclusivamente</em> os parâmetros que têm efeito prático no evento ativo.
+      </p>
+
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/studio-timeline-params-expanded.png" alt="Timeline com a Fita de Parâmetros Contextuais expandida mostrando parâmetros locais e nominais">
+        </div>
+        <figcaption class="callout-caption">
+          Fita contextual expandida (<code>[v] LIVE PARAMS (2)</code>): pílulas em <code>bgDark</code> com sliders dedicados, exibição do rótulo nominal para parâmetros <code>labeled</code> e badge interativo para estados booleanos.
+        </figcaption>
+      </figure>
+
+      <h3>Comportamento Inteligente e Recursos da Fita</h3>
+      <ul>
+        <li>
+          <strong>Filtro de Contexto Automático:</strong> A fita inspeciona o evento selecionado. Se o evento não consome parâmetros (nem locais, nem referências globais em automações ou condições), a fita se <strong>recolhe automaticamente para altura zero</strong>, liberando 100% da área vertical para as pistas de áudio.
+        </li>
+        <li>
+          <strong>Alternância Compacta / Expandida:</strong> Ao clicar no botão <code>[v] LIVE PARAMS (N)</code>, a fita se comprime em uma barra discreta de 24 px (<code>[>] LIVE PARAMS (N)</code>) ocultando as pílulas para momentos em que você deseja focar exclusivamente no alinhamento de clipes. Clique novamente para expandir para 42 px.
+        </li>
+        <li>
+          <strong>Exibição Nominal para Parâmetros Rotulados (Labeled):</strong> Em parâmetros com estados definidos (como <code>Grass</code>, <code>Stone</code>, <code>Water</code>), a caixa de leitura à direita exibe o nome textual do estado atual em vez de um índice numérico abstrato (0, 1 ou 2).
+        </li>
+        <li>
+          <strong>Restauração Rápida (Reset):</strong> Dê um duplo-clique sobre qualquer slider para retornar imediatamente o parâmetro ao seu valor padrão (<code>default_value</code>).
+        </li>
+      </ul>
+
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/studio-timeline-params-collapsed.png" alt="Timeline com a Fita de Parâmetros Contextuais compactada no modo [>] Params">
+        </div>
+        <figcaption class="callout-caption">
+          Fita contextual em modo compacto (<code>[&gt;] LIVE PARAMS (2)</code>): economia de espaço vertical sem perder o indicador de parâmetros vinculados ao evento.
+        </figcaption>
+      </figure>
+
+      <div class="purpose-box box">
+        <div class="box-title">Passo a Passo: Como testar parâmetros ao vivo na Timeline</div>
+        <ol>
+          <li>Selecione um evento que contenha parâmetros vinculados (ex: <code>event:/music/theme</code>).</li>
+          <li>Observe que a fita surge logo acima da régua com o botão <code>[v] LIVE PARAMS (N)</code> e os sliders dos parâmetros contextuais.</li>
+          <li>Pressione <kbd>Espaço</kbd> ou clique em <strong>Play</strong> na Barra de Transporte para iniciar a reprodução da timeline.</li>
+          <li>Enquanto o áudio toca e a agulha avança pelas formas de onda, arraste o slider <code>Intensity</code> ou o seletor <code>Surface</code>. Você ouvirá instantaneamente as automações modulando filtros e volumes em tempo real!</li>
+          <li>Dê duplo-clique no fader para voltar ao valor padrão.</li>
+        </ol>
+      </div>
+
+      <!-- MODO LAYERS (LAYERSTACKVIEW) -->
+      <h2 id="modo-layers-stems">11. Modo Layers (LayerStackView): Stems Adaptativos e Máscaras por Parâmetro</h2>
+      <p>
+        Para trilhas adaptativas baseadas em stems verticais e ambiências em camadas, o palco oferece o modo <strong>Layers</strong> (<code>LayerStackView</code>), acessível pelo seletor segmentado centralizado <code>[ Timeline | Layers ]</code> no cabeçalho de 38 px (<code>StageModeHeader</code>). O modo <code>Timeline</code> continua sendo o padrão ao abrir um evento e exibe uma sub-barra exclusiva de 28 px para Snap, formato e Zoom, enquanto a alternância para <code>Layers</code> oculta a sub-barra temporal e mantém a faixa <strong>LIVE PARAMS</strong> ativa no topo para audição ao vivo.
+      </p>
+
+      <h3>Anatomia dos Cards Bipartidos</h3>
+      <ul>
+        <li>
+          <strong>Coluna Esquerda — Stem &amp; Mix (350 px):</strong> Reúne a faixa de cor da pista, o botão de <strong>Visibilidade (Olho)</strong> sincronizado com o estado de <code>Mute</code>, o botão <code>S</code> (<strong>Solo</strong>), o nome da camada, o badge de repetição (<code>LOOP</code> ou <code>1-SHOT</code>), a miniatura poligonal da waveform e o slider de <strong>Opacidade (0%–100%)</strong> mapeado para o volume em dB da faixa com registro no histórico de Undo/Redo.
+        </li>
+        <li>
+          <strong>Coluna Direita — Máscara de Ativação (0.0 – 1.0):</strong> Permite vincular qualquer parâmetro local ou global (ou manter em <em>Sempre Ativo</em>), ajustar a faixa ativa <code>[min .. max]</code> e configurar o <strong>Fade (%)</strong> em uma barra horizontal plana de 10 px com rampas translúcidas nas extremidades e legenda <code>Ativa: X – Y</code>. Todas as barras compartilham o mesmo alinhamento horizontal e exibem o cursor vertical em ciano acompanhando o valor ao vivo (<code>Cursor ao vivo: $param = val</code>), além do <code>OaeStatusBadge</code> de estado (<code>TOCANDO (%)</code>, <code>BASE ATIVA</code>, <code>AGUARDANDO</code> ou <code>MUTADO (0%)</code>).
+        </li>
+        <li>
+          <strong>Preservação Não-Destrutiva (Round-Trip):</strong> Cada máscara gera e lê diretamente uma curva de automação de <code>volume</code> vinculada ao parâmetro na faixa (com Undo/Redo atômico). Caso a faixa já possua uma curva manual complexa na Timeline, o card exibe o aviso <strong>Curva Personalizada</strong> com o botão <code>Editar na Timeline</code> sem sobrescrever os pontos existentes.
+        </li>
+        <li>
+          <strong>Camadas de Ajuste (Adjustment Layer):</strong> Efeitos vinculados por parâmetro no evento ou no barramento de destino são destacados no topo da pilha com alternância rápida de bypass e seleção sincronizada com o Inspetor e o <code>EffectChainDeck</code>.
+        </li>
+      </ul>
+
+      <div class="purpose-box box">
+        <div class="box-title">Fluxo Rápido: Criando e Organizando Stems no Modo Layers</div>
+        <ol>
+          <li>Abra o evento desejado e clique em <strong>Layers</strong> no seletor <code>[ Timeline | Layers ]</code> no canto superior direito da barra do palco.</li>
+          <li>Clique em <strong>+ Stem Layer</strong> na barra superior ou arraste arquivos de áudio (<code>.wav</code>, <code>.ogg</code>, <code>.mp3</code>, <code>.flac</code>) diretamente sobre a área da pilha para importar o sample e criar uma faixa com <code>Single Instrument</code> configurado em <code>loop = true</code> em um único passo de Undo/Redo.</li>
+          <li>Clique sobre qualquer card para sincronizar imediatamente o <strong>Inspector</strong> e ajuste a <strong>Opacidade</strong> ou os botões <strong>Olho</strong> e <strong>S</strong> durante a audição.</li>
+          <li>Selecione um parâmetro na coluna direita de cada stem e arraste as alças da máscara para coreografar a entrada e saída de cada camada ao mover o slider correspondente na <strong>Timeline Parameter Strip</strong>.</li>
+        </ol>
+      </div>
+
+      <div class="chapter-footer">
+        <a href="04-navegador-projeto.html">← Cap. 4 — Navegador do Projeto</a>
+        <a href="06-inspetor-e-modulacao.html">Próximo: Cap. 6 — Inspetor e Modulação →</a>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/manual.js"></script>
+</body>
+</html>

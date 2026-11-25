@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 0 — Conceitos Básicos de Áudio Interativo | OpenAudio Studio</title>
+  <link rel="stylesheet" href="../assets/css/manual.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="manual-sidebar"></aside>
+
+    <main class="main-content">
+      <div class="breadcrumbs"><a href="../index.html">Manual</a> › Cap. 0 — Conceitos Básicos</div>
+      <h1>Capítulo 0 — Conceitos Básicos de Áudio Interativo</h1>
+      <p class="lead">
+        Nunca usou um programa de áudio para jogos? Sem problemas. Este capítulo explica, sem jargões complicados,
+        toda a teoria essencial para você entender o <strong>OpenAudio Studio</strong> e a integração com a <strong>Unity</strong>.
+      </p>
+
+      <h2>1. Por que usar o OpenAudio Studio em vez de tocar arquivos .wav direto?</h2>
+      <div class="theory-box box">
+        <div class="box-title">Teoria Básica — Áudio Estático vs Áudio Interativo</div>
+        <p>
+          Um arquivo <code>.wav</code> ou <code>.mp3</code> comum é <strong>estático</strong>: toda vez que você dá play, ele toca exatamente igual do início ao fim.
+          Em um jogo ou aplicação interativa, isso cansa o ouvido rapidamente (imagine ouvir o mesmo som de passo idêntico 500 vezes!).
+        </p>
+        <p>
+          O <strong>OpenAudio Studio</strong> permite transformar arquivos de áudio brutos em <strong>Eventos inteligentes</strong>:
+          eles podem sortear variações diferentes, mudar de afinação automaticamente, repetir em loop enquanto um botão estiver pressionado ou abaixar a música suavemente quando um diálogo começar.
+        </p>
+      </div>
+
+      <div class="purpose-box box">
+        <div class="box-title">Mergulho Teórico Profundo</div>
+        <p>
+          Deseja entender em detalhes a ontologia de eventos, camadas, polifonia, voice stealing e a física de parâmetros locais vs. globais? Consulte a página dedicada de <a href="fundamentos-eventos-e-parametros.html">Fundamentos: Eventos e Parâmetros</a>. Para entender a matemática de soma de sinal, faders e a distinção cirúrgica entre Buses e VCAs, consulte <a href="fundamentos-mixagem-buses-vcas-snapshots.html">Fundamentos: Buses, VCAs e Snapshots</a>.
+        </p>
+      </div>
+
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/pipeline-overview.svg" alt="Fluxo completo do arquivo de áudio até o jogo na Unity">
+        </div>
+        <figcaption class="callout-caption">
+          Do arquivo bruto até o jogo: você cria as regras no OpenAudio Studio, gera um pacote <code>.bank</code> e a Unity apenas dispara os eventos pelo nome.
+        </figcaption>
+      </figure>
+
+      <h2>2. As 4 Medidas Fundamentais que Aparecem em Toda a Interface</h2>
+
+      <h3>Volume em Decibéis (dB)</h3>
+      <div class="theory-box box">
+        <div class="box-title">Teoria Básica — O que significa dB?</div>
+        <p>
+          Ao contrário de uma porcentagem de 0% a 100%, áudio profissional usa <strong>Decibéis (dB)</strong>, porque o ouvido humano percebe volume em escala logarítmica.
+          No OpenAudio Studio:
+        </p>
+        <ul>
+          <li><code>0.0 dB</code> = Ganho unitário neste controle. A faixa, o evento e a mixagem ainda podem mudar o nível final.</li>
+          <li>Valores <strong>negativos</strong> (<code>-6 dB</code>, <code>-12 dB</code>, <code>-24 dB</code>) = som mais baixo.</li>
+          <li><code>-80 dB</code> (ou menor) = <strong>silêncio absoluto</strong> (o motor zera o áudio completamente).</li>
+          <li>Valores <strong>positivos</strong> (<code>+3 dB</code>, <code>+6 dB</code>) = som amplificado (cuidado para não distorcer!).</li>
+        </ul>
+      </div>
+
+      <div class="example-box box">
+        <div class="box-title">Exemplo Prático — Mudando o Volume</div>
+        <div class="before-after">
+          <div class="ba-card">
+            <strong>Em <code>0.0 dB</code></strong>
+            Este controle multiplica a amplitude por 1.
+          </div>
+          <div class="ba-card">
+            <strong>Em <code>-6.0 dB</code></strong>
+            A amplitude cai a aproximadamente 50%. A sensação de volume depende do sinal, da escuta e do restante da mixagem.
+          </div>
+        </div>
+      </div>
+
+      <h3>Pan (Posicionamento Esquerda / Direita)</h3>
+      <p>
+        <strong>Pan</strong> (<em>Panorama</em>) controla quanto do som vai para a caixa de som/fone <strong>esquerdo (L)</strong> ou <strong>direito (R)</strong>.
+        <code>0.0</code> (ou <code>C</code>, Centro) envia o mesmo volume para os dois lados; valores negativos puxam para a esquerda e positivos para a direita.
+      </p>
+
+      <h3>Pitch em Semitons (st)</h3>
+      <p>
+        <strong>Pitch</strong> altera a altura (grave/agudo) e a velocidade da reprodução. A unidade usada no Studio é o <strong>Semitom (st)</strong> — a mesma distância entre duas teclas vizinhas de um piano.
+      </p>
+      <div class="example-box box">
+        <div class="box-title">Exemplo Prático — Mudando o Pitch</div>
+        <div class="before-after">
+          <div class="ba-card">
+            <strong>Pitch em <code>+12 st</code></strong>
+            O som sobe exatamente 1 oitava (fica bem mais agudo e toca 2× mais rápido).
+          </div>
+          <div class="ba-card">
+            <strong>Pitch em <code>-2 st</code> a <code>+2 st</code> (aleatório)</strong>
+            Pequenas variações de altura podem reduzir a repetição perceptível. O intervalo adequado depende do material.
+          </div>
+        </div>
+      </div>
+
+      <h3>Fade In, Fade Out e Loop</h3>
+      <ul>
+        <li><strong>Fade In:</strong> rampa suave do silêncio até o volume normal no início do som (evita "estalos" ou entradas bruscas).</li>
+        <li><strong>Fade Out:</strong> rampa suave do volume normal até o silêncio ao terminar ou parar o som.</li>
+        <li><strong>Loop:</strong> repetição contínua de um trecho ou do som inteiro (muito usado em música de fundo, chuva, vento ou motor de carro).</li>
+      </ul>
+
+      <h2>3. Os Blocos de Construção do OpenAudio Studio</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Conceito</th>
+            <th>Analogia Simples</th>
+            <th>Exemplo Real</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Sample</strong></td>
+            <td>O ingrediente bruto</td>
+            <td><code>assets/tiro_01.wav</code></td>
+          </tr>
+          <tr>
+            <td><strong>Evento (<code>event:/</code>)</strong></td>
+            <td>A receita completa que o jogo pede para tocar</td>
+            <td><code>event:/Armas/Disparo</code></td>
+          </tr>
+          <tr>
+            <td><strong>Faixa (Track)</strong></td>
+            <td>Camadas simultâneas dentro de um evento</td>
+            <td>Track 1: Estalo da arma · Track 2: Eco metálico</td>
+          </tr>
+          <tr>
+            <td><strong>Parâmetro</strong></td>
+            <td>Um botão/variável que o jogo envia para mudar o som</td>
+            <td><code>Velocidade</code> (0 a 100) ou <code>Superficie</code> (Grama, Pedra)</td>
+          </tr>
+          <tr>
+            <td><strong>Bus (<code>bus:/</code>)</strong></td>
+            <td>Um canal que recebe e soma áudio. O fader e os efeitos podem agir sobre a mistura.</td>
+            <td><code>bus:/SFX</code>, <code>bus:/Musica</code>, <code>bus:/Vozes</code></td>
+          </tr>
+          <tr>
+            <td><strong>VCA (<code>vca:/</code>)</strong></td>
+            <td>Um controle que multiplica o ganho de vários barramentos e preserva seus faders individuais.</td>
+            <td>Slider "Volume Geral de Efeitos" no menu do jogo</td>
+          </tr>
+          <tr>
+            <td><strong>Snapshot (<code>snapshot:/</code>)</strong></td>
+            <td>Uma "cena" temporária de mixagem</td>
+            <td><code>snapshot:/Pausa</code> abaixa a música e aplica filtro abafado</td>
+          </tr>
+          <tr>
+            <td><strong>Bank (<code>.bank</code>)</strong></td>
+            <td>O arquivo final compilado que vai para a Unity</td>
+            <td><code>ExampleGameProject.bank</code> + <code>ExampleGameProject.bank.catalog.json</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 id="ganho">Ganho, nível do sinal e margem</h2>
+      <p>Um ajuste em <strong>dB</strong> expressa uma relação. Em <code>-6 dB</code>, um controle aplica cerca de <code>0,5</code> de ganho linear. Em <code>+6 dB</code>, aplica cerca de <code>2</code>. O motor multiplica os ganhos que o som encontra pelo caminho. Um evento a <code>-6 dB</code> que passa por um barramento a <code>-6 dB</code> chega ao estágio seguinte com aproximadamente um quarto da amplitude inicial, antes de outros processamentos.</p>
+      <p><strong>dBFS</strong> mede o sinal em relação ao máximo digital. Um fader em <code>0 dB</code> aplica ganho unitário. Um medidor em <code>0 dBFS</code> indica que o pico chegou à referência máxima. Em uma mixagem de jogo, sons imprevisíveis podem somar. A distância entre o pico atual e o limite é a <em>margem</em> ou <em>headroom</em>.</p>
+      <p>Para seguir o sinal da faixa ao Master, experimentar um VCA e comparar com um snapshot, veja <a href="14-barramentos-vcas-snapshots.html">Barramentos, VCAs e snapshots</a>.</p>
+
+      <h2>Mini-Glossário deste Capítulo</h2>
+      <ul>
+        <li><strong>DAW (Digital Audio Workstation):</strong> programa usado para editar, organizar e mixar áudio.</li>
+        <li><strong>dBFS / dB:</strong> unidade logarítmica de volume digital onde <code>0 dB</code> é o teto máximo antes de distorcer.</li>
+        <li><strong>Runtime:</strong> o momento em que o jogo está rodando de fato (dentro da Unity).</li>
+      </ul>
+
+      <figure class="callout-figure"><div class="callout-stage"><img src="../assets/img/studio-transport.png" alt="Barra superior do Studio com os controles de audição"></div><figcaption class="callout-caption">Na barra superior, Play começa a audição. Stop encerra o teste. O contador indica a posição no evento em minutos, segundos e milissegundos.</figcaption></figure>
+
+      <div class="chapter-footer">
+        <a href="../index.html">← Início do Manual</a>
+        <a href="01-visao-geral-interface.html">Próximo: Cap. 1 — Visão Geral da Interface →</a>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/manual.js"></script>
+</body>
+</html>

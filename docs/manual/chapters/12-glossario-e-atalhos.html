@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 12 — Glossário Unificado A–Z e Atalhos | OpenAudio Studio</title>
+  <link rel="stylesheet" href="../assets/css/manual.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="manual-sidebar"></aside>
+
+    <main class="main-content">
+      <div class="breadcrumbs"><a href="../index.html">Manual</a> › Cap. 12 — Glossário A–Z e Atalhos</div>
+      <h1>Capítulo 12 — Glossário Unificado A–Z e Cola de Atalhos</h1>
+      <p class="lead">
+        Consulta rápida de todos os termos de áudio, controles do <code>OpenAudio Studio.exe</code> e conceitos do pacote
+        <code>com.openaudio.core</code> da Unity.
+      </p>
+
+      <h2>Glossário de A a Z</h2>
+      <table>
+        <thead><tr><th>Termo</th><th>Significado</th><th>Onde aprender</th></tr></thead>
+        <tbody>
+          <tr><td><strong>AHDSR</strong></td><td>Envelope de 5 estágios (<em>Attack, Hold, Decay, Sustain, Release</em>) que molda o volume de um som no tempo.</td><td><a href="06-inspetor-e-modulacao.html">Cap. 6</a></td></tr>
+          <tr><td><strong>Async</strong></td><td>Opção do clipe pela qual a voz disparada pode avançar independentemente do cursor da Timeline. Combine com loop e lógica de sustentação quando precisar aguardar Key Off.</td><td><a href="11-tutoriais-praticos.html#async">Cap. 11 — Async</a></td></tr>
+          <tr><td><strong>Bank (<code>.bank</code>)</strong></td><td>Arquivo binário compilado contendo eventos, mixer e áudios empacotados para o jogo.</td><td><a href="02-projetos-e-publicacao.html">Cap. 2</a></td></tr>
+          <tr><td><strong>BPM</strong></td><td>Batidas Por Minuto — velocidade rítmica de uma música.</td><td><a href="07-deck-inferior-mixer-efeitos.html">Cap. 7</a></td></tr>
+          <tr><td><strong>Breadcrumbs</strong></td><td>Trilha de navegação hierárquica no topo da Timeline para transitar entre eventos pais e sub-eventos filhos.</td><td><a href="05-timeline-e-waveforms.html#breadcrumbs">Cap. 5</a></td></tr>
+          <tr><td><strong>Built-in Parameters</strong></td><td>Parâmetros 3D automáticos calculados pelo motor em tempo real (<code>Distance</code>, <code>Direction</code>, <code>Elevation</code>, <code>EventConeAngle</code>, <code>Speed</code>).</td><td><a href="09-unity-componentes-inspector.html#builtin-params">Cap. 9</a></td></tr>
+          <tr><td><strong>Bus (<code>bus:/</code>)</strong></td><td>Canal que recebe, soma e encaminha sinais. Pode aplicar ganho e efeitos à mistura.</td><td><a href="14-barramentos-vcas-snapshots.html#barramento">Barramentos</a></td></tr>
+          <tr><td><strong>Catalog (<code>.bank.catalog.json</code>)</strong></td><td>Índice JSON gerado junto ao <code>.bank</code> com lista de eventos e CRC-32 para a Unity.</td><td><a href="08-unity-instalacao-e-workflow.html">Cap. 8</a></td></tr>
+          <tr><td><strong>Command Instrument</strong></td><td>Clipe que agenda disparo ou parada de evento e ativação ou desativação de snapshot. O Inspector apresenta os campos <code>Command Type</code> e <code>Command Target</code>.</td><td><a href="11-tutoriais-praticos.html#command-orquestracao">Cap. 11 — exemplo com recursos distribuídos</a></td></tr>
+          <tr><td><strong>Cooldown</strong></td><td>Tempo mínimo de espera (em ms) antes de permitir outro disparo do mesmo evento.</td><td><a href="06-inspetor-e-modulacao.html">Cap. 6</a></td></tr>
+          <tr><td><strong>CRC-32</strong></td><td>Código calculado a partir dos bytes. A comparação ajuda a detectar divergência entre banco e catálogo.</td><td><a href="02-projetos-e-publicacao.html">Cap. 2</a></td></tr>
+          <tr><td><strong>Decibel (dB)</strong></td><td>Unidade logarítmica de relação. Ganho de <code>0 dB</code> multiplica a amplitude por 1. Na conversão de ganho do motor, <code>-80 dB</code> corresponde a zero.</td><td><a href="00-conceitos-basicos.html">Cap. 0</a></td></tr>
+          <tr><td><strong>Ducking (Sidechain)</strong></td><td>Abaixar automaticamente o volume de um Bus (ex.: música) quando outro Bus (ex.: voz) toca.</td><td><a href="07-deck-inferior-mixer-efeitos.html">Cap. 7</a></td></tr>
+          <tr><td><strong>Evento (<code>event:/</code>)</strong></td><td>Unidade jogável que combina faixas, clipes, regras e parâmetros.</td><td><a href="00-conceitos-basicos.html">Cap. 0</a></td></tr>
+          <tr><td><strong><code>[EventRef]</code></strong></td><td>Atributo C# da Unity que transforma um campo de texto em campo de caminho com menu de eventos em <strong>Browse…</strong>.</td><td><a href="09-unity-componentes-inspector.html">Cap. 9</a></td></tr>
+          <tr><td><strong>Fade In / Fade Out</strong></td><td>Aumento ou redução gradual de volume no início ou no fim de um som.</td><td><a href="05-timeline-e-waveforms.html">Cap. 5</a></td></tr>
+          <tr><td><strong>Key Off</strong></td><td>Comando que libera a sustentação e permite que o evento continue a partir do <em>Sustain Point</em>; o envelope pode executar seu release.</td><td><a href="11-tutoriais-praticos.html#async">Cap. 11 — Async, Sustain Point e Key Off</a></td></tr>
+          <tr><td><strong>Live-Linking</strong></td><td>Conexão TCP (porta <code>7450</code>) entre Studio e Unity para mixar ao vivo enquanto o jogo roda.</td><td><a href="10-unity-api-csharp-e-live.html">Cap. 10</a></td></tr>
+          <tr><td><strong>Lock Inspector</strong></td><td>Trava a seleção atual no painel Inspector, permitindo navegar na Timeline sem desviar a inspeção do item congelado.</td><td><a href="06-inspetor-e-modulacao.html#lock-inspector">Cap. 6</a></td></tr>
+          <tr><td><strong>Master Bank</strong></td><td>Banco principal que contém toda a árvore de Buses e efeitos do Mixer.</td><td><a href="02-projetos-e-publicacao.html">Cap. 2</a></td></tr>
+          <tr><td><strong>Multi Instrument</strong></td><td>Instrumento que seleciona uma entrada de sample ou evento da playlist conforme o modo de reprodução e seus pesos.</td><td><a href="07-deck-inferior-mixer-efeitos.html#aba3-playlist">Cap. 7 — Playlist</a></td></tr>
+          <tr><td><strong>Pan</strong></td><td>Distribuição do som entre o canal esquerdo (L) e direito (R).</td><td><a href="00-conceitos-basicos.html">Cap. 0</a></td></tr>
+          <tr><td><strong>Parameter Sheet (<code>PSHT</code>)</strong></td><td>Vínculo de um instrumento a um parâmetro e subintervalo, configurado pelo Inspector em <code>Trigger Sheet</code>, <code>Sheet Min</code> e <code>Sheet Max</code>.</td><td><a href="05-timeline-e-waveforms.html#parameter-sheets">Cap. 5 — Trigger Sheet</a></td></tr>
+          <tr><td><strong>Trigger Sheet</strong></td><td>Seletor de parâmetro local ou global ao qual o instrumento será vinculado. <code>Sheet Min</code> e <code>Sheet Max</code> definem os limites inclusivos.</td><td><a href="06-inspetor-e-modulacao.html#parameter-trigger-sheet">Cap. 6 — Inspector</a></td></tr>
+          <tr><td><strong>Pitch (st)</strong></td><td>Afinação/velocidade medida em semitons.</td><td><a href="00-conceitos-basicos.html">Cap. 0</a></td></tr>
+          <tr><td><strong>PMOD</strong></td><td>Modificador de parâmetro embutido (ex.: sensibilidade <code>velocity</code> ou trava <code>hold_during_playback</code>).</td><td><a href="06-inspetor-e-modulacao.html#pmod">Cap. 6</a></td></tr>
+          <tr><td><strong>Quantização</strong></td><td>Alinhamento de uma transição musical para o próximo <code>BEAT</code> ou <code>BAR</code> (compasso).</td><td><a href="07-deck-inferior-mixer-efeitos.html">Cap. 7</a></td></tr>
+          <tr><td><strong>Sample</strong></td><td>Áudio de origem identificado no projeto. Em Audio Assets, veja o caminho em File.</td><td><a href="04-navegador-projeto.html">Cap. 4</a></td></tr>
+          <tr><td><strong>Scatterer</strong></td><td>Instrumento que dispara entradas da playlist em intervalos aleatórios, limitado por total e polifonia e com faixa de distância configurável.</td><td><a href="07-deck-inferior-mixer-efeitos.html#aba3-playlist">Cap. 7 — Playlist</a></td></tr>
+          <tr><td><strong>Snap</strong></td><td>Imã magnético na timeline que alinha clipes em segundos ou batidas musicais.</td><td><a href="05-timeline-e-waveforms.html">Cap. 5</a></td></tr>
+          <tr><td><strong>Snapshot (<code>snapshot:/</code>)</strong></td><td>Predefinição temporária de mixagem (ex.: abafar o jogo na tela de pausa).</td><td><a href="04-navegador-projeto.html">Cap. 4</a></td></tr>
+          <tr><td><strong>Sound Size</strong></td><td>Raio aparente da fonte acústica para envolvimento estéreo (envelopment) ao se aproximar.</td><td><a href="09-unity-componentes-inspector.html#emitter">Cap. 9</a></td></tr>
+          <tr><td><strong>Steal Mode</strong></td><td>Política de substituição ao atingir o limite de instâncias de um evento (<code>OLDEST</code>, <code>QUIETEST</code>, <code>NONE</code>).</td><td><a href="06-inspetor-e-modulacao.html">Cap. 6</a></td></tr>
+          <tr><td><strong>Swatches de Cor</strong></td><td>Paleta de 16 cores para personalização visual e categorização rápida de pistas da timeline.</td><td><a href="05-timeline-e-waveforms.html#cores-faixas">Cap. 5</a></td></tr>
+          <tr><td><strong>VCA (<code>vca:/</code>)</strong></td><td><em>Voltage-Controlled Amplifier</em>. Multiplicador de ganho para barramentos associados. Preserva os faders e as rotas.</td><td><a href="14-barramentos-vcas-snapshots.html#vca">VCAs</a></td></tr>
+          <tr><td><strong>Waveform</strong></td><td>Representação gráfica poligonal da amplitude da onda sonora ao longo do tempo.</td><td><a href="05-timeline-e-waveforms.html">Cap. 5</a></td></tr>
+        </tbody>
+      </table>
+
+      <h2>Termos para acompanhar a mixagem</h2>
+      <dl><dt>Bus Route</dt><dd>Destino do áudio de um evento. <a href="14-barramentos-vcas-snapshots.html#barramento">Veja a rota da moeda.</a></dd><dt>Fader</dt><dd>Controle de ganho de um canal ou grupo.</dd><dt>Headroom</dt><dd>Margem entre o pico observado e o limite digital.</dd><dt>Insert</dt><dd>Efeito colocado no caminho do canal.</dd><dt>Parent</dt><dd>Barramento que recebe a saída de um barramento filho.</dd><dt>RMS</dt><dd>Medida da energia do sinal em uma janela. Ajuda a distinguir um pico breve de um som sustentado.</dd><dt>Send e return</dt><dd>Envio paralelo e canal que o recebe. <a href="13-unity-timeline-e-bancos.html#routing">Veja o exemplo de retorno.</a></dd><dt>Wet e dry</dt><dd>Contribuições processada e direta do sinal.</dd></dl>
+
+      <h2>Atalhos do OpenAudio Studio</h2>
+      <figure class="callout-figure manual-photo"><div class="callout-stage"><img src="../assets/img/studio-transport.png" alt="Barra superior do Studio"></div><figcaption class="callout-caption">Help e F1 abrem o manual. Os controles de transporte também respondem aos atalhos da tabela.</figcaption></figure>
+      <table>
+        <thead><tr><th>Atalho</th><th>Função</th></tr></thead>
+        <tbody>
+          <tr><td><kbd>F1</kbd></td><td>Abrir o manual offline</td></tr>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>N</kbd></td><td>Criar projeto na pasta escolhida</td></tr>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>O</kbd></td><td>Abrir um arquivo de autoria</td></tr>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>S</kbd></td><td>Salvar a autoria</td></tr>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>B</kbd></td><td>Publicar banco e catálogo</td></tr>
+          <tr><td><kbd>Espaço</kbd></td><td>Iniciar ou pausar a audição</td></tr>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>Z</kbd></td><td>Desfazer (Undo — até 100 passos)</td></tr>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>Y</kbd></td><td>Refazer (Redo)</td></tr>
+          <tr><td><kbd>F2</kbd></td><td>Renomear item selecionado no navegador (com atualização em cascata)</td></tr>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>D</kbd></td><td>Duplicar item selecionado</td></tr>
+          <tr><td><kbd>Del</kbd></td><td>Excluir item selecionado</td></tr>
+          <tr><td><kbd>Ctrl</kbd> + <kbd>`</kbd></td><td>Ocultar ou restaurar todos os painéis secundários (Stage Focus / Maximize Timeline)</td></tr>
+          <tr><td><kbd>Shift</kbd> + Arraste</td><td>Ajuste fino de sliders e faders (sensibilidade reduzida em 10x: 0.1 dB / 0.1 st)</td></tr>
+          <tr><td>Duplo-clique em Slider</td><td>Restaurar controle para o valor padrão (Default) com registro no histórico de Undo</td></tr>
+          <tr><td>Duplo-clique em <code>[EVT]</code></td><td>Navegar para o sub-evento na Timeline através da barra de Breadcrumbs</td></tr>
+          <tr><td><kbd>Esc</kbd></td><td>Fechar imagem ampliada / cancelar edição</td></tr>
+        </tbody>
+      </table>
+
+      <div class="chapter-footer">
+        <a href="11-tutoriais-praticos.html">← Cap. 11 — Tutoriais Práticos</a>
+        <a href="../index.html">Voltar ao Início do Manual ↑</a>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/manual.js"></script>
+</body>
+</html>

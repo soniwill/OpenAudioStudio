@@ -1,0 +1,24 @@
+{
+  "name": "com.openaudio.core",
+  "version": "1.0.0",
+  "displayName": "OpenAudio Engine Core",
+  "description": "Interactive audio middleware runtime and authoring integration for Unity.",
+  "license": "Apache-2.0",
+  "unity": "2021.3",
+  "unityRelease": "0f1",
+  "author": {
+    "name": "OpenAudio Authors",
+    "url": "https://github.com/openaudio/openaudio"
+  },
+  "keywords": [
+    "audio",
+    "middleware",
+    "dsp",
+    "fmod",
+    "wwise",
+    "sound"
+  ],
+  "dependencies": {
+    "com.unity.modules.assetbundle": "1.0.0"
+  }
+}

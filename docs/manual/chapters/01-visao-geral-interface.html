@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 1 — Visão Geral da Interface e Workspace | OpenAudio Studio</title>
+  <link rel="stylesheet" href="../assets/css/manual.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="manual-sidebar"></aside>
+
+    <main class="main-content">
+      <div class="breadcrumbs"><a href="../index.html">Manual</a> › Cap. 1 — Visão Geral da Interface</div>
+      <h1>Capítulo 1 — Visão Geral da Interface e Workspace</h1>
+      <p class="lead">
+        Use a <strong>Workspace Bar</strong> para localizar, reabrir e encaixar os painéis de autoria, mixagem e diagnóstico. Comece pelo preset <strong>Default (Authoring)</strong> para seguir os exercícios do manual.
+      </p>
+
+      <div class="purpose-box box">
+        <div class="box-title">Para que serve esta organização?</div>
+        <p>
+          Tudo fica acessível sem janelas modais intrusivas: você seleciona itens no Navegador à esquerda, orquestra a linha do tempo e faixas no centro, ajusta números finos no Inspetor à direita e opera mixagem, efeitos ou lógica adaptativa no Bottom Deck — com total liberdade para redimensionar, desacoplar ou salvar layouts personalizados para cada etapa do seu fluxo de trabalho.
+        </p>
+      </div>
+
+      <!-- WORKSPACE BAR -->
+      <h2 id="workspace-bar">1. A Barra de Workspace (Templates, Presets e Modo Foco)</h2>
+      <p>
+        Localizada na borda superior da janela, acima da barra de transporte, a <strong>Workspace Bar</strong> gerencia a visibilidade de painéis, templates de produção e configurações de layout personalizadas:
+      </p>
+
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/studio-workspace-bar.png" alt="Captura real da Workspace Bar com seletores de templates, botões de painel e modo foco">
+        </div>
+        <figcaption class="callout-caption">
+          A Workspace Bar: alterne painéis com 1 clique, salve layouts personalizados ou ative o modo foco instantaneamente.
+        </figcaption>
+      </figure>
+
+      <h3>Recursos da Workspace Bar</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Controle</th>
+            <th>Tipo</th>
+            <th>Como Funciona</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Trn, Brw, Stg, Ins e Dck</strong></td>
+            <td>Pills de Visibilidade</td>
+            <td><code>Brw</code>, <code>Stg</code>, <code>Ins</code> e <code>Dck</code> mostram ou ocultam Browser, Stage (Timeline), Inspector e Bottom Deck. Já <code>Trn</code> (Transport Bar) é uma barra permanente: alterna entre modo compacto e expandido ou re-encaixa a barra se estiver flutuante. <code>Log</code> (Diagnostics &amp; Log) e <code>Prj</code> (Project Toolbar) ficam no menu overflow <code>...</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>Menu Overflow (<code>...</code>)</strong></td>
+            <td>Menu da WorkspaceBar</td>
+            <td>Concentra <code>Diagnostics &amp; Log (Log)</code>, <code>Project Toolbar (Prj)</code>, <code>Hide All / Restore</code>, submenu <code>Dock Slots</code>, <code>Delete Custom Preset</code> e <code>Reset Layout</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>Seletor de Templates (Presets)</strong></td>
+            <td>Menu Suspenso</td>
+            <td>
+              Alterna entre arranjos pré-configurados de fábrica:
+              <ul>
+                <li><code>Default (Authoring)</code>: o equilíbrio clássico para autoria completa.</li>
+                <li><code>Stage Focus</code>: amplia a Timeline, mantém o Inspector e recolhe Browser e Bottom Deck.</li>
+                <li><code>Mixing &amp; Mastering</code>: Bottom Deck ampliado com foco em tiras de mixer, medidores K-System e efeitos.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>+ Save (Salvar Layout)</strong></td>
+            <td>Botão de Ação</td>
+            <td>Salva a geometria, proporções e divisões atuais como um novo layout personalizado em <code>oae_studio_layout.json</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>Del (Excluir Layout)</strong></td>
+            <td>Botão de Ação</td>
+            <td>Exclui o preset personalizado ativo (templates nativos são protegidos e não podem ser apagados).</td>
+          </tr>
+          <tr>
+            <td><strong>Reset</strong></td>
+            <td>Restauração</td>
+            <td>Retorna a geometria e o posicionamento de todas as divisões ao padrão original de fábrica.</td>
+          </tr>
+          <tr>
+            <td><strong>Dock</strong></td>
+            <td>Menu por painel</td>
+            <td>Escolha o painel e use <strong>Visible</strong> para mostrar ou ocultar. Os itens <strong>Slot:</strong> permitem escolher a região de encaixe ou abrir uma janela flutuante.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- MAPA DOS PAINÉIS -->
+      <h2>2. Mapa dos Painéis Principais</h2>
+      <p>Esta captura mostra a área de autoria com <strong>Diagnostics &amp; Log</strong> embutido no Bottom Deck.</p>
+
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/studio-logs-embedded.png" alt="Studio com a aba Diagnostics &amp; Log na barra de abas do Bottom Deck ao lado de 3D Spatializer">
+        </div>
+        <ul class="callout-legend">
+          <li><strong>1. Topo Modular (Project Toolbar + Transport Bar):</strong> A <code>Project Toolbar</code> (marca <code>OPENAUDIO</code>, <code>New</code>, <code>Open</code>, <code>Save</code>, <code>Build Bank [F7]</code>, <code>?</code> Help) e a <code>Transport Bar</code> (<code>Play</code>, <code>Pause</code>, <code>Stop</code>, <code>Loop</code>, <code>Key Off</code> em 24×24 contorno/tint, readout de timecode/BPM real, status, pill <code>Params (N)</code> e medidor <code>KSystemMeter</code> L/R) ficam lado a lado no topo em 36 px com grip lateral tátil (<code>::</code>).</li>
+          <li><strong>2. Navegador do Projeto (Esquerda):</strong> Cabeçalho único <code>BROWSER</code> (24 px), 4 abas (<code>Events</code>, <code>Snapshots</code>, <code>Buses</code> com <code>VCAs</code>, <code>Assets</code>), busca e lista fixa <code>PROJECT PARAMETERS (N)</code> no rodapé.</li>
+          <li><strong>3. Stage Central:</strong> Cabeçalho <code>STAGE</code> (24 px), <code>StageModeHeader</code> (38 px) com seletor centralizado <code>[ Timeline | Layers ]</code>, sub-barra exclusiva de Snap/Zoom no modo <code>Timeline</code>, faixa retrátil <code>LIVE PARAMS</code> e pistas ou <code>LayerStackView</code> com máscara plana.</li>
+          <li><strong>4. Inspetor (Direita):</strong> Cabeçalho único <code>PROPERTY INSPECTOR</code> com cadeado <code>Lock</code> e cards <code>ValueBox</code> (<code>Clip</code>, <code>Track</code>, <code>MÁSCARA &amp; TRANSIÇÃO</code> contextual e <code>Event</code>).</li>
+          <li><strong>5. Bottom Deck:</strong> Cabeçalho único <code>BottomDeckHeader</code> (34 px) com alça arrastável <code>BOTTOM DECK</code>, 7 abas ordenadas (<code>Mixer</code>, <code>Effect Chain</code>, <code>Logic Conditions</code>, <code>Playlist</code>, <code>3D Spatializer</code>, <code>Parameters (N)</code> e <code>Diagnostics</code>), menu de contexto das abas e botão único <code>Pop-Out ^</code>.</li>
+          <li><strong>6. Diagnostics:</strong> Mostra mensagens de prévia, compilação e conexão. Pode aparecer como aba do Deck ou como painel independente via menu <code>...</code>.</li>
+        </ul>
+      </figure>
+
+      <!-- DOCKING E CABEÇALHOS -->
+      <h2>3. Sistema de Docking Estilo Unity 6 e Cabeçalhos Grafite</h2>
+      <div class="theory-box box">
+        <div class="box-title">Como Funciona o Docking por Arraste</div>
+        <p>
+          O sistema de docking do OpenAudio Studio adota as convenções modernas do Unity 6:
+        </p>
+        <ul>
+          <li><strong>Arraste na borda externa do workspace:</strong> Cria uma nova divisão de ponta a ponta na janela (ex: arrastar o Inspector para a borda direita externa faz com que ele ocupe toda a altura útil da tela).</li>
+          <li><strong>Arraste na borda de um painel existente:</strong> Divide a área daquele painel específico em duas metades (horizontal ou vertical).</li>
+          <li><strong>Arraste sobre a barra de abas de um painel:</strong> Agrupa os dois painéis em um mesmo container com abas selecionáveis.</li>
+          <li><strong>Cabeçalhos em Grafite:</strong> Superfícies neutras de alta legibilidade. Painéis de aba única exibem o título integrado de forma sutil; painéis de abas múltiplas destacam a aba ativa e mantêm foco de teclado evidente.</li>
+        </ul>
+      </div>
+
+      <h3 id="layout-logs">Mantenha os logs visíveis enquanto trabalha</h3>
+      <figure class="callout-figure">
+        <div class="callout-stage"><img src="../assets/img/studio-logs-independent.png" alt="Inspector da altura inteira à direita e painel Diagnostics &amp; Log abaixo do Effects Rack"></div>
+        <figcaption class="callout-caption">O Inspector ocupa a coluna direita. À esquerda, o log de compilação permanece visível abaixo de <strong>Effects Rack</strong>.</figcaption>
+      </figure>
+      <ol>
+        <li>Parta do preset <strong>Default (Authoring)</strong>. Use <strong>Ins</strong>, <strong>Dck</strong> e <strong>Log</strong> na Workspace Bar caso algum painel esteja oculto.</li>
+        <li>Arraste a aba <strong>Inspector</strong> para a borda direita externa do workspace. Solte quando o destaque cobrir a coluna direita inteira.</li>
+        <li>Arraste a aba <strong>Diagnostics &amp; Log</strong> para a borda inferior do <strong>Bottom Deck</strong>. Solte quando o destaque limitar o novo painel à largura do Deck.</li>
+        <li>Alterne entre <strong>Mixer Deck</strong> e <strong>Effects Rack</strong>. O log deve continuar visível abaixo do Deck, com o Inspector ocupando toda a altura útil à direita.</li>
+      </ol>
+      <p>Use <strong>+ Save</strong> e dê um nome ao arranjo para recuperá-lo pelo seletor. <strong>Hide All</strong> e <strong>Restore</strong> ocultam e reexibem a disposição atual. Para voltar ao arranjo de fábrica, use <strong>Reset</strong>.</p>
+
+      <h2>4. Atalhos Globais Essenciais</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Atalho</th>
+            <th>Ação</th>
+            <th>Quando Usar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><kbd>Ctrl</kbd> + <kbd>Z</kbd></td>
+            <td>Desfazer (Undo)</td>
+            <td>Volta até 100 ações de histórico. O motor agrupa arrastos contínuos de sliders em uma única entrada inteligente.</td>
+          </tr>
+          <tr>
+            <td><kbd>Ctrl</kbd> + <kbd>Y</kbd></td>
+            <td>Refazer (Redo)</td>
+            <td>Reaplica ações desfeitas.</td>
+          </tr>
+          <tr>
+            <td><kbd>Space</kbd></td>
+            <td>Play / Pause</td>
+            <td>Inicia ou pausa rapidamente a audição do evento ativo enquanto edita pistas.</td>
+          </tr>
+          <tr>
+            <td><kbd>F2</kbd></td>
+            <td>Renomear item selecionado</td>
+            <td>Renomeia eventos, barramentos, snapshots ou parâmetros mantendo todas as referências do projeto intactas.</td>
+          </tr>
+          <tr>
+            <td><kbd>Ctrl</kbd> + <kbd>D</kbd></td>
+            <td>Duplicar item selecionado</td>
+            <td>Duplica o item selecionado quando o foco está no Browser. Para copiar um clipe, selecione-o e use <strong>Duplicate Clip</strong> no Inspector.</td>
+          </tr>
+          <tr>
+            <td><kbd>Del</kbd></td>
+            <td>Excluir item selecionado</td>
+            <td>Remove o item selecionado da árvore ou clipe da timeline.</td>
+          </tr>
+          <tr>
+            <td><kbd>F1</kbd></td>
+            <td>Manual Oficial Offline</td>
+            <td>Abre a documentação técnica no navegador padrão sem exigir conexão à internet.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- MCP SERVER -->
+      <h2>5. Servidor MCP Integrado e Automação Externa</h2>
+      <div class="theory-box box">
+        <div class="box-title">O que é o Servidor MCP do OpenAudio Studio?</div>
+        <p>
+          O OpenAudio Studio é o primeiro software de áudio para jogos com um servidor nativo embutido baseado no <strong>Model Context Protocol (MCP)</strong>. Através do MCP, agentes de inteligência artificial (como Google Antigravity, Claude Code e Cursor) e scripts de teste automatizado podem controlar o aplicativo em tempo real.
+        </p>
+      </div>
+
+      <p><strong>Ferramentas Disponíveis via MCP:</strong></p>
+      <table>
+        <thead>
+          <tr>
+            <th>Ferramenta MCP</th>
+            <th>Capacidade e Ação no Studio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>studio_transport</code></td>
+            <td>Controla a barra de transporte: Play, Pause, Stop, Loop e Key Off remotamente.</td>
+          </tr>
+          <tr>
+            <td><code>studio_select_item</code></td>
+            <td>Seleciona qualquer item do projeto no navegador pelo caminho (ex.: <code>event:/sfx/coin</code> ou <code>bus:/music</code>).</td>
+          </tr>
+          <tr>
+            <td><code>studio_set_mixer_fader</code></td>
+            <td>Ajusta o ganho em dB, pan estéreo ou estado de mute/solo de qualquer channel strip do console de mixagem.</td>
+          </tr>
+          <tr>
+            <td><code>studio_trigger_control</code></td>
+            <td>Alterna abas do Bottom Deck e aciona botões da interface, como <code>Log</code> na Workspace Bar.</td>
+          </tr>
+          <tr>
+            <td><code>studio_move_clip</code></td>
+            <td>Move clipes na timeline entre faixas ou desloca o ponto temporal em milissegundos.</td>
+          </tr>
+          <tr>
+            <td><code>studio_build_bank</code></td>
+            <td>Compila e publica o Master Bank e bancos de conteúdo, gerando os arquivos <code>.bank</code> e catálogos JSON.</td>
+          </tr>
+          <tr>
+            <td><code>studio_ui_screenshot</code></td>
+            <td>Captura em alta resolução qualquer componente da janela (como a Workspace Bar, o Inspector ou a Timeline) gerando arquivos PNG sem distorções.</td>
+          </tr>
+          <tr>
+            <td><code>studio_ui_inspect</code></td>
+            <td>Retorna a árvore de acessibilidade e propriedades visuais dos componentes JUCE para verificação de testes.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        Para desenvolvedores e engenheiros de áudio que desejam integrar o Studio aos seus assistentes locais, o servidor pode ser iniciado via CLI com o argumento <code>--mcp</code> (comunicação via stdio JSON-RPC) ou via WebSocket local na porta <code>7451</code>.
+      </p>
+
+      <div class="chapter-footer">
+        <a href="00-conceitos-basicos.html">← Cap. 0 — Conceitos Básicos</a>
+        <a href="02-projetos-e-publicacao.html">Próximo: Cap. 2 — Projetos e Publicação →</a>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/manual.js"></script>
+</body>
+</html>

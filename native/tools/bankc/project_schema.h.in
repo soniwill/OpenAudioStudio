@@ -1,0 +1,9 @@
+#pragma once
+#include <cstdint>
+
+inline const uint8_t oae_project_schema_bytes[] = {
+@OAE_PROJECT_SCHEMA_BYTES@
+    0x00
+};
+
+inline const char* const oae_project_schema_json = reinterpret_cast<const char*>(oae_project_schema_bytes);

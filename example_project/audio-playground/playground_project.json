@@ -1,0 +1,803 @@
+{
+  "version": 1,
+  "name": "AudioPlaygroundProject",
+  "buses": [
+    {
+      "path": "bus:/sfx",
+      "volume": 1.0,
+      "effects": [
+        {
+          "type": "reverb",
+          "position": 0,
+          "params": [
+            0.12,
+            0.88,
+            0.55
+          ],
+          "wet": 0.35,
+          "dry": 0.88
+        }
+      ]
+    },
+    {
+      "path": "bus:/music",
+      "volume": 1.0,
+      "effects": [
+        {
+          "type": "compressor",
+          "position": 0,
+          "params": [
+            -24.0,
+            6.0,
+            15.0,
+            650.0,
+            0.0
+          ],
+          "wet": 1.0,
+          "dry": 0.0,
+          "sidechain_bus": "bus:/vo"
+        },
+        {
+          "type": "lowpass",
+          "position": 0,
+          "params": [
+            20000.0,
+            0.707
+          ],
+          "wet": 1.0,
+          "dry": 0.0
+        }
+      ]
+    },
+    {
+      "path": "bus:/ambience",
+      "volume": 1.0,
+      "effects": [
+        {
+          "type": "lowpass",
+          "position": 0,
+          "params": [
+            20000.0,
+            0.707
+          ],
+          "wet": 1.0,
+          "dry": 0.0
+        }
+      ]
+    },
+    {
+      "path": "bus:/vo",
+      "volume": 1.0,
+      "effects": [
+        {
+          "type": "reverb",
+          "position": 0,
+          "params": [
+            0.1,
+            0.9,
+            0.45
+          ],
+          "wet": 0.25,
+          "dry": 0.95
+        }
+      ]
+    },
+    {
+      "path": "bus:/ui",
+      "volume": 1.0,
+      "effects": []
+    }
+  ],
+  "global_parameters": [
+    {
+      "name": "SurfaceType",
+      "kind": "labeled",
+      "labels": [
+        "Wood",
+        "Concrete",
+        "Grass"
+      ],
+      "default_value": 0
+    },
+    {
+      "name": "CombatIntensity",
+      "kind": "continuous",
+      "min": 0.0,
+      "max": 1.0,
+      "default_value": 0.0,
+      "seek_speed": 0.8,
+      "seek_speed_down": 0.6
+    }
+  ],
+  "vcas": [
+    {
+      "path": "vca:/playground_master",
+      "buses": [
+        "bus:/sfx",
+        "bus:/music",
+        "bus:/ambience",
+        "bus:/vo",
+        "bus:/ui"
+      ]
+    },
+    {
+      "path": "vca:/playground_music",
+      "buses": [
+        "bus:/music"
+      ]
+    },
+    {
+      "path": "vca:/playground_sfx",
+      "buses": [
+        "bus:/sfx",
+        "bus:/ambience",
+        "bus:/ui"
+      ]
+    }
+  ],
+  "samples": [
+    {
+      "id": "sample_step_wood_1",
+      "file": "assets/playground/step_wood_1.wav"
+    },
+    {
+      "id": "sample_step_wood_2",
+      "file": "assets/playground/step_wood_2.wav"
+    },
+    {
+      "id": "sample_step_wood_3",
+      "file": "assets/playground/step_wood_3.wav"
+    },
+    {
+      "id": "sample_step_wood_4",
+      "file": "assets/playground/step_wood_4.wav"
+    },
+    {
+      "id": "sample_step_concrete_1",
+      "file": "assets/playground/step_concrete_1.wav"
+    },
+    {
+      "id": "sample_step_concrete_2",
+      "file": "assets/playground/step_concrete_2.wav"
+    },
+    {
+      "id": "sample_step_concrete_3",
+      "file": "assets/playground/step_concrete_3.wav"
+    },
+    {
+      "id": "sample_step_concrete_4",
+      "file": "assets/playground/step_concrete_4.wav"
+    },
+    {
+      "id": "sample_step_grass_1",
+      "file": "assets/playground/step_grass_1.wav"
+    },
+    {
+      "id": "sample_step_grass_2",
+      "file": "assets/playground/step_grass_2.wav"
+    },
+    {
+      "id": "sample_step_grass_3",
+      "file": "assets/playground/step_grass_3.wav"
+    },
+    {
+      "id": "sample_step_grass_4",
+      "file": "assets/playground/step_grass_4.wav"
+    },
+    {
+      "id": "sample_emitter_3d",
+      "file": "assets/playground/emitter_3d_loop.wav"
+    },
+    {
+      "id": "sample_music_explore",
+      "file": "assets/playground/music_explore.wav",
+      "stream": true
+    },
+    {
+      "id": "sample_music_combat",
+      "file": "assets/playground/music_combat.wav",
+      "stream": true
+    },
+    {
+      "id": "sample_music_tension",
+      "file": "assets/playground/music_tension_layer.wav",
+      "stream": true
+    },
+    {
+      "id": "sample_forest_bird_1",
+      "file": "assets/playground/forest_bird_1.wav"
+    },
+    {
+      "id": "sample_forest_bird_2",
+      "file": "assets/playground/forest_bird_2.wav"
+    },
+    {
+      "id": "sample_forest_wind",
+      "file": "assets/playground/forest_wind_grain.wav"
+    },
+    {
+      "id": "sample_forest_fire",
+      "file": "assets/playground/forest_fire_crackle.wav"
+    },
+    {
+      "id": "sample_ui_click",
+      "file": "assets/playground/ui_click.wav"
+    }
+  ],
+  "events": [
+    {
+      "path": "event:/playground/footstep",
+      "kind": "event",
+      "bus_path": "bus:/sfx",
+      "volume_db": 1.0,
+      "max_instances": 6,
+      "steal_mode": "oldest",
+      "cooldown_ms": 40,
+      "tracks": [
+        {
+          "volume_db": 0.0,
+          "instruments": [
+            {
+              "kind": "multi",
+              "playlist_mode": "random_no_repeat",
+              "playlist": [
+                {
+                  "sample_id": "sample_step_wood_1",
+                  "weight": 0.25
+                },
+                {
+                  "sample_id": "sample_step_wood_2",
+                  "weight": 0.25
+                },
+                {
+                  "sample_id": "sample_step_wood_3",
+                  "weight": 0.25
+                },
+                {
+                  "sample_id": "sample_step_wood_4",
+                  "weight": 0.25
+                }
+              ],
+              "offset_ms": 0.0,
+              "length_ms": 280.0,
+              "loop": false,
+              "volume_db_random_range": 2.0,
+              "pitch_semitones_random_range": 1.8,
+              "condition": {
+                "probability_pct": 100.0,
+                "terms": [
+                  {
+                    "param": {
+                      "scope": "global",
+                      "name": "SurfaceType"
+                    },
+                    "min": 0.0,
+                    "max": 0.4
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "multi",
+              "playlist_mode": "random_no_repeat",
+              "playlist": [
+                {
+                  "sample_id": "sample_step_concrete_1",
+                  "weight": 0.25
+                },
+                {
+                  "sample_id": "sample_step_concrete_2",
+                  "weight": 0.25
+                },
+                {
+                  "sample_id": "sample_step_concrete_3",
+                  "weight": 0.25
+                },
+                {
+                  "sample_id": "sample_step_concrete_4",
+                  "weight": 0.25
+                }
+              ],
+              "offset_ms": 0.0,
+              "length_ms": 280.0,
+              "loop": false,
+              "volume_db_random_range": 2.0,
+              "pitch_semitones_random_range": 1.8,
+              "condition": {
+                "probability_pct": 100.0,
+                "terms": [
+                  {
+                    "param": {
+                      "scope": "global",
+                      "name": "SurfaceType"
+                    },
+                    "min": 0.6,
+                    "max": 1.4
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "multi",
+              "playlist_mode": "random_no_repeat",
+              "playlist": [
+                {
+                  "sample_id": "sample_step_grass_1",
+                  "weight": 0.25
+                },
+                {
+                  "sample_id": "sample_step_grass_2",
+                  "weight": 0.25
+                },
+                {
+                  "sample_id": "sample_step_grass_3",
+                  "weight": 0.25
+                },
+                {
+                  "sample_id": "sample_step_grass_4",
+                  "weight": 0.25
+                }
+              ],
+              "offset_ms": 0.0,
+              "length_ms": 280.0,
+              "loop": false,
+              "volume_db_random_range": 2.0,
+              "pitch_semitones_random_range": 1.8,
+              "condition": {
+                "probability_pct": 100.0,
+                "terms": [
+                  {
+                    "param": {
+                      "scope": "global",
+                      "name": "SurfaceType"
+                    },
+                    "min": 1.6,
+                    "max": 2.0
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "event:/playground/emitter_3d",
+      "kind": "event",
+      "bus_path": "bus:/sfx",
+      "volume_db": 1.5,
+      "stop_fadeout_ms": 350.0,
+      "parameters": [
+        {
+          "name": "EventConeAngle",
+          "kind": "continuous",
+          "min": 0.0,
+          "max": 180.0,
+          "default_value": 0.0
+        }
+      ],
+      "automations": [
+        {
+          "target": "volume",
+          "is_timeline": false,
+          "param": {
+            "scope": "local",
+            "name": "EventConeAngle"
+          },
+          "curve": {
+            "points": [
+              {
+                "x": 0.0,
+                "y": 1.0,
+                "shape": "linear"
+              },
+              {
+                "x": 45.0,
+                "y": -2.0,
+                "shape": "s_curve"
+              },
+              {
+                "x": 115.0,
+                "y": -16.0,
+                "shape": "s_curve"
+              },
+              {
+                "x": 180.0,
+                "y": -24.0,
+                "shape": "linear"
+              }
+            ]
+          }
+        }
+      ],
+      "tracks": [
+        {
+          "volume_db": 0.0,
+          "instruments": [
+            {
+              "kind": "single",
+              "sample_id": "sample_emitter_3d",
+              "offset_ms": 0.0,
+              "length_ms": 16000.0,
+              "fade_in_ms": 30.0,
+              "fade_out_ms": 200.0,
+              "loop": true
+            }
+          ]
+        }
+      ],
+      "logic_items": [
+        {
+          "kind": "loop_region",
+          "start_ms": 0.0,
+          "length_ms": 16000.0,
+          "iterations": -1,
+          "until_key_off": false
+        }
+      ]
+    },
+    {
+      "path": "event:/playground/adaptive_music",
+      "kind": "event",
+      "bus_path": "bus:/music",
+      "volume_db": -3.0,
+      "stop_fadeout_ms": 900.0,
+      "tracks": [
+        {
+          "volume_db": 0.0,
+          "instruments": [
+            {
+              "kind": "single",
+              "sample_id": "sample_music_explore",
+              "offset_ms": 0.0,
+              "length_ms": 16000.0,
+              "fade_in_ms": 600.0,
+              "fade_out_ms": 800.0,
+              "loop": true,
+              "modulators": [
+                {
+                  "kind": "ahdsr",
+                  "attack_ms": 450.0,
+                  "hold_ms": 0.0,
+                  "decay_ms": 0.0,
+                  "sustain": 1.0,
+                  "release_ms": 850.0,
+                  "release_on_key_off": true
+                }
+              ]
+            },
+            {
+              "kind": "single",
+              "sample_id": "sample_music_combat",
+              "offset_ms": 18000.0,
+              "length_ms": 16000.0,
+              "fade_in_ms": 450.0,
+              "fade_out_ms": 900.0,
+              "loop": true,
+              "modulators": [
+                {
+                  "kind": "ahdsr",
+                  "attack_ms": 350.0,
+                  "hold_ms": 0.0,
+                  "decay_ms": 0.0,
+                  "sustain": 1.0,
+                  "release_ms": 900.0,
+                  "release_on_key_off": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "volume_db": -4.0,
+          "automations": [
+            {
+              "target": "volume",
+              "is_timeline": false,
+              "param": {
+                "scope": "global",
+                "name": "CombatIntensity"
+              },
+              "curve": {
+                "points": [
+                  {
+                    "x": 0.0,
+                    "y": -28.0,
+                    "shape": "ease_in"
+                  },
+                  {
+                    "x": 0.5,
+                    "y": -10.0,
+                    "shape": "s_curve"
+                  },
+                  {
+                    "x": 1.0,
+                    "y": -2.0,
+                    "shape": "ease_out"
+                  }
+                ]
+              }
+            }
+          ],
+          "instruments": [
+            {
+              "kind": "single",
+              "sample_id": "sample_music_tension",
+              "offset_ms": 18000.0,
+              "length_ms": 16000.0,
+              "fade_in_ms": 500.0,
+              "fade_out_ms": 1000.0,
+              "loop": true
+            }
+          ]
+        }
+      ],
+      "logic_items": [
+        {
+          "kind": "tempo",
+          "position_ms": 0.0,
+          "bpm": 120.0,
+          "ts_upper": 4,
+          "ts_lower": 4
+        },
+        {
+          "kind": "marker",
+          "position_ms": 0.0,
+          "name": "Exploration"
+        },
+        {
+          "kind": "loop_region",
+          "start_ms": 0.0,
+          "length_ms": 16000.0,
+          "iterations": -1,
+          "until_key_off": false
+        },
+        {
+          "kind": "transition_region",
+          "start_ms": 0.0,
+          "length_ms": 16000.0,
+          "target_marker": "Combat",
+          "quantization": "immediate",
+          "crossfade_ms": 1400.0,
+          "condition": {
+            "probability_pct": 100.0,
+            "terms": [
+              {
+                "param": {
+                  "scope": "global",
+                  "name": "CombatIntensity"
+                },
+                "min": 0.5,
+                "max": 1.0
+              }
+            ]
+          }
+        },
+        {
+          "kind": "marker",
+          "position_ms": 18000.0,
+          "name": "Combat"
+        },
+        {
+          "kind": "loop_region",
+          "start_ms": 18000.0,
+          "length_ms": 16000.0,
+          "iterations": -1,
+          "until_key_off": false
+        },
+        {
+          "kind": "transition_region",
+          "start_ms": 18000.0,
+          "length_ms": 16000.0,
+          "target_marker": "Exploration",
+          "quantization": "immediate",
+          "crossfade_ms": 1600.0,
+          "condition": {
+            "probability_pct": 100.0,
+            "terms": [
+              {
+                "param": {
+                  "scope": "global",
+                  "name": "CombatIntensity"
+                },
+                "min": 0.0,
+                "max": 0.49
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "event:/playground/forest_scatterer",
+      "kind": "event",
+      "bus_path": "bus:/ambience",
+      "volume_db": -1.5,
+      "stop_fadeout_ms": 800.0,
+      "tracks": [
+        {
+          "volume_db": 0.0,
+          "instruments": [
+            {
+              "kind": "scatterer",
+              "offset_ms": 0.0,
+              "length_ms": 6000.0,
+              "fade_in_ms": 150.0,
+              "fade_out_ms": 350.0,
+              "async": true,
+              "playlist_mode": "random_no_repeat",
+              "playlist": [
+                {
+                  "sample_id": "sample_forest_bird_1",
+                  "weight": 0.35
+                },
+                {
+                  "sample_id": "sample_forest_bird_2",
+                  "weight": 0.25
+                },
+                {
+                  "sample_id": "sample_forest_wind",
+                  "weight": 0.22
+                },
+                {
+                  "sample_id": "sample_forest_fire",
+                  "weight": 0.18
+                }
+              ],
+              "spawn_interval_min_ms": 220.0,
+              "spawn_interval_max_ms": 620.0,
+              "polyphony": 4,
+              "total_sounds": 0,
+              "min_scatter_distance": 1.5,
+              "max_scatter_distance": 9.0,
+              "volume_db_random_range": 2.5,
+              "pitch_semitones_random_range": 1.8
+            }
+          ]
+        }
+      ],
+      "logic_items": [
+        {
+          "kind": "loop_region",
+          "start_ms": 0.0,
+          "length_ms": 6000.0,
+          "iterations": -1,
+          "until_key_off": false
+        }
+      ]
+    },
+    {
+      "path": "event:/playground/ui_click",
+      "kind": "event",
+      "bus_path": "bus:/ui",
+      "volume_db": -1.0,
+      "tracks": [
+        {
+          "volume_db": 0.0,
+          "instruments": [
+            {
+              "kind": "single",
+              "sample_id": "sample_ui_click",
+              "offset_ms": 0.0,
+              "length_ms": 80.0,
+              "loop": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "snapshot:/playground/cave_reverb",
+      "kind": "snapshot",
+      "priority": 180,
+      "snapshot_mode": "override",
+      "fade_in_ms": 450,
+      "stop_fadeout_ms": 750,
+      "snapshot_targets": [
+        {
+          "bus_path": "bus:/music",
+          "value": -6.0,
+          "param_id": -1
+        },
+        {
+          "bus_path": "bus:/music",
+          "position": 0,
+          "effect_index": 1,
+          "effect_type": "lowpass",
+          "param_id": 0,
+          "value": 950.0
+        },
+        {
+          "bus_path": "bus:/sfx",
+          "value": 2.0,
+          "param_id": -1
+        },
+        {
+          "bus_path": "bus:/sfx",
+          "position": 0,
+          "effect_index": 0,
+          "effect_type": "reverb",
+          "param_id": 0,
+          "value": 0.94
+        },
+        {
+          "bus_path": "bus:/sfx",
+          "position": 0,
+          "effect_index": 0,
+          "effect_type": "reverb",
+          "param_id": 1,
+          "value": 0.18
+        },
+        {
+          "bus_path": "bus:/vo",
+          "position": 0,
+          "effect_index": 0,
+          "effect_type": "reverb",
+          "param_id": 0,
+          "value": 0.88
+        },
+        {
+          "bus_path": "bus:/vo",
+          "position": 0,
+          "effect_index": 0,
+          "effect_type": "reverb",
+          "param_id": 1,
+          "value": 0.22
+        },
+        {
+          "bus_path": "bus:/ambience",
+          "value": -8.0,
+          "param_id": -1
+        },
+        {
+          "bus_path": "bus:/ambience",
+          "position": 0,
+          "effect_index": 0,
+          "effect_type": "lowpass",
+          "param_id": 0,
+          "value": 750.0
+        }
+      ]
+    },
+    {
+      "path": "snapshot:/playground/vo_ducking",
+      "kind": "snapshot",
+      "priority": 220,
+      "snapshot_mode": "override",
+      "fade_in_ms": 160,
+      "stop_fadeout_ms": 900,
+      "snapshot_targets": [
+        {
+          "bus_path": "bus:/music",
+          "value": -14.0,
+          "param_id": -1
+        },
+        {
+          "bus_path": "bus:/ambience",
+          "value": -8.0,
+          "param_id": -1
+        }
+      ]
+    }
+  ],
+  "effect_automations": [],
+  "mixer": {
+    "master": {
+      "volume": 1.0,
+      "mute": false,
+      "effects": [
+        {
+          "type": "limiter",
+          "position": 0,
+          "params": [
+            -1.0,
+            80.0,
+            0.0
+          ],
+          "wet": 1.0,
+          "dry": 0.0
+        }
+      ]
+    }
+  }
+}

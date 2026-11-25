@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 2 — Projetos Portáteis e Publicação | OpenAudio Studio</title>
+  <link rel="stylesheet" href="../assets/css/manual.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="manual-sidebar"></aside>
+
+    <main class="main-content">
+      <div class="breadcrumbs"><a href="../index.html">Manual</a> › Cap. 2 — Projetos e Publicação</div>
+      <h1>Capítulo 2 — Projetos Portáteis e Publicação (<code>.bank</code>)</h1>
+      <p class="lead">
+        Crie o primeiro projeto, carregue uma autoria existente e publique os arquivos que a Unity usa. Os exemplos mostram onde localizar cada arquivo e como confirmar o resultado.
+      </p>
+
+      <h2>Operações deste capítulo</h2>
+      <ul><li><a href="#criar">Criar do zero e cadastrar o primeiro áudio</a></li><li><a href="#abrir">Abrir um projeto existente</a></li><li><a href="#salvar">Salvar, duplicar e renomear</a></li><li><a href="#publicar">Publicar para a Unity</a></li></ul>
+
+      <h2 id="arquivos">O que é a pasta do projeto?</h2>
+      <p>Um projeto reúne o arquivo de autoria <code>project.json</code>, os arquivos de áudio usados pelos eventos e a saída da compilação. Ao abrir o projeto, o Studio lê o JSON e resolve cada áudio a partir da pasta que contém esse arquivo. A entrada <code>assets/coin.wav</code>, por exemplo, aponta para o arquivo <code>coin.wav</code> na subpasta <code>assets</code> desse projeto.</p>
+      <table>
+        <thead><tr><th>Onde</th><th>O que contém</th><th>Quando usar</th></tr></thead>
+        <tbody>
+          <tr><td><code>project.json</code></td><td>Eventos, faixas, instrumentos, vínculos com amostras, mixagem e parâmetros.</td><td>Selecione este arquivo em <strong>Open Project</strong>. Faça uma cópia antes de editar o JSON à mão.</td></tr>
+          <tr><td><code>assets/</code></td><td>Gravações ou sons de origem. Os exercícios usam WAV PCM.</td><td>Leve a pasta junto quando mover ou copiar o projeto.</td></tr>
+          <tr><td><code>build/</code></td><td>Banco publicado e catálogo. Pode conter também arquivos de prévia do Studio.</td><td>Copie para o jogo o par que leva o nome do projeto. A prévia serve à audição dentro do Studio.</td></tr>
+        </tbody>
+      </table>
+      <h2 id="botoes">Botões de projeto na barra superior</h2>
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/studio-transport.png" alt="Captura real dos botões de Projeto na Barra de Transporte">
+          <svg class="callout-svg" viewBox="0 0 1440 36" preserveAspectRatio="none">
+            <g class="callout-group" data-callout="1">
+              <rect class="callout-rect" x="5" y="4" width="83" height="28" rx="4"/>
+              <circle class="callout-badge-bg" cx="14" cy="10" r="9"/>
+              <text class="callout-badge-text" x="14" y="10" font-size="11">1</text>
+            </g>
+            <g class="callout-group" data-callout="2">
+              <rect class="callout-rect" x="90" y="4" width="83" height="28" rx="4"/>
+              <circle class="callout-badge-bg" cx="99" cy="10" r="9"/>
+              <text class="callout-badge-text" x="99" y="10" font-size="11">2</text>
+            </g>
+            <g class="callout-group" data-callout="3">
+              <rect class="callout-rect" x="175" y="4" width="83" height="28" rx="4"/>
+              <circle class="callout-badge-bg" cx="184" cy="10" r="9"/>
+              <text class="callout-badge-text" x="184" y="10" font-size="11">3</text>
+            </g>
+            <g class="callout-group" data-callout="4">
+              <rect class="callout-rect amber" x="260" y="4" width="83" height="28" rx="4"/>
+              <circle class="callout-badge-bg" cx="269" cy="10" r="9"/>
+              <text class="callout-badge-text" x="269" y="10" font-size="11">4</text>
+            </g>
+            <g class="callout-group" data-callout="5">
+              <rect class="callout-rect" x="345" y="4" width="53" height="28" rx="4"/>
+              <circle class="callout-badge-bg" cx="355" cy="10" r="9"/>
+              <text class="callout-badge-text" x="355" y="10" font-size="11">5</text>
+            </g>
+          </svg>
+        </div>
+        <ul class="callout-legend">
+          <li data-callout="1"><span class="legend-num">1</span><div><strong>New Project:</strong> cria a estrutura de autoria na pasta escolhida. O Master e os barramentos iniciais de sfx e música ficam disponíveis.</div></li>
+          <li data-callout="2"><span class="legend-num">2</span><div><strong>Open Project:</strong> abre um arquivo <code>project.json</code> existente (também é possível abrir passando o caminho pela linha de comando).</div></li>
+          <li data-callout="3"><span class="legend-num">3</span><div><strong>Save Project:</strong> grava o <code>project.json</code> usando um arquivo temporário antes de substituir o projeto.</div></li>
+          <li data-callout="4"><span class="legend-num">4</span><div><strong>Build Bank:</strong> executa o compilador <code>oae_bankc.exe</code> em segundo plano e gera o <code>.bank</code> + <code>.bank.catalog.json</code>.</div></li>
+          <li data-callout="5"><span class="legend-num">5</span><div><strong>Help</strong> abre este manual no navegador.</div></li>
+        </ul>
+      </figure>
+
+      <h2 id="criar">Criar um projeto do zero</h2>
+      <ol>
+        <li>Se estiver com outro projeto aberto, use <strong>Save Project</strong> para guardar o trabalho antes de trocar.</li>
+        <li>Clique em <strong>New Project</strong> ou pressione <kbd>Ctrl</kbd>+<kbd>N</kbd>. Na janela <strong>Select Directory for New Project</strong>, escolha uma pasta nova ou vazia, por exemplo <code>Documentos/Audio da Ilha</code>. Confirme a pasta. Use uma pasta exclusiva para evitar substituir o <code>project.json</code> de outro projeto.</li>
+        <li>Abra <strong>Diagnostics &amp; Log</strong> e procure <code>Created new project in:</code>. Abra a pasta no Explorador e confira <code>project.json</code>, <code>assets/</code> e <code>build/</code>. O nome inicial do projeto vem do último componente da pasta, neste caso <code>Audio da Ilha</code>.</li>
+        <li>No navegador do Studio, expanda <strong>Buses</strong>. O projeto inicial já oferece <code>bus:/sfx</code> e <code>bus:/music</code>, com saída para o Master. As listas de eventos e de áudios começam vazias.</li>
+      </ol>
+      <h3 id="primeiro-audio">Cadastrar o primeiro WAV e montar o primeiro evento</h3>
+      <p>A edição visual deste build usa o cadastro de <strong>Audio Assets</strong> existente no projeto. Para inserir o primeiro arquivo de um projeto vazio, copie o WAV e declare sua entrada no JSON. Depois, faça a autoria do evento pela interface.</p>
+      <ol>
+        <li>Feche o Studio depois de salvar. Copie <code>example_project/assets/coin.wav</code> para <code>Audio da Ilha/assets/coin.wav</code>. Use o Explorador para preservar a extensão do arquivo.</li>
+        <li>Abra <code>Audio da Ilha/project.json</code> em um editor de texto. Localize <code>"samples": []</code> e troque apenas a lista vazia pela lista abaixo. Preserve a vírgula que já existe depois do campo e salve o arquivo como UTF-8.</li>
+      </ol>
+      <pre><code>"samples": [
+  { "id": "moeda", "file": "assets/coin.wav" }
+]</code></pre>
+      <ol start="3">
+        <li>Abra o Studio e carregue o <code>project.json</code> da pasta nova. Expanda <strong>Audio Assets</strong>. Selecione <code>moeda</code> e confira o caminho em <strong>File</strong> no Inspetor.</li>
+        <li>No navegador, clique em <strong>+</strong> e escolha <strong>New Event</strong>. Selecione <code>event:/new_event</code> e siga o <a href="04-navegador-projeto.html#renomear">passo a passo de renomeação</a> para mudar o caminho para <code>event:/sfx/moeda</code>.</li>
+        <li>No Inspetor do evento, escolha <code>bus:/sfx</code> em <strong>Bus Route</strong>. Role até <strong>Tracks &amp; Instruments</strong>. Na primeira faixa, abra <strong>+ Add Instrument</strong>, escolha <strong>Single Instrument</strong> e confira <code>moeda</code> em <strong>Sample</strong>.</li>
+        <li>Clique em <strong>Stop</strong> para voltar ao começo e depois em <strong>Play</strong>. Espere um som curto e veja o clipe na primeira faixa. Para comparar, ajuste <strong>Volume</strong> do evento de <code>0 dB</code> para <code>-6 dB</code> e reproduza de novo. Salve a versão que quiser preservar.</li>
+      </ol>
+      <p>Se o áudio aparece na árvore, mas o evento fica em silêncio, confira se o clipe aponta para <code>moeda</code>, se o barramento está sem <strong>Mute</strong> e se o arquivo existe no caminho informado em <strong>File</strong>. Em <strong>Diagnostics &amp; Log</strong>, procure erros de leitura, de compilação ou de dispositivo.</p>
+
+      <h2 id="abrir">Abrir um projeto existente</h2>
+      <ol>
+        <li>Guarde as edições do projeto atual em <strong>Save Project</strong>. Use <strong>Open Project</strong> ou <kbd>Ctrl</kbd>+<kbd>O</kbd>.</li>
+        <li>Na janela <strong>Open OpenAudio Project</strong>, navegue até a pasta do projeto e escolha seu arquivo de autoria. Para praticar, escolha <code>example_project/project.json</code>. Um arquivo <code>.bank.catalog.json</code> também termina em JSON, mas pertence à publicação do jogo.</li>
+        <li>Confirme a abertura. Procure <code>Loaded project:</code> no log e confira o caminho mostrado. Expanda <strong>Events</strong> e selecione <code>event:/sfx/coin</code>. A timeline deve exibir a faixa da moeda.</li>
+        <li>Dê <strong>Play</strong>. Se a autoria abrir e a prévia falhar, confira o primeiro erro no log e a pasta <code>assets/</code>. Se a própria abertura falhar, confira se escolheu o arquivo de autoria e se ele continua legível e na versão <code>1</code>.</li>
+      </ol>
+
+      <h2 id="salvar">Salvar, duplicar ou renomear um projeto</h2>
+      <p><strong>Save Project</strong> ou <kbd>Ctrl</kbd>+<kbd>S</kbd> grava as edições no JSON aberto. Para duplicar o projeto, salve, feche o Studio, copie a pasta inteira e abra o <code>project.json</code> da cópia. O log mostra qual arquivo você está editando.</p>
+      <table>
+        <thead><tr><th>O que você quer mudar</th><th>Como fazer</th><th>O que conferir</th></tr></thead>
+        <tbody>
+          <tr><td>Nome da pasta</td><td>Com o Studio fechado, renomeie a pasta no Explorador e abra o JSON pelo novo caminho.</td><td>Os caminhos relativos para <code>assets/</code> continuam válidos. O nome interno do projeto fica como estava.</td></tr>
+          <tr><td>Nome interno do projeto e da próxima publicação</td><td>Salve, feche o Studio e faça uma cópia de segurança do JSON. Em um editor de texto, mude só o campo <code>"name"</code> da raiz, por exemplo para <code>"AudioIlha"</code>. Salve e reabra pelo Studio.</td><td>O próximo <strong>Build Bank</strong> gera <code>build/AudioIlha.bank</code> e seu catálogo. Atualize o nome no carregador Unity se ele usava o anterior.</td></tr>
+          <tr><td>Nome ou caminho de um evento, barramento ou outro item</td><td>Selecione o item na árvore e pressione <kbd>F2</kbd>.</td><td>Confira a árvore e o Inspetor. Veja os detalhes em <a href="04-navegador-projeto.html#renomear">Renomear itens</a>.</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="publicar">Publicar um banco e conferir a saída</h2>
+      <ol>
+        <li>Selecione um evento conhecido e teste a audição. Use <strong>Save Project</strong> para preservar a autoria.</li>
+        <li>Clique em <strong>Build Bank</strong> ou pressione <kbd>Ctrl</kbd>+<kbd>B</kbd>. O Studio envia uma cópia do estado atual ao compilador. Abra <a href="07-deck-inferior-mixer-efeitos.html#aba6-diagnostics">Diagnostics &amp; Log</a> pelo botão <strong>Log</strong> se estiver oculto. Aguarde <code>[Build] Bank compiled successfully!</code>. Se aparecer <code>[Build Error]</code>, leia a mensagem seguinte para localizar a falha.</li>
+        <li>Na pasta <code>build/</code>, confira os dois arquivos produzidos. Com o exemplo original, eles são <code>ExampleGameProject.bank</code> e <code>ExampleGameProject.bank.catalog.json</code>. Leve os dois juntos para <code>Assets/StreamingAssets/</code> com a Unity fora do Play Mode.</li>
+        <li>Se a compilação falhar, leia a primeira mensagem de erro. Uma indicação como <code>/events/0/tracks/0/instruments/0/sample_id</code> aponta para o primeiro instrumento da primeira faixa do primeiro evento. Confira o identificador e repita o build depois de corrigir. Um par antigo em <code>build/</code> pode pertencer à publicação anterior.</li>
+      </ol>
+      <h3>Master Bank e bancos de conteúdo</h3>
+      <p>O Master Bank declara a árvore compartilhada de barramentos e efeitos. Um banco de conteúdo entrega eventos e amostras e encaminha seus sinais para barramentos já definidos no Master. Isso permite carregar, por exemplo, áudio de bônus só durante a fase correspondente. No AudioPlayground, <code>playground.bank</code> fornece a base e <code>playground_vo.bank</code> adiciona as vozes carregadas sob demanda. Carregue o Master primeiro e retire os bancos de conteúdo quando seus eventos estiverem encerrados.</p>
+
+      <h2>Termos do projeto</h2>
+      <dl><dt>Caminho relativo</dt><dd>Endereço interpretado a partir da pasta do projeto, como <code>assets/coin.wav</code>.</dd><dt>Compilação</dt><dd>Transformação dos dados editáveis e dos áudios em um banco que o motor do jogo consegue carregar.</dd><dt>Catálogo</dt><dd>Índice JSON que identifica eventos e registra tamanho e CRC-32 do banco associado.</dd><dt>Rollback</dt><dd>Recuperação da publicação anterior se a substituição do banco falhar depois que a troca do par começou.</dd></dl>
+
+      <div class="chapter-footer">
+        <a href="01-visao-geral-interface.html">← Cap. 1 — Visão Geral da Interface</a>
+        <a href="03-transporte-e-audicao.html">Próximo: Cap. 3 — Transporte e Audição →</a>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/manual.js"></script>
+</body>
+</html>

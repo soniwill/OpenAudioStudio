@@ -1,0 +1,7 @@
+# Variação de atraso em playlists
+
+O editor Playlist grava `delay_ms_random_range` no multi-instrumento. O campo opcional aceita inteiros de 0 a 5000 ms, com padrão zero. A cada disparo do instrumento, o motor soma um atraso inteiro uniforme entre zero e o valor configurado. O atraso é sempre posterior ao disparo para preservar o início da timeline e o ponto do qual o clipe é disparado. O áudio mantém sua duração. O controle de pitch e o de volume continuam usando as faixas simétricas existentes.
+
+O banco v1 mantém o layout de EVTS. A extensão IDLY contém um `u32` com a contagem de registros, seguido de quatro `u32` por registro em little-endian. Os três primeiros campos são índices de evento, faixa e instrumento, e o último é o limite em milissegundos. O compilador omite registros com valor zero e omite o chunk quando não há registros. O leitor rejeita índices inválidos, destinos que não sejam multi-instrumentos, entradas duplicadas, limites fora de 1 a 5000 e dados excedentes. Bancos sem IDLY conservam a reprodução original. Leitores antigos que ignoram extensões desconhecidas reproduzem sem a variação de atraso.
+
+No projeto de exemplo (`AudioPlayground`), selecione o clipe multi de `event:/playground/footstep` e ajuste **Delay variation** para 150 ms. Salve e publique o banco. A prévia e o banco publicado devem disparar o som em até 150 ms após o início do clipe. O valor zero volta a usar apenas o tempo da timeline.

@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 3 — Barra de Transporte e Audição | OpenAudio Studio</title>
+  <link rel="stylesheet" href="../assets/css/manual.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="manual-sidebar"></aside>
+
+    <main class="main-content">
+      <div class="breadcrumbs"><a href="../index.html">Manual</a> › Cap. 3 — Transporte e Audição</div>
+      <h1>Capítulo 3 — Barra de Transporte e Audição em Tempo Real</h1>
+      <p class="lead">
+        A Barra de Transporte (<code>Transport Bar</code>) trabalha lado a lado com a <code>Project Toolbar</code> no topo do Studio.
+        Ela é o seu centro de comando para testar qualquer evento, disparar a engine nativa e simular parâmetros de jogo em tempo real.
+      </p>
+
+      <div class="box">
+        <div class="box-title">Barras Modulares, Grip Lateral e Persistência Permanente</div>
+        <p>
+          As barras de projeto e de transporte possuem altura compacta unificada (34 px), símbolos vetoriais nítidos com cores semânticas ativas
+          (<code>Play</code> verde, <code>Pause</code> âmbar, <code>Loop</code> ciano) e tooltips com atalhos de teclado
+          (<code>Play (Space)</code>, <code>Save Project (Ctrl+S)</code>, <code>Build Bank (F7)</code>).
+        </p>
+        <ul>
+          <li><strong>Grip lateral tátil (<code>::</code>):</strong> arraste para reordenar no topo ou destacar em janela flutuante; dê <strong>duplo-clique</strong> para alternar entre modo <em>Minimizado</em> (apenas controles essenciais e timecode) e <em>Maximizado</em>; clique com o <strong>botão direito</strong> para abrir o menu contextual.</li>
+          <li><strong>Nunca fechar:</strong> essas barras não possuem botão de fechar (<code>X</code>). Quando flutuantes, oferecem um botão dedicado <strong>Dock Back</strong> para retornar ao topo.</li>
+        </ul>
+      </div>
+
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/studio-transport.png" alt="Captura real da Barra de Transporte com atalho de parâmetros">
+          <svg class="callout-svg" viewBox="0 0 1244 34" preserveAspectRatio="none">
+            <g class="callout-group" data-callout="1">
+              <rect class="callout-rect" x="15" y="3" width="32" height="28" rx="4"/>
+              <circle class="callout-badge-bg" cx="24" cy="9" r="8"/>
+              <text class="callout-badge-text" x="24" y="9" font-size="10">1</text>
+            </g>
+            <g class="callout-group" data-callout="2">
+              <rect class="callout-rect" x="49" y="3" width="67" height="28" rx="4"/>
+              <circle class="callout-badge-bg" cx="58" cy="9" r="8"/>
+              <text class="callout-badge-text" x="58" y="9" font-size="10">2</text>
+            </g>
+            <g class="callout-group" data-callout="3">
+              <rect class="callout-rect" x="117" y="3" width="32" height="28" rx="4"/>
+              <circle class="callout-badge-bg" cx="126" cy="9" r="8"/>
+              <text class="callout-badge-text" x="126" y="9" font-size="10">3</text>
+            </g>
+            <g class="callout-group" data-callout="4">
+              <rect class="callout-rect amber" x="151" y="3" width="32" height="28" rx="4"/>
+              <circle class="callout-badge-bg" cx="160" cy="9" r="8"/>
+              <text class="callout-badge-text" x="160" y="9" font-size="10">4</text>
+            </g>
+            <g class="callout-group" data-callout="5">
+              <rect class="callout-rect" x="185" y="3" width="340" height="28" rx="4"/>
+              <circle class="callout-badge-bg" cx="194" cy="9" r="8"/>
+              <text class="callout-badge-text" x="194" y="9" font-size="10">5</text>
+            </g>
+            <g class="callout-group" data-callout="6">
+              <rect class="callout-rect" x="1148" y="3" width="90" height="28" rx="4"/>
+              <circle class="callout-badge-bg" cx="1228" cy="9" r="8"/>
+              <text class="callout-badge-text" x="1228" y="9" font-size="10">6</text>
+            </g>
+          </svg>
+        </div>
+        <ul class="callout-legend">
+          <li data-callout="1"><span class="legend-num">1</span><div><strong>Play:</strong> inicia a audição do evento selecionado usando o motor nativo real (o mesmo compilado para os jogos na Unity).</div></li>
+          <li data-callout="2"><span class="legend-num">2</span><div><strong>Pause / Stop:</strong> <em>Pause</em> guarda a posição atual para retomar a reprodução dali; <em>Stop</em> encerra o som e retorna o cursor para <code>00:00.000</code>.</div></li>
+          <li data-callout="3"><span class="legend-num">3</span><div><strong>Loop:</strong> quando ativado, mantém o evento em repetição contínua para calibrar mixagem e efeitos sem ter que clicar repetidamente em Play.</div></li>
+          <li data-callout="4"><span class="legend-num">4</span><div><strong>Key Off:</strong> simula o jogador soltando o botão ou gatilho. Libera <em>Sustain Points</em> e dispara o estágio de <em>Release</em> de envelopes AHDSR.</div></li>
+          <li data-callout="5"><span class="legend-num">5</span><div><strong>Timecode &amp; Status:</strong> exibe a posição em <code>MM:SS.mmm</code> e o status de compilação da prévia (<code>Preview In Sync</code>).</div></li>
+          <li data-callout="6"><span class="legend-num">6</span><div><strong>Atalho Params (N):</strong> badge dinâmico (<code>OaeStatusBadge</code>) com o total de parâmetros globais do projeto, acompanhado pelo medidor estéreo horizontal <code>KSystemMeter</code> L/R do barramento master. Clicar no badge abre instantaneamente a aba <strong>Parameters (N)</strong> no Bottom Deck.</div></li>
+        </ul>
+      </figure>
+
+      <h2>Para que serve o botão <code>Key Off</code>?</h2>
+      <div class="theory-box box">
+        <div class="box-title">Teoria Básica — Som Sustentado vs Som de Disparo Único</div>
+        <p>
+          Alguns sons têm duração fixa (um tiro, uma moeda). Outros precisam durar <strong>enquanto algo estiver acontecendo</strong>:
+          um feixe de laser enquanto o jogador segura o botão, ou uma música esperando o chefe ser derrotado para avançar à fanfarra final.
+        </p>
+        <p>
+          No OpenAudio Studio, você define isso colocando um <strong>Sustain Point</strong> na Timeline. Quando a reprodução atinge o ponto, ela estaciona ali
+          e mantém o som tocando. O botão <strong>Key Off</strong> é o comando manual para dizer ao evento: <em>"o jogador soltou a tecla, continue até o fim!"</em>.
+        </p>
+      </div>
+
+      <h2>Arquitetura Ergonômica em 3 Níveis</h2>
+      <p>
+        Para garantir escalabilidade com projetos que possuem centenas de variáveis sem poluir o campo de visão do sound designer, o OpenAudio Studio organiza a audição em três níveis complementares:
+      </p>
+      <ol>
+        <li>
+          <strong>Nível 1 — Barra de Transporte Superior (Foco no Áudio):</strong> Uma barra desobstruída dedicada exclusivamente a tempo, transporte e status, complementada pelo atalho rápido <code>[Params (N)]</code>.
+        </li>
+        <li>
+          <strong>Nível 2 — Fita Retrátil Contextual na Timeline (Foco no Evento):</strong> Uma fita integrada logo acima da régua temporal que exibe <em>unicamente</em> os parâmetros consumidos pelo evento em foco (parâmetros locais e parâmetros globais vinculados a automações ou condições). Possui recolhimento automático para altura zero quando o evento não consome parâmetros e botão manual <code>[v] Parameters (N)</code>. Veja detalhes no <a href="05-timeline-e-waveforms.html#fita-parametros-contextuais">Capítulo 5</a>.
+        </li>
+        <li>
+          <strong>Nível 3 — Deck de Parâmetros Globais no Bottom Deck (Foco na Simulação do Mundo):</strong> Uma central completa para simulação de variáveis climáticas, estados de jogo, dificuldade e telemetria com cards especializados, busca, filtros e suporte a janela flutuante independente.
+        </li>
+      </ol>
+
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/deck-tab7-parameters.png" alt="Aba Global Parameters no Bottom Deck com cartões contínuos, discretos e rotulados">
+        </div>
+        <figcaption class="callout-caption">
+          O Global Parameters Deck (aba <code>Parameters (N)</code> do Bottom Deck): simulação de parâmetros do projeto em tempo real, com controles especializados, busca instantânea e telemetria de modificadores físicos.
+        </figcaption>
+      </figure>
+
+      <p>
+        Arraste um controle na Fita da Timeline ou no Deck Global enquanto o evento está tocando em <strong>Play</strong> para testar:
+      </p>
+      <ul>
+        <li>Se o volume ou filtro muda suavemente conforme as curvas de automação;</li>
+        <li>Se camadas musicais entram ou saem na hora certa conforme as condições lógicas;</li>
+        <li>Se as balísticas de <em>Seek Speed</em> e <em>Velocity</em> automática respondem naturalmente.</li>
+      </ul>
+
+      <h2 id="estados">Entenda posição, estado e instância</h2>
+      <p>O contador acompanha a posição dentro do evento. Em <code>00:01.250</code>, a leitura é um segundo e 250 milissegundos. Na audição local, clique ou arraste na régua de tempo para mudar o ponto de teste. Com a audição parada, a régua, o minimapa e os contadores mantêm a posição escolhida até você apertar <strong>Play</strong>, acionar <strong>Stop</strong> ou trocar de evento.</p>
+      <p>Para ouvir a partir de <code>00:02.500</code>, selecione um evento com áudio nesse ponto e aguarde a prévia local ficar pronta. Com a audição parada, clique na régua em 2,5 segundos, confira a posição no contador e aperte <strong>Play</strong>. Para voltar ao início, pressione <strong>Stop</strong>. Selecionar outro evento também zera a posição de partida.</p>
+      <p>Ao retomar de <strong>Pause</strong>, o Studio inicia outra instância na posição guardada. A comparação com um Play contínuo pode soar diferente se o evento usar escolhas aleatórias ou depender do histórico.</p>
+      <table><thead><tr><th>Controle</th><th>Quando usar</th><th>O que observar</th></tr></thead><tbody>
+        <tr><td>Play</td><td>Ouvir a seleção atual ou retomar uma pausa local.</td><td>O cursor da audição local avança a partir da posição escolhida. O Mixer Deck mostra o barramento que recebe sinal.</td></tr>
+        <tr><td>Stop</td><td>Encerrar a audição e preparar outro disparo desde o começo.</td><td>O estado volta a parado e a próxima reprodução começa em zero.</td></tr>
+        <tr><td>Key Off</td><td>Soltar uma sustentação prevista na autoria, como liberar uma nota mantida.</td><td>O evento pode seguir para o restante da timeline ou para a soltura do envelope. Um som curto sem sustentação pode terminar antes que o comando seja útil.</td></tr>
+        <tr><td>Loop</td><td>Repetir o teste local, por exemplo ao comparar um fader.</td><td>Ao fim, o Studio volta a disparar. Para publicar uma repetição no jogo, configure a lógica do evento ou do instrumento.</td></tr></tbody></table>
+      <p>Quando o Live-Linking está ativo, <strong>Play</strong>, <strong>Stop</strong> e <strong>Key Off</strong> podem controlar a reprodução remota na Unity. Confira o estado em <a href="10-unity-api-csharp-e-live.html#live">Live-Linking</a>.</p>
+
+      <h2>Mini-Glossário deste Capítulo</h2>
+      <ul>
+        <li><strong>Audição (Audition):</strong> testar um som dentro do Studio com o motor de áudio real antes de exportá-lo para o jogo.</li>
+        <li><strong>Key Off:</strong> comando que libera uma nota ou região sustentada para seguir para a fase de encerramento (<em>Release</em>).</li>
+        <li><strong>Timecode:</strong> marcador numérico preciso de tempo decorrido (minutos, segundos e milissegundos).</li>
+      </ul>
+
+      <h2 id="primeira-audicao">Ouça o primeiro evento</h2>
+      <ol>
+        <li>Use <strong>Open Project</strong> para abrir <code>example_project/project.json</code> do pacote portátil.</li>
+        <li>No Browser, escolha <strong>Events → sfx → coin</strong> e aguarde <strong>Preview In Sync</strong> no transporte.</li>
+        <li>Clique em <strong>Play</strong>. Você deve ouvir a moeda uma vez e ver o contador avançar. Use <strong>Stop</strong> para reiniciar a posição.</li>
+      </ol>
+      <p>Se o som não sair, confira se o evento está selecionado e se o barramento SFX está sem mute. Abra <a href="07-deck-inferior-mixer-efeitos.html#aba6-diagnostics">Diagnostics &amp; Log</a> para procurar mensagens de dispositivo ou de compilação da prévia.</p>
+
+      <h2>Compare pausa, parada e repetição</h2>
+      <p>Abra <code>example_project/project.json</code> e selecione <code>event:/music/theme</code>. Clique em <strong>Play</strong> e observe o contador. Clique em <strong>Pause</strong> e depois em <strong>Play</strong> para retomar. Após <strong>Stop</strong>, inicie novamente e compare a posição. Use o botão <strong>Loop</strong> para repetir a audição local. Uma região de loop criada no evento viaja no banco e tem suas próprias regras.</p>
+
+      <h2 id="mixagem-e-hotswap-streaming">Mixagem ao vivo por faixa e Hot-Swap de prévia com Streaming</h2>
+      <p>
+        Durante a audição local, alterações de <code>Volume</code>, <code>Pan</code>, <code>M</code> (Mute) e <code>S</code> (Solo) em uma faixa são enviadas diretamente ao barramento nativo da faixa na instância em reprodução, sem cortes nem espera de compilação. As flags de <code>M</code> e <code>S</code> são exclusivas do Studio e não disparam recompilação de prévia nem contaminam o <code>.bank</code> publicado.
+      </p>
+      <p>
+        Ao editar propriedades compiláveis (como <code>volume_db</code>, <code>pan</code> ou regiões de áudio), o Studio adia a recompilação enquanto você arrasta o controle (<code>is_in_gesture</code>) e compila em segundo plano usando dois arquivos alternados (<code>build/preview_a.bank</code> e <code>build/preview_b.bank</code>). Assim, projetos com samples em <em>streaming</em> (<code>"stream": true</code>) não colidem com o arquivo aberto pelo motor de áudio no Windows; ao concluir a compilação, o Studio encerra a instância ativa, descarrega o slot anterior, libera os handles pendentes via atualização do motor e retoma a audição no novo slot exibindo <strong>Preview In Sync</strong>.
+      </p>
+
+      <div class="chapter-footer">
+        <a href="02-projetos-e-publicacao.html">← Cap. 2 — Projetos e Publicação</a>
+        <a href="04-navegador-projeto.html">Próximo: Cap. 4 — Navegador do Projeto →</a>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/manual.js"></script>
+</body>
+</html>

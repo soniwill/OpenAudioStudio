@@ -1,0 +1,187 @@
+{
+  "version": 1,
+  "name": "AudioPlaygroundVoiceProject",
+  "buses": [
+    {
+      "path": "bus:/vo",
+      "volume": 1.0,
+      "effects": [
+        {
+          "type": "reverb",
+          "position": 0,
+          "params": [
+            0.1,
+            0.9,
+            0.45
+          ],
+          "wet": 0.25,
+          "dry": 0.95
+        }
+      ]
+    },
+    {
+      "path": "bus:/music",
+      "volume": 1.0,
+      "effects": [
+        {
+          "type": "compressor",
+          "position": 0,
+          "params": [
+            -24.0,
+            6.0,
+            15.0,
+            650.0,
+            0.0
+          ],
+          "wet": 1.0,
+          "dry": 0.0,
+          "sidechain_bus": "bus:/vo"
+        },
+        {
+          "type": "lowpass",
+          "position": 0,
+          "params": [
+            20000.0,
+            0.707
+          ],
+          "wet": 1.0,
+          "dry": 0.0
+        }
+      ]
+    }
+  ],
+  "global_parameters": [],
+  "vcas": [],
+  "samples": [
+    {
+      "id": "sample_vo_welcome",
+      "file": "assets/playground/vo_welcome.wav"
+    },
+    {
+      "id": "sample_vo_spatial",
+      "file": "assets/playground/vo_spatial.wav"
+    },
+    {
+      "id": "sample_vo_ducking",
+      "file": "assets/playground/vo_ducking.wav"
+    }
+  ],
+  "audio_table": [
+    {
+      "key": "vo_welcome",
+      "sample_id": "sample_vo_welcome"
+    },
+    {
+      "key": "vo_spatial_test",
+      "sample_id": "sample_vo_spatial"
+    },
+    {
+      "key": "vo_ducking_active",
+      "sample_id": "sample_vo_ducking"
+    }
+  ],
+  "events": [
+    {
+      "path": "event:/playground/dialogue_vo",
+      "kind": "event",
+      "bus_path": "bus:/vo",
+      "volume_db": 0.0,
+      "parameters": [
+        {
+          "name": "DialogueLine",
+          "kind": "labeled",
+          "labels": [
+            "vo_welcome",
+            "vo_spatial_test",
+            "vo_ducking_active"
+          ],
+          "default_value": 0
+        }
+      ],
+      "tracks": [
+        {
+          "volume_db": 0.0,
+          "instruments": [
+            {
+              "kind": "programmer",
+              "programmer_key": "vo_welcome",
+              "offset_ms": 0.0,
+              "length_ms": 5000.0,
+              "condition": {
+                "probability_pct": 100.0,
+                "terms": [
+                  {
+                    "param": {
+                      "scope": "local",
+                      "name": "DialogueLine"
+                    },
+                    "min": 0.0,
+                    "max": 0.4
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "programmer",
+              "programmer_key": "vo_spatial_test",
+              "offset_ms": 0.0,
+              "length_ms": 5000.0,
+              "condition": {
+                "probability_pct": 100.0,
+                "terms": [
+                  {
+                    "param": {
+                      "scope": "local",
+                      "name": "DialogueLine"
+                    },
+                    "min": 0.6,
+                    "max": 1.4
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "programmer",
+              "programmer_key": "vo_ducking_active",
+              "offset_ms": 0.0,
+              "length_ms": 5000.0,
+              "condition": {
+                "probability_pct": 100.0,
+                "terms": [
+                  {
+                    "param": {
+                      "scope": "local",
+                      "name": "DialogueLine"
+                    },
+                    "min": 1.6,
+                    "max": 2.0
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "effect_automations": [],
+  "mixer": {
+    "master": {
+      "volume": 1.0,
+      "mute": false,
+      "effects": [
+        {
+          "type": "limiter",
+          "position": 0,
+          "params": [
+            -1.0,
+            80.0,
+            0.0
+          ],
+          "wet": 1.0,
+          "dry": 0.0
+        }
+      ]
+    }
+  }
+}

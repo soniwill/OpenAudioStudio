@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" width="100%" height="auto">
+  <rect width="1000" height="300" rx="12" fill="#161719" stroke="#2f3237" stroke-width="2"/>
+  <text x="500" y="34" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="16" font-weight="700" text-anchor="middle">Fluxo Completo: Do Arquivo de Áudio até o Jogo na Unity</text>
+
+  <!-- Step 1: Samples -->
+  <rect x="30" y="65" width="190" height="175" rx="10" fill="#202225" stroke="#40444b" stroke-width="1.5"/>
+  <text x="125" y="95" fill="#00f5d4" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" text-anchor="middle">1. SAMPLES (Arquivos)</text>
+  <text x="125" y="122" fill="#a0a4ab" font-family="Consolas, monospace" font-size="12" text-anchor="middle">passo_01.wav</text>
+  <text x="125" y="142" fill="#a0a4ab" font-family="Consolas, monospace" font-size="12" text-anchor="middle">musica_tema.ogg</text>
+  <text x="125" y="162" fill="#a0a4ab" font-family="Consolas, monospace" font-size="12" text-anchor="middle">explosao.flac</text>
+  <text x="125" y="205" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="11" text-anchor="middle">Áudio bruto gravado</text>
+
+  <!-- Arrow 1->2 -->
+  <path d="M225 152 L265 152" stroke="#00f5d4" stroke-width="2.5" marker-end="url(#arr)"/>
+
+  <!-- Step 2: OpenAudio Studio -->
+  <rect x="270" y="65" width="235" height="175" rx="10" fill="#202225" stroke="#00f5d4" stroke-width="2"/>
+  <text x="387" y="95" fill="#00f5d4" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" text-anchor="middle">2. OPENAUDIO STUDIO (.exe)</text>
+  <rect x="288" y="110" width="198" height="32" rx="6" fill="#282b30" stroke="#2f3237"/>
+  <text x="387" y="130" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="12" text-anchor="middle">Eventos + Regras + Random</text>
+  <rect x="288" y="150" width="198" height="32" rx="6" fill="#282b30" stroke="#2f3237"/>
+  <text x="387" y="170" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="12" text-anchor="middle">Mixer (Buses, VCAs, Efeitos)</text>
+  <text x="387" y="212" fill="#ffb703" font-family="Segoe UI, sans-serif" font-size="11" font-weight="600" text-anchor="middle">Salva em project.json + assets/</text>
+
+  <!-- Arrow 2->3 -->
+  <path d="M510 152 L550 152" stroke="#00f5d4" stroke-width="2.5"/>
+
+  <!-- Step 3: Build Bank -->
+  <rect x="555" y="65" width="185" height="175" rx="10" fill="#202225" stroke="#ffb703" stroke-width="2"/>
+  <text x="647" y="95" fill="#ffb703" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" text-anchor="middle">3. BUILD BANK</text>
+  <rect x="572" y="114" width="150" height="36" rx="6" fill="#282b30" stroke="#ffb703"/>
+  <text x="647" y="136" fill="#f0f2f5" font-family="Consolas, monospace" font-size="12" text-anchor="middle">Master.bank</text>
+  <rect x="572" y="160" width="150" height="36" rx="6" fill="#282b30" stroke="#40444b"/>
+  <text x="647" y="182" fill="#a0a4ab" font-family="Consolas, monospace" font-size="11" text-anchor="middle">.bank.catalog.json</text>
+  <text x="647" y="220" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="11" text-anchor="middle">Pacote otimizado p/ jogo</text>
+
+  <!-- Arrow 3->4 -->
+  <path d="M745 152 L785 152" stroke="#00f5d4" stroke-width="2.5"/>
+
+  <!-- Step 4: Unity -->
+  <rect x="790" y="65" width="180" height="175" rx="10" fill="#202225" stroke="#38b000" stroke-width="2"/>
+  <text x="880" y="95" fill="#38b000" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" text-anchor="middle">4. UNITY (Seu Jogo)</text>
+  <text x="880" y="124" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="12" text-anchor="middle">com.openaudio.core</text>
+  <text x="880" y="150" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="11" text-anchor="middle">Dispara "event:/Passos"</text>
+  <text x="880" y="170" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="11" text-anchor="middle">Envia parâmetros (Velocidade)</text>
+  <text x="880" y="210" fill="#00f5d4" font-family="Segoe UI, sans-serif" font-size="11" font-weight="600" text-anchor="middle">↔ Live-Linking ao vivo!</text>
+
+  <text x="500" y="275" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="12" text-anchor="middle">Você cria a inteligência sonora no Studio e apenas dispara os eventos pelo nome dentro da Unity.</text>
+</svg>

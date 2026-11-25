@@ -1,0 +1,176 @@
+name: Release Windows
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: New release version (for example v0.1.1)
+        required: true
+        default: v0.1.1
+        type: string
+      unity_player:
+        description: Build the playable demo using the configured Windows Unity runner
+        default: false
+        type: boolean
+      create_draft:
+        description: Create a draft release after validation
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-windows-${{ inputs.version }}
+
+jobs:
+  package:
+    if: github.ref == 'refs/heads/main'
+    runs-on: windows-2022
+    timeout-minutes: 45
+    env:
+      RELEASE_VERSION: ${{ inputs.version }}
+      CMAKE_GENERATOR_PLATFORM: x64
+    steps:
+      - name: Validate release request
+        env:
+          UNITY_PLAYER: ${{ inputs.unity_player }}
+          CREATE_DRAFT: ${{ inputs.create_draft }}
+          UNITY_RUNNER_ENABLED: ${{ vars.OAE_UNITY_RUNNER_ENABLED }}
+        run: |
+          if ($env:RELEASE_VERSION -cnotmatch '\Av[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*)?\z') {
+            throw 'Invalid version. Use, for example, v0.1.1.'
+          }
+          if ($env:CREATE_DRAFT -eq 'true' -and $env:UNITY_PLAYER -ne 'true') {
+            throw 'A complete draft requires the Unity player. Enable unity_player or build artifacts without creating a draft.'
+          }
+          if ($env:UNITY_PLAYER -eq 'true' -and $env:UNITY_RUNNER_ENABLED -ne 'true') {
+            throw 'Configure the Windows oae-unity runner and set OAE_UNITY_RUNNER_ENABLED=true before requesting a playable demo.'
+          }
+
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Build Studio and run smoke tests
+        run: ./scripts/build_studio.ps1 -Config Release
+
+      - name: Package the exact checkout
+        run: |
+          ./scripts/package_studio_release.ps1 -Version $env:RELEASE_VERSION
+          ./scripts/package_unity_release.ps1 -Version $env:RELEASE_VERSION -IntegrationOnly -RuntimePath './build/Studio_Bundle_Release/oae_audio.dll'
+          $output = "build/releases/$env:RELEASE_VERSION"
+          Copy-Item -LiteralPath "build/unity-releases/$env:RELEASE_VERSION/OpenAudioUnity-$env:RELEASE_VERSION-windows-x64.zip" -Destination $output
+          Get-ChildItem -LiteralPath $output -Filter '*.zip' -File | Sort-Object Name | ForEach-Object {
+            "$((Get-FileHash -LiteralPath $_.FullName).Hash.ToLowerInvariant())  $($_.Name)"
+          } | Set-Content -LiteralPath "$output/SHA256SUMS.txt" -Encoding ascii
+
+      - name: Verify the extracted Windows package
+        run: |
+          $name = "OpenAudioStudio-$env:RELEASE_VERSION-windows-x64"
+          $dest = Join-Path $env:RUNNER_TEMP 'oae-release-test'
+          Expand-Archive "build/releases/$env:RELEASE_VERSION/$name.zip" $dest
+          $folder = Join-Path $dest $name
+          Push-Location $folder
+          try {
+            $studio = Start-Process -FilePath './OpenAudio Studio.exe' -ArgumentList '--smoke-headless' -Wait -PassThru -NoNewWindow
+            if ($studio.ExitCode -ne 0) { throw "Extracted Studio failed with exit code $($studio.ExitCode)" }
+            ./oae_bankc.exe './example_project/project.json' -o './example.bank'
+            if ($LASTEXITCODE -ne 0) { throw 'Bank compiler failed on the packaged example' }
+            foreach ($file in @('playground.bank', 'playground_vo.bank', 'playground.bank.catalog.json', 'playground_vo.bank.catalog.json')) {
+              if (-not (Test-Path -LiteralPath "example_project/audio-playground/build/$file")) {
+                throw "Missing AudioPlayground bank or catalog: $file"
+              }
+            }
+          } finally {
+            Pop-Location
+          }
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: OpenAudioStudio-core-${{ inputs.version }}
+          path: build/releases/${{ inputs.version }}/*
+          if-no-files-found: error
+          compression-level: 0
+
+      - uses: actions/upload-artifact@v7
+        if: inputs.unity_player
+        with:
+          name: OpenAudioStudio-native-tools-${{ inputs.version }}
+          path: |
+            build/Studio_Bundle_Release/oae_audio.dll
+            build/Studio_Bundle_Release/oae_bankc.exe
+          if-no-files-found: error
+
+  unity-player:
+    needs: package
+    if: github.ref == 'refs/heads/main' && inputs.unity_player
+    runs-on: [self-hosted, Windows, X64, oae-unity]
+    timeout-minutes: 45
+    env:
+      RELEASE_VERSION: ${{ inputs.version }}
+      OAE_UNITY_EDITOR: ${{ vars.OAE_UNITY_EDITOR }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: OpenAudioStudio-native-tools-${{ inputs.version }}
+          path: build/release-native
+
+      - name: Build and package the AudioPlayground
+        run: |
+          ./scripts/build_audio_playground.ps1 -Version $env:RELEASE_VERSION -RuntimeDirectory './build/release-native' -UnityPath $env:OAE_UNITY_EDITOR
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: OpenAudioStudio-AudioPlayground-${{ inputs.version }}
+          path: build/unity-releases/${{ inputs.version }}/OpenAudioStudio-AudioPlayground-${{ inputs.version }}-windows-x64.zip
+          if-no-files-found: error
+          compression-level: 0
+
+  release:
+    needs: [package, unity-player]
+    if: github.ref == 'refs/heads/main' && inputs.create_draft
+    runs-on: windows-2022
+    permissions:
+      contents: write
+    env:
+      RELEASE_VERSION: ${{ inputs.version }}
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: OpenAudioStudio-core-${{ inputs.version }}
+          path: release-assets
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: OpenAudioStudio-AudioPlayground-${{ inputs.version }}
+          path: release-assets
+
+      - name: Verify all four archives and create a new draft
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = $env:RELEASE_VERSION
+          $archives = @(
+            "OpenAudioStudio-$version-windows-x64.zip",
+            "OpenAudioStudio-$version-source.zip",
+            "OpenAudioUnity-$version-windows-x64.zip",
+            "OpenAudioStudio-AudioPlayground-$version-windows-x64.zip"
+          )
+          $files = @($archives | ForEach-Object { Get-Item -LiteralPath "release-assets/$_" })
+          if ($files.Count -ne 4 -or ($files | Where-Object Length -eq 0)) { throw 'Incomplete release bundle.' }
+          $checksums = 'release-assets/SHA256SUMS.txt'
+          $files | Sort-Object Name | ForEach-Object {
+            "$((Get-FileHash -LiteralPath $_.FullName).Hash.ToLowerInvariant())  $($_.Name)"
+          } | Set-Content -LiteralPath $checksums -Encoding ascii
+          $existing = gh api --paginate "repos/$env:GITHUB_REPOSITORY/releases" --jq ".[] | select(.tag_name == `"$version`") | .id"
+          if ($LASTEXITCODE -ne 0) { throw 'Could not verify existing release versions.' }
+          if ($existing) { throw "Release $version already exists. Choose a new version." }
+          $paths = @($files.FullName) + $checksums
+          $notes = "Windows x64 downloads: portable Studio, Unity integration with the native DLL, and the playable AudioPlayground demo with its approved dialogue. The source ZIP includes the pinned JUCE revision and playable demo audio sources. Verify downloads using SHA256SUMS.txt."
+          gh release create $version @paths --repo $env:GITHUB_REPOSITORY --draft --target $env:GITHUB_SHA --title "OpenAudio Studio $version" --notes $notes

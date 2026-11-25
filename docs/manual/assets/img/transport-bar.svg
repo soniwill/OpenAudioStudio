@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 120" width="100%" height="auto">
+  <rect width="1180" height="120" rx="8" fill="#202225" stroke="#2f3237" stroke-width="2"/>
+  <!-- Project Actions -->
+  <rect x="16" y="18" width="95" height="34" rx="5" fill="#282b30" stroke="#40444b"/>
+  <text x="63" y="39" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="12" text-anchor="middle">New Project</text>
+  <rect x="118" y="18" width="95" height="34" rx="5" fill="#282b30" stroke="#40444b"/>
+  <text x="165" y="39" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="12" text-anchor="middle">Open Project</text>
+  <rect x="220" y="18" width="95" height="34" rx="5" fill="#282b30" stroke="#40444b"/>
+  <text x="267" y="39" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="12" text-anchor="middle">Save Project</text>
+  <rect x="322" y="18" width="95" height="34" rx="5" fill="#282b30" stroke="#ffb703"/>
+  <text x="369" y="39" fill="#ffb703" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700" text-anchor="middle">Build Bank</text>
+
+  <!-- Transport Buttons -->
+  <rect x="444" y="18" width="60" height="34" rx="5" fill="#38b000"/>
+  <text x="474" y="39" fill="#081214" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700" text-anchor="middle">Play</text>
+  <rect x="510" y="18" width="60" height="34" rx="5" fill="#282b30" stroke="#40444b"/>
+  <text x="540" y="39" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="12" text-anchor="middle">Pause</text>
+  <rect x="576" y="18" width="60" height="34" rx="5" fill="#282b30" stroke="#40444b"/>
+  <text x="606" y="39" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="12" text-anchor="middle">Stop</text>
+  <rect x="642" y="18" width="60" height="34" rx="5" fill="#282b30" stroke="#00f5d4"/>
+  <text x="672" y="39" fill="#00f5d4" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" text-anchor="middle">Loop</text>
+  <rect x="708" y="18" width="70" height="34" rx="5" fill="#282b30" stroke="#ffb703"/>
+  <text x="743" y="39" fill="#ffb703" font-family="Segoe UI, sans-serif" font-size="12" font-weight="600" text-anchor="middle">Key Off</text>
+
+  <!-- Timecode & Status -->
+  <rect x="796" y="18" width="120" height="34" rx="5" fill="#161719" stroke="#2f3237"/>
+  <text x="856" y="40" fill="#00f5d4" font-family="Consolas, monospace" font-size="15" font-weight="700" text-anchor="middle">00:04.520</text>
+  <rect x="924" y="18" width="240" height="34" rx="5" fill="#161719" stroke="#2f3237"/>
+  <text x="938" y="39" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="12">Status: Playing · Bank OK</text>
+
+  <!-- Live Parameter Sliders Row -->
+  <rect x="16" y="68" width="1148" height="38" rx="5" fill="#161719" stroke="#2f3237"/>
+  <text x="28" y="91" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="11" font-weight="700">PARÂMETROS AO VIVO:</text>
+  <text x="175" y="91" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="12">Velocidade</text>
+  <rect x="250" y="83" width="180" height="8" rx="4" fill="#282b30"/>
+  <rect x="250" y="83" width="115" height="8" rx="4" fill="#00f5d4"/>
+  <circle cx="365" cy="87" r="7" fill="#f0f2f5"/>
+  <text x="445" y="91" fill="#00f5d4" font-family="Consolas, monospace" font-size="12">0.64</text>
+
+  <text x="510" y="91" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="12">Superficie (Global)</text>
+  <rect x="640" y="83" width="180" height="8" rx="4" fill="#282b30"/>
+  <rect x="640" y="83" width="60" height="8" rx="4" fill="#ffb703"/>
+  <circle cx="700" cy="87" r="7" fill="#f0f2f5"/>
+  <text x="835" y="91" fill="#ffb703" font-family="Consolas, monospace" font-size="12">Pedra (1)</text>
+</svg>

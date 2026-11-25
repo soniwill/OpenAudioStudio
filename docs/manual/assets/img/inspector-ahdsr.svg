@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 420" width="100%" height="auto">
+  <rect width="980" height="420" rx="8" fill="#202225" stroke="#2f3237" stroke-width="2"/>
+
+  <!-- Left: Inspector Panel -->
+  <rect x="14" y="14" width="320" height="392" rx="6" fill="#161719" stroke="#2f3237"/>
+  <text x="28" y="38" fill="#00f5d4" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700">INSPECTOR PANEL</text>
+  <rect x="26" y="50" width="296" height="54" rx="5" fill="#282b30"/>
+  <text x="38" y="70" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="11">1. Propriedades Base</text>
+  <text x="38" y="92" fill="#f0f2f5" font-family="Consolas, monospace" font-size="11">Vol: -3.0 dB · Pitch: +2.0 st</text>
+
+  <rect x="26" y="114" width="296" height="68" rx="5" fill="#282b30"/>
+  <text x="38" y="134" fill="#ffb703" font-family="Segoe UI, sans-serif" font-size="11" font-weight="700">2. Modulador RANDOM</text>
+  <text x="38" y="154" fill="#f0f2f5" font-family="Consolas, monospace" font-size="11">Vol: ±2.5 dB · Pitch: ±1.5 st</text>
+  <text x="38" y="172" fill="#a0a4ab" font-family="Consolas, monospace" font-size="11">Pan: ±0.20</text>
+
+  <rect x="26" y="192" width="296" height="106" rx="5" fill="#282b30" stroke="#b5179e"/>
+  <text x="38" y="212" fill="#b5179e" font-family="Segoe UI, sans-serif" font-size="11" font-weight="700">3. Envelope AHDSR</text>
+  <text x="38" y="234" fill="#f0f2f5" font-family="Consolas, monospace" font-size="11">Attack:  15 ms   Hold:    40 ms</text>
+  <text x="38" y="254" fill="#f0f2f5" font-family="Consolas, monospace" font-size="11">Decay:  180 ms   Sustain: 70 %</text>
+  <text x="38" y="274" fill="#f0f2f5" font-family="Consolas, monospace" font-size="11">Release: 350 ms</text>
+
+  <rect x="26" y="308" width="296" height="84" rx="5" fill="#282b30"/>
+  <text x="38" y="328" fill="#00f5d4" font-family="Segoe UI, sans-serif" font-size="11" font-weight="700">4. Curvas de Automação</text>
+  <text x="38" y="350" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="11">LINEAR · HOLD · EASE_IN</text>
+  <text x="38" y="368" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="11">EASE_OUT · S_CURVE</text>
+
+  <!-- Right: AHDSR Visual Diagram -->
+  <rect x="350" y="14" width="616" height="392" rx="6" fill="#161719" stroke="#2f3237"/>
+  <text x="370" y="40" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="14" font-weight="700">Como o Envelope AHDSR Molda o Volume do Som</text>
+
+  <!-- Axes -->
+  <line x1="390" y1="300" x2="930" y2="300" stroke="#40444b" stroke-width="1.5"/>
+  <line x1="390" y1="80" x2="390" y2="300" stroke="#40444b" stroke-width="1.5"/>
+  <text x="376" y="90" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="10" text-anchor="end">100%</text>
+  <text x="376" y="175" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="10" text-anchor="end">70%</text>
+  <text x="376" y="300" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="10" text-anchor="end">0%</text>
+
+  <!-- AHDSR Curve -->
+  <path d="M390 300 L450 90 L520 90 L610 170 L760 170 L890 300" fill="rgba(0,245,212,0.12)" stroke="#00f5d4" stroke-width="3"/>
+
+  <!-- Phase markers -->
+  <line x1="450" y1="90" x2="450" y2="300" stroke="#2f3237" stroke-dasharray="4 4"/>
+  <line x1="520" y1="90" x2="520" y2="300" stroke="#2f3237" stroke-dasharray="4 4"/>
+  <line x1="610" y1="170" x2="610" y2="300" stroke="#2f3237" stroke-dasharray="4 4"/>
+  <line x1="760" y1="170" x2="760" y2="300" stroke="#ffb703" stroke-dasharray="4 4"/>
+
+  <text x="420" y="322" fill="#00f5d4" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700" text-anchor="middle">A</text>
+  <text x="485" y="322" fill="#00f5d4" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700" text-anchor="middle">H</text>
+  <text x="565" y="322" fill="#00f5d4" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700" text-anchor="middle">D</text>
+  <text x="685" y="322" fill="#00f5d4" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700" text-anchor="middle">S (Sustentado)</text>
+  <text x="825" y="322" fill="#ffb703" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700" text-anchor="middle">R (Release)</text>
+
+  <text x="760" y="152" fill="#ffb703" font-family="Segoe UI, sans-serif" font-size="11" font-weight="700" text-anchor="middle">Key Off / Stop</text>
+  <text x="660" y="370" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="12" text-anchor="middle">Attack (sobe) → Hold (segura no pico) → Decay (cai) → Sustain (mantém) → Release (desaparece)</text>
+</svg>

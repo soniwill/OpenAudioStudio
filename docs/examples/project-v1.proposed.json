@@ -1,0 +1,226 @@
+{
+  "version": 1,
+  "name": "Demo de autoria",
+  "samples": [
+    {
+      "id": "tone",
+      "file": "assets/tone.wav"
+    }
+  ],
+  "buses": [
+    {
+      "path": "bus:/sfx",
+      "volume": 0.8,
+      "effects": [
+        {
+          "type": "lowpass",
+          "position": 0,
+          "params": [
+            1000,
+            0.707
+          ]
+        }
+      ]
+    }
+  ],
+  "global_parameters": [
+    {
+      "name": "RPM",
+      "kind": "continuous",
+      "min": 0,
+      "max": 8000,
+      "default_value": 1000
+    }
+  ],
+  "events": [
+    {
+      "kind": "event",
+      "path": "event:/tone",
+      "bus_path": "bus:/sfx",
+      "tracks": [
+        {
+          "instruments": [
+            {
+              "kind": "single",
+              "sample_id": "tone",
+              "length_ms": 250
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "path": "event:/demo",
+      "bus_path": "bus:/sfx",
+      "parameters": [
+        {
+          "name": "Mode",
+          "kind": "labeled",
+          "labels": [
+            "Idle",
+            "Active"
+          ],
+          "default_value": 1
+        }
+      ],
+      "logic_items": [
+        {
+          "kind": "marker",
+          "name": "end",
+          "position_ms": 400
+        },
+        {
+          "kind": "tempo",
+          "bpm": 120
+        },
+        {
+          "kind": "transition_region",
+          "start_ms": 100,
+          "length_ms": 50,
+          "target_marker": "end",
+          "quantization": "beat"
+        }
+      ],
+      "tracks": [
+        {
+          "instruments": [
+            {
+              "kind": "multi",
+              "length_ms": 250,
+              "playlist_mode": "shuffle",
+              "playlist": [
+                {
+                  "sample_id": "tone",
+                  "weight": 2
+                },
+                {
+                  "target_event": "event:/tone"
+                }
+              ],
+              "condition": {
+                "probability_pct": 100,
+                "terms": [
+                  {
+                    "param": {
+                      "scope": "local",
+                      "name": "Mode"
+                    },
+                    "min": 1,
+                    "max": 1
+                  }
+                ]
+              },
+              "modulators": [
+                {
+                  "kind": "ahdsr",
+                  "attack_ms": 5,
+                  "release_ms": 25,
+                  "release_on_key_off": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "instruments": [
+            {
+              "kind": "command",
+              "offset_ms": 250,
+              "command_type": "snapshot_on",
+              "command_target": "snapshot:/duck"
+            },
+            {
+              "kind": "silence",
+              "offset_ms": 300,
+              "length_ms": 100
+            }
+          ]
+        }
+      ],
+      "modulators": [
+        {
+          "kind": "random",
+          "target": "pitch",
+          "range": 2
+        }
+      ],
+      "automations": [
+        {
+          "target": "pitch",
+          "is_timeline": false,
+          "param": {
+            "scope": "global",
+            "name": "RPM"
+          },
+          "curve": {
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 8000,
+                "y": 12,
+                "shape": "ease_out"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "kind": "snapshot",
+      "path": "snapshot:/duck",
+      "fade_in_ms": 25,
+      "snapshot_targets": [
+        {
+          "bus_path": "bus:/sfx",
+          "value": -9
+        }
+      ]
+    }
+  ],
+  "effect_automations": [
+    {
+      "bus_path": "bus:/sfx",
+      "position": 0,
+      "effect_index": 0,
+      "effect_type": "lowpass",
+      "param_id": 0,
+      "param": {
+        "scope": "global",
+        "name": "RPM"
+      },
+      "curve": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1000
+          },
+          {
+            "x": 8000,
+            "y": 6000
+          }
+        ]
+      }
+    }
+  ],
+  "vcas": [
+    {
+      "path": "vca:/sfx",
+      "buses": [
+        "bus:/sfx"
+      ],
+      "events": [
+        "event:/demo"
+      ]
+    }
+  ],
+  "mixer": {
+    "master": {
+      "volume": 1,
+      "mute": false
+    }
+  }
+}

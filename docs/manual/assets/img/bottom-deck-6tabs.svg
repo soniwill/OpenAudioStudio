@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 280" width="100%" height="auto">
+  <rect width="1180" height="280" rx="8" fill="#202225" stroke="#2f3237" stroke-width="2"/>
+
+  <!-- 6 Tabs Header -->
+  <rect x="14" y="12" width="140" height="34" rx="5" fill="#00f5d4" fill-opacity="0.18" stroke="#00f5d4"/>
+  <text x="84" y="34" fill="#00f5d4" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700" text-anchor="middle">1. Mixer Deck</text>
+
+  <rect x="164" y="12" width="150" height="34" rx="5" fill="#282b30" stroke="#40444b"/>
+  <text x="239" y="34" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="12" text-anchor="middle">2. Effects Rack</text>
+
+  <rect x="324" y="12" width="160" height="34" rx="5" fill="#282b30" stroke="#40444b"/>
+  <text x="404" y="34" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="12" text-anchor="middle">3. Playlist / Weights</text>
+
+  <rect x="494" y="12" width="155" height="34" rx="5" fill="#282b30" stroke="#40444b"/>
+  <text x="571" y="34" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="12" text-anchor="middle">4. Logic &amp; Triggers</text>
+
+  <rect x="659" y="12" width="145" height="34" rx="5" fill="#282b30" stroke="#40444b"/>
+  <text x="731" y="34" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="12" text-anchor="middle">5. 3D Spatializer</text>
+
+  <rect x="814" y="12" width="165" height="34" rx="5" fill="#282b30" stroke="#40444b"/>
+  <text x="896" y="34" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="12" text-anchor="middle">6. Diagnostics &amp; Log</text>
+
+  <!-- Preview Cards inside Deck -->
+  <rect x="14" y="60" width="275" height="204" rx="6" fill="#161719" stroke="#2f3237"/>
+  <text x="28" y="84" fill="#00f5d4" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700">Mixer Strips &amp; VU</text>
+  <rect x="36" y="100" width="54" height="145" rx="4" fill="#282b30"/>
+  <rect x="58" y="120" width="10" height="100" rx="2" fill="#38b000"/>
+  <text x="63" y="236" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="10" text-anchor="middle">Master</text>
+  <rect x="104" y="100" width="54" height="145" rx="4" fill="#282b30"/>
+  <rect x="126" y="140" width="10" height="80" rx="2" fill="#00f5d4"/>
+  <text x="131" y="236" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="10" text-anchor="middle">SFX</text>
+  <rect x="172" y="100" width="54" height="145" rx="4" fill="#282b30"/>
+  <rect x="194" y="155" width="10" height="65" rx="2" fill="#00f5d4"/>
+  <text x="199" y="236" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="10" text-anchor="middle">Music</text>
+
+  <rect x="302" y="60" width="280" height="204" rx="6" fill="#161719" stroke="#2f3237"/>
+  <text x="316" y="84" fill="#ffb703" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700">7 Efeitos DSP no Effects Rack</text>
+  <text x="316" y="112" fill="#f0f2f5" font-family="Consolas, monospace" font-size="11">• Limiter (Brickwall -0.1 dBFS)</text>
+  <text x="316" y="134" fill="#f0f2f5" font-family="Consolas, monospace" font-size="11">• Compressor + Sidechain Ducking</text>
+  <text x="316" y="156" fill="#f0f2f5" font-family="Consolas, monospace" font-size="11">• EQ3 (Grave / Médio / Agudo)</text>
+  <text x="316" y="178" fill="#f0f2f5" font-family="Consolas, monospace" font-size="11">• Lowpass &amp; Highpass</text>
+  <text x="316" y="200" fill="#f0f2f5" font-family="Consolas, monospace" font-size="11">• Freeverb (Reverb) &amp; Delay</text>
+
+  <rect x="595" y="60" width="280" height="204" rx="6" fill="#161719" stroke="#2f3237"/>
+  <text x="609" y="84" fill="#b5179e" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700">Playlist &amp; Logic Triggers</text>
+  <text x="609" y="112" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="11">• Pesos e Shuffle / No-Repeat</text>
+  <text x="609" y="136" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="11">• Loop Regions &amp; Sustain Points</text>
+  <text x="609" y="160" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="11">• Transições (IMMEDIATE / BEAT / BAR)</text>
+  <text x="609" y="184" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="11">• Condições por Parâmetro &amp; Chance %</text>
+
+  <rect x="888" y="60" width="278" height="204" rx="6" fill="#161719" stroke="#2f3237"/>
+  <text x="902" y="84" fill="#38b000" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700">3D Spatializer &amp; Diagnostics</text>
+  <circle cx="965" cy="155" r="44" fill="none" stroke="#38b000" stroke-dasharray="4 3"/>
+  <circle cx="965" cy="155" r="22" fill="none" stroke="#00f5d4"/>
+  <circle cx="988" cy="140" r="6" fill="#ffb703"/>
+  <text x="1030" y="140" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="11">Min/Max Dist</text>
+  <text x="1030" y="160" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="11">Pan Azimutal</text>
+  <text x="1030" y="190" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="11">+ Log de Build</text>
+</svg>

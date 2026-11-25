@@ -1,0 +1,13 @@
+./oae_native_tests.exe : Successfully published bank and catalog: 
+%TEMP%\oae_bank_sync_audio_table\programmer.bank
+No linha:1 caractere:27
++ ... se/Release; ./oae_native_tests.exe -tc="Synchronous bank load preserv ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Successfully pu...programmer.bank:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Successfully compiled bank: %TEMP%\oae_bank_sync_audio_table\programmer.bank (22956 bytes, CRC32: 0xea952838)
+===============================================================================
+[doctest] test cases:  1 |  1 passed | 0 failed | 117 skipped
+[doctest] assertions: 33 | 33 passed | 0 failed |
+[doctest] Status: SUCCESS!

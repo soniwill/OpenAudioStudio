@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 380" width="100%" height="auto">
+  <rect width="1000" height="380" rx="10" fill="#161719" stroke="#2f3237" stroke-width="2"/>
+  <text x="500" y="32" fill="#f0f2f5" font-family="Segoe UI, sans-serif" font-size="16" font-weight="700" text-anchor="middle">Sessão de Live-Linking: Conexão e Desconexão Bidirecional</text>
+
+  <!-- Left: Studio Box -->
+  <rect x="24" y="54" width="370" height="302" rx="8" fill="#202225" stroke="#00f5d4" stroke-width="2"/>
+  <text x="209" y="80" fill="#00f5d4" font-family="Segoe UI, sans-serif" font-size="14" font-weight="700" text-anchor="middle">OpenAudio Studio (Servidor TCP)</text>
+
+  <!-- Studio Listening -->
+  <rect x="38" y="96" width="342" height="48" rx="4" fill="#161719" stroke="#33373d"/>
+  <text x="48" y="114" fill="#8b949e" font-family="Consolas, monospace" font-size="10">Bridge TCP: 127.0.0.1:7450</text>
+  <text x="48" y="132" fill="#38b000" font-family="Consolas, monospace" font-size="10">✓ [Live] TCP bridge listening on :7450</text>
+
+  <!-- Studio Connected State -->
+  <rect x="38" y="152" width="342" height="92" rx="4" fill="#122c27" stroke="#00f5d4"/>
+  <text x="48" y="172" fill="#00f5d4" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700">Estado 1: CONECTADO (Play Mode)</text>
+  <text x="48" y="192" fill="#f0f2f5" font-family="Consolas, monospace" font-size="10">Transporte: <tspan fill="#00f5d4" font-weight="700">&quot;Live: Unity Connected&quot;</tspan></text>
+  <text x="48" y="210" fill="#a0a4ab" font-family="Consolas, monospace" font-size="9.5">[Live] Connected to Unity (crc=0x0, match=OK)</text>
+  <text x="48" y="228" fill="#ffb703" font-family="Segoe UI, sans-serif" font-size="10">Faders e mutes afetam a instância no jogo!</text>
+
+  <!-- Studio Disconnected State -->
+  <rect x="38" y="252" width="342" height="92" rx="4" fill="#241b1d" stroke="#ff7b72"/>
+  <text x="48" y="272" fill="#ff7b72" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700">Estado 2: DESCONECTADO (Ao sair do Play)</text>
+  <text x="48" y="292" fill="#f0f2f5" font-family="Consolas, monospace" font-size="10">Transporte: <tspan fill="#ff7b72" font-weight="700">&quot;Live: Offline (Local Engine)&quot;</tspan></text>
+  <text x="48" y="310" fill="#a0a4ab" font-family="Consolas, monospace" font-size="9.5">[Live] Client disconnected; reverted to local</text>
+  <text x="48" y="328" fill="#38b000" font-family="Segoe UI, sans-serif" font-size="10">Retorno automático e seguro à prévia local.</text>
+
+  <!-- Center: TCP Bridge Communication -->
+  <rect x="412" y="54" width="176" height="302" rx="8" fill="#1a1c1e" stroke="#ffb703" stroke-width="1.5"/>
+  <text x="500" y="80" fill="#ffb703" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" text-anchor="middle">Protocolo TCP</text>
+
+  <path d="M 430 110 L 570 110" stroke="#ffb703" stroke-width="2"/>
+  <text x="500" y="104" fill="#ffb703" font-family="Consolas, monospace" font-size="10" text-anchor="middle">&quot;type&quot;: &quot;hello&quot; →</text>
+
+  <path d="M 570 145 L 430 145" stroke="#00f5d4" stroke-width="2"/>
+  <text x="500" y="139" fill="#00f5d4" font-family="Consolas, monospace" font-size="10" text-anchor="middle">← &quot;hello_ack&quot; (match=OK)</text>
+
+  <path d="M 430 185 L 570 185" stroke="#58a6ff" stroke-width="2" stroke-dasharray="4 2"/>
+  <text x="500" y="179" fill="#58a6ff" font-family="Consolas, monospace" font-size="10" text-anchor="middle">fader / bus_volume →</text>
+
+  <path d="M 570 225 L 430 225" stroke="#ffb703" stroke-width="2" stroke-dasharray="4 2"/>
+  <text x="500" y="219" fill="#ffb703" font-family="Consolas, monospace" font-size="10" text-anchor="middle">← &quot;param_set&quot;</text>
+
+  <path d="M 430 275 L 570 275" stroke="#8b949e" stroke-width="2"/>
+  <text x="500" y="269" fill="#8b949e" font-family="Consolas, monospace" font-size="10" text-anchor="middle">ping ↔ pong (RTT)</text>
+
+  <path d="M 570 315 L 430 315" stroke="#ff7b72" stroke-width="2"/>
+  <text x="500" y="309" fill="#ff7b72" font-family="Consolas, monospace" font-size="10" text-anchor="middle">TCP FIN (Close) ←</text>
+
+  <!-- Right: Unity Box -->
+  <rect x="606" y="54" width="370" height="302" rx="8" fill="#202225" stroke="#58a6ff" stroke-width="2"/>
+  <text x="791" y="80" fill="#58a6ff" font-family="Segoe UI, sans-serif" font-size="14" font-weight="700" text-anchor="middle">Projeto Unity (Cliente TCP)</text>
+
+  <!-- Unity Inspector Setup -->
+  <rect x="620" y="96" width="342" height="74" rx="4" fill="#161719" stroke="#33373d"/>
+  <text x="630" y="116" fill="#8b949e" font-family="Segoe UI, sans-serif" font-size="11">Inspector do OaeAudioManager:</text>
+  <text x="630" y="136" fill="#f0f2f5" font-family="Consolas, monospace" font-size="10">[x] Enable Live Linking (127.0.0.1:7450)</text>
+  <text x="630" y="154" fill="#a0a4ab" font-family="Consolas, monospace" font-size="10">[ ] Pause On Focus Loss (desmarcado)</text>
+
+  <!-- Unity Play Mode Active -->
+  <rect x="620" y="178" width="342" height="80" rx="4" fill="#13233a" stroke="#58a6ff"/>
+  <text x="630" y="198" fill="#58a6ff" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700">Play Mode Ativo (Connected)</text>
+  <text x="630" y="218" fill="#f0f2f5" font-family="Consolas, monospace" font-size="10">LiveClient inicia thread de fundo e handshake.</text>
+  <text x="630" y="238" fill="#38b000" font-family="Consolas, monospace" font-size="10">Overlay F9: Voices: Real / Virtual (Total)</text>
+
+  <!-- Unity Exit Play Mode -->
+  <rect x="620" y="266" width="342" height="78" rx="4" fill="#241b1d" stroke="#ff7b72"/>
+  <text x="630" y="286" fill="#ff7b72" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700">Saída do Play Mode (OnDestroy)</text>
+  <text x="630" y="306" fill="#f0f2f5" font-family="Consolas, monospace" font-size="10">ShutdownEngine() fecha socket e desaloca client.</text>
+  <text x="630" y="326" fill="#a0a4ab" font-family="Segoe UI, sans-serif" font-size="10">Zero vazamento de conexões ou threads pendentes.</text>
+</svg>

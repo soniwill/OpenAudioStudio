@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 7 — Deck Inferior: Mixer, Efeitos, Playlist, Lógica e 3D | OpenAudio Studio</title>
+  <link rel="stylesheet" href="../assets/css/manual.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="manual-sidebar"></aside>
+
+    <main class="main-content">
+      <div class="breadcrumbs"><a href="../index.html">Manual</a> › Cap. 7 — Bottom Deck e Logs</div>
+      <h1>Capítulo 7 — Bottom Deck e Diagnostics &amp; Log</h1>
+      <p class="lead">
+        Use o Bottom Deck para ajustar a mixagem, os efeitos, as playlists, a lógica e a prévia espacial. Consulte Diagnostics &amp; Log na aba embutida ou encaixe o painel em uma divisão independente.
+      </p>
+
+      <nav aria-label="Nesta página">
+        <ul>
+          <li><a href="#destacar-paineis">Reordenar, Encaixar e Destacar Abas (Docking)</a></li>
+          <li><a href="#aba1-mixer">Aba 1 — Mixer Deck (Console, Gain Staging e Medição)</a></li>
+          <li><a href="#aba2-effects">Aba 2 — Effects Rack (Os 7 DSPs Nativos Dissecados)</a></li>
+          <li><a href="#aba3-playlist">Aba 3 — Playlist / Weights (Estocástica e Anti-Metralhadora)</a></li>
+          <li><a href="#aba4-logic">Aba 4 — Logic &amp; Triggers (Linha do Tempo Não-Linear e Música Adaptativa)</a></li>
+          <li><a href="#aba5-spatializer">Aba 5 — 3D Spatializer (Psicoacústica e Física Espacial)</a></li>
+          <li><a href="#aba6-diagnostics">Diagnostics &amp; Log</a></li>
+          <li><a href="#aba7-parameters">Aba 7 — Global Parameters (Simulação, Busca e Modificadores)</a></li>
+          <li><a href="#boas-praticas-deck">Boas Práticas de Engenharia no Deck</a></li>
+        </ul>
+      </nav>
+
+      <!-- DOCKING E JANELAS -->
+      <h2 id="destacar-paineis">Reordenar, Encaixar e Destacar Abas (Docking)</h2>
+      <p>
+        O Bottom Deck possui flexibilidade completa de layout:
+      </p>
+      <ul>
+        <li>
+          <strong>Reordenar abas:</strong> No menu <code>Tabs</code> do deck, utilize <code>Move active tab left</code> ou <code>Move active tab right</code> para organizar as abas na sequência de trabalho desejada.
+        </li>
+        <li>
+          <strong>Janelas Destacadas (Pop Out / Dock Back):</strong> Clique no botão <code>Pop Out</code> para transformar a aba ativa (como o Mixer ou o Effects Rack) em uma janela independente e flutuante. Você pode movê-la para um segundo monitor enquanto continua editando a timeline. Ao terminar, clique em <code>Dock Back</code> para devolver o painel à sua posição exata no deck.
+        </li>
+        <li>
+          <strong>Divisão independente de logs:</strong> arraste <strong>Diagnostics &amp; Log</strong> para a borda inferior do Deck para manter as mensagens à vista enquanto usa as outras abas. Veja <a href="01-visao-geral-interface.html#layout-logs">como montar e restaurar esse layout</a>.
+        </li>
+      </ul>
+
+      <!-- ABA 1: MIXER DECK -->
+      <h2 id="aba1-mixer">Aba 1 — Mixer Deck (Console, Gain Staging e Medição)</h2>
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/deck-tab1-mixer.png" alt="Captura nativa do Mixer Deck com tiras de canal Master, SFX, Music, VCA e barra de Snapshots">
+        </div>
+        <figcaption class="callout-caption">
+          O Mixer Deck do OpenAudio Studio: console de mixagem com channel strips verticais, botões de Mute/Solo, medidores balísticos estéreo e auditioning de snapshots em tempo real.
+        </figcaption>
+      </figure>
+
+      <div class="theory-box box">
+        <div class="box-title">Teoria de Console — Tiras de Canal e Gain Staging</div>
+        <p>
+          O Mixer Deck replica a arquitetura de uma mesa de som de grande formato (estilo SSL ou Neve). Cada coluna vertical representa uma <strong>tira de canal (Channel Strip)</strong> correspondente a um barramento (<code>bus:/</code>) ou a um controle remoto (<code>vca:/</code>), finalizando na tira mestre à esquerda (<strong>Master Bus</strong>).
+        </p>
+        <p>
+          <strong>Gain Staging (Estrutura de Ganho):</strong> No áudio digital, <code>0 dBFS</code> é o limite absoluto. Se a soma das dezenas de sons ultrapassar 0 dBFS antes do Master, ocorre distorção harmônica severa (<em>clipping</em>). Mantenha os barramentos de categoria com margem de segurança (headroom de -6 dB a -12 dB) e use o Master Fader como ajuste final da entrega.
+        </p>
+      </div>
+
+      <h3>Controles e Recursos da Tira de Canal</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Elemento</th>
+            <th>Função Acústica / Técnica</th>
+            <th>Como Operar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Fader de Volume</strong></td>
+            <td>Controla o ganho nominal do barramento em decibéis (de <code>-80.0 dB</code> até <code>+10.0 dB</code>).</td>
+            <td>Arraste o slider vertical. Segure <kbd>Shift</kbd> para ajuste fino de 0.1 dB ou dê duplo-clique para resetar para <code>0.0 dB</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>Botão Mute (M)</strong></td>
+            <td>Silencia instantaneamente a saída do barramento selecionado, sem interromper as instâncias ativas.</td>
+            <td>Clique para ligar/desligar. Ideal para isolar problemas de frequência e ruído em categorias específicas.</td>
+          </tr>
+          <tr>
+            <td><strong>Botão Solo (S)</strong></td>
+            <td>Silencia todos os outros barramentos do mesmo nível hierárquico, permitindo audição exclusiva.</td>
+            <td>Clique para isolar a categoria (ex: ouvir apenas as vozes sem interferência de efeitos sonoros).</td>
+          </tr>
+          <tr>
+            <td><strong>Balística de Medição</strong></td>
+            <td>Exibe barras duplas (canais esquerdo e direito) combinando medição de Pico e RMS.</td>
+            <td>O traço sólido representa o pico instantâneo (Sample Peak); o corpo mais denso reflete a potência contínua (RMS).</td>
+          </tr>
+          <tr>
+            <td><strong>Escala K-System</strong></td>
+            <td>Seletor de calibração de sonoridade acústica profissional (desenvolvido pelo engenheiro Bob Katz).</td>
+            <td>
+              Alterne entre <strong>dBFS Nominal</strong> (pico digital padrão), <strong>K-12</strong> (jogos rápidos/broadcast), <strong>K-14</strong> (jogos de ação e música moderna) e <strong>K-20</strong> (cinema e jogos cinematográficos de ampla faixa dinâmica).
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Linha de Snapshots</strong></td>
+            <td>Lista todos os estados dinâmicos cadastrados no projeto (ex.: <code>pause_menu</code>).</td>
+            <td>
+              Clique sobre o nome do snapshot para ativá-lo em tempo real durante a reprodução da timeline e ouvir a atenuação imediata dos barramentos vinculados.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ABA 2: EFFECTS RACK -->
+      <h2 id="aba2-effects">Aba 2 — Effects Rack (Os 7 DSPs Nativos Dissecados)</h2>
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/studio-effects-configured.png" alt="Effects Rack com lowpass selecionado em bus:/sfx, corte em 1200 Hz e Q em 0.707">
+        </div>
+        <figcaption class="callout-caption">
+          O Effects Rack no Bottom Deck: cadeia de inserção sequencial (Insert Chain). O áudio atravessa cada processador da esquerda para a direita.
+        </figcaption>
+      </figure>
+
+      <div class="theory-box box">
+        <div class="box-title">O Conceito de Insert Chain (Cadeia de Inserção)</div>
+        <p>
+          O processamento de sinal digital (DSP) no OpenAudio Studio funciona em série: o áudio gerado pelo evento (ou somado no barramento) entra no primeiro efeito, sua saída transformada é entregue ao segundo, e assim sucessivamente. A ordem dos efeitos altera profundamente o timbre resultante (por exemplo: aplicar Reverb antes de uma Distorção soa completamente diferente de Distorcer o som e depois enviá-lo ao Reverb!).
+        </p>
+      </div>
+
+      <h3>Os 7 Efeitos DSP Nativos e seus Parâmetros</h3>
+
+      <h4>1. EQ3 (Equalizador Paramétrico de 3 Bandas)</h4>
+      <p>
+        Permite esculpir a resposta de frequência do som dividindo o espectro em três regiões:
+      </p>
+      <ul>
+        <li><strong>Low Shelf (Graves):</strong> Ganho de -24 dB a +24 dB com corte fixo em 250 Hz. Use para atenuar ruídos de vento ou dar peso a explosões.</li>
+        <li><strong>Mid Peaking (Médios):</strong> Ganho de -24 dB a +24 dB, frequência central varrível de 200 Hz a 8.000 Hz e controle de largura de banda (Q). Essencial para limpar frequências nasais de voz ou dar presença a disparos de fuzil.</li>
+        <li><strong>High Shelf (Agudos):</strong> Ganho de -24 dB a +24 dB com corte em 4.000 Hz. Use para clarear os detalhes de passos ou simular amortecimento de ar.</li>
+      </ul>
+
+      <h4>2. Compressor (+ Sidechain)</h4>
+      <p>
+        Controla a faixa dinâmica do sinal, reduzindo a diferença entre os trechos mais baixos e os mais altos:
+      </p>
+      <ul>
+        <li><strong>Threshold (Limiar, dB):</strong> O nível acima do qual o compressor começa a atenuar o áudio.</li>
+        <li><strong>Ratio (Proporção):</strong> A intensidade da compressão para sinais que ultrapassam o limiar (ex.: <code>4:1</code> significa que para cada 4 dB que excederem o threshold, apenas 1 dB passa para a saída).</li>
+        <li><strong>Attack (Ataque, ms):</strong> A rapidez com que o compressor age ao detectar um pico (ataques ultra-rápidos de 5 ms controlam transientes; ataques lentos de 50 ms preservam o impacto inicial do tambor ou tiro).</li>
+        <li><strong>Release (Soltura, ms):</strong> O tempo para o ganho retornar ao normal após o sinal baixar do limiar.</li>
+        <li><strong>Sidechain Input:</strong> Permite que o compressor de um barramento (ex: Música) seja acionado pelo áudio de outro canal (ex: Vozes de diálogo), criando o clássico efeito de <em>ducking</em> automático.</li>
+      </ul>
+
+      <h4>3. Limiter (Limitador de Pico)</h4>
+      <p>
+        Um compressor de proporção infinita ($\infty:1$) com tempo de ataque ultrarrápido, projetado como uma barreira rígida contra ceifamento digital.
+      </p>
+      <ul>
+        <li><strong>Ceiling (Teto, dBFS):</strong> O teto máximo absoluto (normalmente regulado em <code>-0.1 dBFS</code> ou <code>-0.5 dBFS</code> para prevenir distorções na conversão analógica de placas de som de jogadores).</li>
+        <li><strong>Release (ms):</strong> Tempo de recuperação da atenuação. Valores entre 80 ms e 200 ms oferecem transparência sem efeito de "bombeamento" (pumping).</li>
+      </ul>
+
+      <h4>4. Reverb (Simulação de Sala e Ambiência Acústica)</h4>
+      <p>
+        Simula a densidade de reflexões acústicas de um espaço físico tridimensional:
+      </p>
+      <ul>
+        <li><strong>Room Size (Tamanho da Sala, %):</strong> Varia a dimensão aparente do espaço, desde um quarto pequeno até uma catedral cavernosa.</li>
+        <li><strong>Damp (Amortecimento de Altas Frequências, %):</strong> Simula materiais absorventes (cortinas, madeira, público). Valores altos deixam a cauda do reverb mais escura e opaca.</li>
+        <li><strong>Wet / Dry Mix (%):</strong> Proporção entre o som direto original (Dry) e as reflexões reverberadas (Wet).</li>
+      </ul>
+
+      <h4>5. Delay (Ecos Temporizados)</h4>
+      <p>
+        Cria repetições discretas do sinal no tempo:
+      </p>
+      <ul>
+        <li><strong>Delay Time (Tempo de Atraso, ms):</strong> Intervalo entre o som original e suas repetições (ex.: 250 ms para ecos naturais de desfiladeiro).</li>
+        <li><strong>Feedback (%):</strong> Quantidade do sinal atrasado que é devolvida à entrada. Valores altos geram dezenas de repetições contínuas.</li>
+        <li><strong>Dry / Wet (%):</strong> Balanço entre o som original e as repetições ecoadas.</li>
+      </ul>
+
+      <h4>6. Chorus (Modulação Estéreo e Duplicação)</h4>
+      <p>
+        Modula micro-atrasos e micro-variações de afinação para criar a ilusão de múltiplos emissores tocando em uníssono.
+      </p>
+      <ul>
+        <li><strong>Rate (Frequência de Modulação, Hz):</strong> Velocidade da oscilação do LFO (Low Frequency Oscillator).</li>
+        <li><strong>Depth (Profundidade, ms):</strong> Amplitude da variação temporal; cria corpo, textura e sensação de largura no campo estéreo.</li>
+      </ul>
+
+      <h4>7. Distortion / Saturation (Saturação Harmônica)</h4>
+      <p>
+        Aplica funções não-lineares de transferência na forma de onda, gerando novos harmônicos que aumentam a percepção de peso e agressividade.
+      </p>
+      <ul>
+        <li><strong>Drive (%):</strong> Nível de sobrecarga da entrada. Cria desde um calor analógico sutil até distorção pesada de laser ou voz robótica.</li>
+        <li><strong>Tone (Frequência):</strong> Filtro tonal para moldar se a distorção ressalta agudos cortantes ou graves encorpados.</li>
+      </ul>
+
+      <!-- ABA 3: PLAYLIST / WEIGHTS -->
+      <h2 id="aba3-playlist">Aba 3 — Playlist / Weights (Estocástica e Anti-Metralhadora)</h2>
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/studio-playlist-configured.png" alt="Playlist em Random (weighted) com uma entrada de sample de peso 80 e uma entrada EVT de peso 20">
+        </div>
+        <figcaption class="callout-caption">
+          Aba Playlist / Weights: gerenciamento estocástico de multi-instrumentos. Cada amostra possui forma de onda, afinação individual, ganho e peso probabilístico.
+        </figcaption>
+      </figure>
+
+      <div class="theory-box box">
+        <div class="box-title">A Psicoacústica Anti-Metralhadora</div>
+        <p>
+          O efeito "metralhadora" ocorre quando a mesma amostra é disparada em rápida sucessão, destruindo a imersão pela repetição artificial idêntica. No OpenAudio Studio, <strong>Multi Instruments</strong> e <strong>Scatterer Instruments</strong> eliminam esse problema através de estocástica calibrada:
+        </p>
+        <ul>
+          <li><strong>Entradas Mistas:</strong> Cada item da playlist aceita uma amostra direta (WAV) ou um evento aninhado (EVT), permitindo disparar variações acústicas ou camadas de áudio completas.</li>
+          <li><strong>Independência entre Plays:</strong> O gerador pseudoaleatório (PCG32) utiliza semeadura não-determinística baseada em relógio de alta precisão e contadores atômicos para cada play independente, assegurando que prévias consecutivas no Studio ou no jogo variem realisticamente e convirjam para a distribuição dos pesos.</li>
+          <li><strong>Validação Anti-Ciclo:</strong> Ao adicionar eventos como alvos na playlist, o sistema rejeita automaticamente referências que criariam dependências circulares com o evento pai, desabilitando alvos cíclicos.</li>
+        </ul>
+      </div>
+
+      <h3>Modos de Reprodução da Playlist</h3>
+      <ul>
+        <li>
+          <strong>Random (Weighted):</strong> Sorteio livre em cada disparo, respeitando estritamente a porcentagem de probabilidade calculada a partir dos pesos:
+          <pre><code>Probabilidade(Item_i) = Peso(Item_i) / Soma_Dos_Pesos_Totais</code></pre>
+        </li>
+        <li>
+          <strong>Shuffle:</strong> Percorre a lista embaralhada sem repetir até que todas as entradas tenham tocado; use a prévia repetida para observar as escolhas.
+        </li>
+        <li>
+          <strong>Sequential:</strong> Avança pelas entradas na ordem exata da playlist.
+        </li>
+      </ul>
+
+      <h3>Multi, Scatterer e Programmer com o projeto distribuído</h3>
+      <div class="example-box box">
+        <div class="box-title">Exemplo repetível: coin.wav e theme.wav</div>
+        <p>
+          Em uma cópia de <code>example_project/project.json</code>, crie um Multi Instrument numa faixa de teste e abra esta aba. Adicione <code>sample_coin</code> (<code>coin.wav</code>) e o evento aninhado <code>event:/music/theme</code>; selecione <code>Random (Weighted)</code> e use pesos <code>80</code> e <code>20</code>. Ao pré-visualizar repetidamente, observe que os sorteios são independentes entre execuções consecutivas, alternando entre a moeda curta e o tema conforme as probabilidades estatísticas configuradas.
+        </p>
+        <p>
+          Para Scatterer, adicione <code>sample_coin</code> à lista e ajuste no Inspector <strong>Int Min</strong> / <strong>Int Max</strong> para <code>250</code>/<code>500 ms</code>, <strong>Polyphony</strong> para <code>3</code> e <strong>Total</strong> para <code>6</code>. O spawner agenda os grãos da playlist com atrasos aleatórios dentro da janela configurada, respeitando o limite simultâneo de polifonia e cessando após os 6 disparos. Alvos que criariam dependência cíclica direta ou indireta ficam desabilitados na lista.
+        </p>
+        <p>
+          Para Programmer Instrument, cadastre uma entrada na tabela de áudio (<code>audio_table</code>) com chave <code>coin_demo</code> apontando para <code>sample_coin</code>, e configure essa mesma chave no card do Inspector. Ao acionar o transporte, o Studio carrega a tabela no banco síncrono e a prévia reproduz imediatamente o sample mapeado em <code>bus:/sfx</code>. Consulte o <a href="11-tutoriais-praticos.html#playlist-programmer">tutorial de Multi, Scatterer e Programmer</a>.
+        </p>
+      </div>
+
+      <!-- ABA 4: LOGIC & TRIGGERS -->
+      <h2 id="aba4-logic">Aba 4 — Logic &amp; Triggers (Linha do Tempo Não-Linear e Música Adaptativa)</h2>
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/studio-logic-configured.png" alt="Região de transição com destino B, condição MasterVolume de 0.4 a 0.8, quantização Beat e crossfade de 100 ms">
+        </div>
+        <figcaption class="callout-caption">
+          A região de 300 a 1200 ms leva ao marcador <strong>B</strong> na próxima batida quando <code>MasterVolume</code> está no intervalo selecionado. O crossfade dura 100 ms.
+        </figcaption>
+      </figure>
+
+      <div class="theory-box box">
+        <div class="box-title">O Tempo Não-Linear na Música Adaptativa</div>
+        <p>
+          A Timeline do evento continua avançando, mas itens lógicos podem repetir uma região ou solicitar uma transição para um marcador de destino. Uma condição pode permitir ou bloquear o salto; a quantização escolhe quando efetuar uma transição permitida.
+        </p>
+      </div>
+
+      <pre><code>+--------------------------------------------------------------------------+
+|  EXEMPLO DE MÁQUINA DE ESTADOS NA TIMELINE                               |
++--------------------------------------------------------------------------+
+|                                                                          |
+|  [Seção Exploração (Loop A)] =======( Condição: Combate > 0.6 )========> |
+|            ^                                       |                     |
+|            | Repete em loop                        v (Salto Quantizado)  |
+|            +----------------------- [Seção Batalha (Loop B)]             |
+|                                                    |                     |
+|                                       ( Condição: VidaInimigo == 0 )     |
+|                                                    v                     |
+|                                     [Marcador Clímax / Vitória]          |
++--------------------------------------------------------------------------+</code></pre>
+
+      <h3>Componentes da Aba Logic &amp; Triggers</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Elemento Lógico</th>
+            <th>Comportamento no Runtime</th>
+            <th>Aplicação Musical / Sonora</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Loop Region</strong></td>
+            <td>Faz o cursor de reprodução voltar ao início da região ao atingir o ponto final.</td>
+            <td>Manter uma base instrumental ou som contínuo (vento, motor) tocando indefinidamente.</td>
+          </tr>
+          <tr>
+            <td><strong>Transition Marker / Region</strong></td>
+            <td>Item lógico que referencia um <em>Destination marker</em>; uma região também possui início e comprimento.</td>
+            <td>Indicar o ponto ou o intervalo no qual a transição pode ocorrer.</td>
+          </tr>
+          <tr>
+            <td><strong>Quantization (Quantização)</strong></td>
+            <td>Adia uma transição permitida até a próxima batida (<code>Beat</code>) ou início de compasso (<code>Bar</code>); valor imediato executa sem espera musical.</td>
+            <td>Impede que a música mude fora de tempo, preservando o ritmo e a métrica musical.</td>
+          </tr>
+          <tr>
+            <td><strong>Transition Crossfade (ms)</strong></td>
+            <td>Define a duração de crossfade usada na transição.</td>
+            <td>Garante transições imperceptíveis e fluidas entre temas musicais diferentes.</td>
+          </tr>
+          <tr>
+            <td><strong>Sustain Point</strong></td>
+            <td>Pausa o avanço do cursor na posição exata até que o código emita o sinal de <code>KeyOff</code>.</td>
+            <td>Sons de armas com carregamento (Charge): sustenta o zumbido até o jogador soltar o gatilho.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="example-box box">
+        <div class="box-title">Configurar e testar uma região de transição</div>
+        <ol>
+          <li>Abra uma cópia de <code>example_project/project.json</code> e selecione <code>event:/music/theme</code>. Clique com o botão direito na régua para criar um <strong>Marker</strong> de destino em uma posição diferente e dê a ele o nome <code>destino</code>.</li>
+          <li>Na posição de origem, crie <strong>Transition Region</strong> pelo menu da régua. Selecione-a nesta aba, escolha <code>destino</code> em <strong>Destination marker</strong> e adicione uma condição em <code>MasterVolume</code> com <strong>Minimum (inclusive)</strong> <code>0.4</code> e <strong>Maximum (inclusive)</strong> <code>0.8</code>.</li>
+          <li>Defina <strong>Quantization</strong> como <code>Beat</code> e <strong>Crossfade (ms)</strong> como <code>100</code>. Na prévia, confirme o salto com <code>MasterVolume</code> dentro do intervalo; fora dele, confirme o avanço normal sem salto. Para uma lista já preenchida, veja <a href="#aba3-playlist">Playlist / Weights</a> e o <a href="11-tutoriais-praticos.html#logic-transition">passo a passo completo</a>.</li>
+        </ol>
+      </div>
+
+      <!-- ABA 5: 3D SPATIALIZER -->
+      <h2 id="aba5-spatializer">3D Spatializer — testar distância e posição</h2>
+      <p>O painel aplica seus ajustes à instância de prévia local enquanto está visível. Para testar o cone direcional no jogo, configure o <a href="09-unity-componentes-inspector.html#listener">emissor e o listener na Unity</a>.</p>
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/studio-spatializer-configured.png" alt="Prévia local com o emissor à direita do centro e leitura de 13.9 metros e 32 por cento de ganho">
+        </div>
+        <figcaption class="callout-caption">
+          Aba 3D Spatializer: simulação acústica espacial. Visualize o posicionamento do emissor no radar e configure atenuação por distância, cones direcionais e dispersão sonora.
+        </figcaption>
+      </figure>
+
+      <div class="theory-box box">
+        <div class="box-title">Como o Cérebro Localiza o Som no Espaço</div>
+        <p>
+          A percepção humana de espaço depende de três fenômenos fundamentais:
+        </p>
+        <ol>
+          <li><strong>ITD (Interaural Time Difference):</strong> O som chega a um ouvido fração de milissegundo antes do outro.</li>
+          <li><strong>ILD (Interaural Level Difference):</strong> A cabeça amortece frequências agudas da orelha oposta à fonte.</li>
+          <li><strong>Atenuação e Filtragem Atmosférica:</strong> O ar dissipa frequências agudas proporcionalmente à distância percorrida.</li>
+        </ol>
+      </div>
+
+      <h3>Controles e resultado da prévia</h3>
+      <ol>
+        <li>
+          <strong>Atenuação por Distância:</strong>
+          <ul>
+            <li><code>Min Distance (m):</code> Distância abaixo da qual o som mantém ganho total nominal (<code>0 dB</code>).</li>
+            <li><code>Max Distance (m):</code> Limite de distância da curva. Observe o ganho mostrado pelo radar ao se aproximar desse limite.</li>
+            <li><code>Rolloff Curve</code>: compare <strong>Linear</strong>, <strong>Inverse</strong> e <strong>Quadratic</strong> na mesma posição.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Cones de diretividade:</strong> a prévia local usa emissão omnidirecional. Os campos de cone do emissor Unity permitem reduzir o ganho fora da abertura, como no caso de uma caixa de som orientada para a frente.
+        </li>
+        <li>
+          <strong>Absorção atmosférica:</strong> em uma situação física, o ar atenua frequências altas ao longo da distância. Os controles de distância do radar ajustam o ganho. Para obter uma mudança de timbre no projeto, configure o filtro e a automação desejados.
+        </li>
+        <li>
+          <strong>Sound Size (m) e Min Extent (deg):</strong> aumentam o espalhamento aparente e suavizam panoramas extremos. Compare o mesmo emissor lateral com os dois controles em zero e depois com <code>Min Extent</code> maior.
+        </li>
+      </ol>
+      <ol>
+        <li>Abra uma cópia de <code>example_project/project.json</code> e selecione <code>event:/music/theme</code>. Ative <strong>Loop</strong>, clique em <strong>Play</strong> e abra <strong>3D Spatializer</strong>.</li>
+        <li>Com a curva <strong>Linear</strong>, posicione o emissor perto e longe do centro. Compare a distância e a porcentagem de ganho e ouça a diferença de volume. Depois compare lados opostos à mesma distância para ouvir o pan.</li>
+        <li>Com o emissor próximo e lateral, aumente <strong>Sound Size</strong> e <strong>Min Extent</strong>. O panorama deve ficar menos extremo. Use <strong>Stop</strong>, desative <strong>Loop</strong> e volte o emissor ao centro ao terminar.</li>
+      </ol>
+
+      <!-- ABA 6: DIAGNOSTICS & LOG -->
+      <h2 id="aba6-diagnostics">Diagnostics &amp; Log — prévia, publicação e conexão</h2>
+      <p>Use <strong>Log</strong> na Workspace Bar caso o painel esteja oculto. Quando embutido, selecione sua aba no Deck. Quando encaixado separadamente, abra o painel pelo cabeçalho <strong>Diagnostics &amp; Log</strong>.</p>
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/deck-tab6-diagnostics.png" alt="Diagnostics &amp; Log embutido no Deck com mensagens da prévia">
+        </div>
+        <figcaption class="callout-caption">
+          Diagnostics &amp; Log embutido no Bottom Deck. As mensagens registram a operação que o Studio executou.
+        </figcaption>
+      </figure>
+
+      <h3>O que procurar nas mensagens</h3>
+      <ul>
+        <li>
+          <strong>Publicação:</strong> ao acionar <strong>Build Bank</strong>, procure <code>[Build] Starting bank compilation...</code> seguido de <code>[Build] Bank compiled successfully!</code>. Se aparecer <code>[Build Error]</code>, leia o diagnóstico com o código de saída e os detalhes do erro antes de conferir os <a href="02-projetos-e-publicacao.html#publicar">arquivos de saída</a>.
+        </li>
+        <li>
+          <strong>Prévia:</strong> <code>[Preview] Live preview hot swapped.</code> indica que uma nova prévia foi instalada em memória. <code>[Preview Build Error]</code> indica que a reconstrução falhou. Confira o diagnóstico para localizar o campo ou arquivo que precisa de correção.
+        </li>
+        <li>
+          <strong>Live-Linking:</strong> o bridge anuncia <code>[Live] Live-Linking TCP bridge listening on 127.0.0.1:7450</code>. Procure <code>[Live] Connected to &lt;cliente&gt; (bank_crc32=..., match=OK).</code> ao entrar em Play Mode e <code>[Live] Client disconnected; reverted to local StudioEngine.</code> ao sair (retornando a <code>Live: Offline (Local Engine)</code>). Na Unity, veja as vozes em tempo real no <a href="09-unity-componentes-inspector.html#overlay">Diagnostics Overlay</a> (<kbd>F9</kbd>). O profiler contínuo do Studio segue pendente para etapas futuras.
+        </li>
+      </ul>
+
+      <!-- ABA 6: PARAMETERS (N) -->
+      <h2 id="aba7-parameters">Aba 6 — Parameters (N) — Simulação e Modificadores em Tempo Real</h2>
+      <p>
+        A aba <strong>Parameters (N)</strong> (índice 6 do Bottom Deck, entre <em>3D Spatializer</em> e <em>Diagnostics</em>) fornece uma central dedicada para inspecionar, simular e modular todos os parâmetros globais do projeto em tempo real, de forma completamente desacoplada de eventos específicos. Você pode acessá-la diretamente pelo cabeçalho do deck ou clicando no pill <code>Params (N)</code> da barra de transporte.
+      </p>
+
+      <figure class="callout-figure">
+        <div class="callout-stage">
+          <img src="../assets/img/deck-tab7-parameters.png" alt="Aba Global Parameters embutida no Bottom Deck com barra de busca, filtros e cards especializados">
+        </div>
+        <figcaption class="callout-caption">
+          Aba 7 — Global Parameters no Bottom Deck: controle unificado de simulação com cards adaptativos para parâmetros contínuos, discretos e rotulados (botoeira segmentada com estado ativo em destaque), além de telemetria de física em tempo real (velocity, seek, hold) e botão de pop-out flutuante.
+        </figcaption>
+      </figure>
+
+      <h3>Barra de Ferramentas, Busca e Filtros Rápidos</h3>
+      <p>
+        No topo da aba, uma barra de ferramentas oferece busca instantânea e modos de filtragem para localizar e manipular parâmetros em projetos com dezenas ou centenas de variáveis:
+      </p>
+      <ul>
+        <li><strong>Caixa de Busca em Tempo Real (<code>Filter parameters...</code>):</strong> Filtra os cartões imediatamente à medida que você digita qualquer trecho do nome do parâmetro.</li>
+        <li><strong>Filtro <em>All</em>:</strong> Exibe todos os parâmetros globais declarados no projeto em uma grade panorâmica.</li>
+        <li><strong>Filtro <em>Used in Event</em>:</strong> Isola instantaneamente apenas os parâmetros globais que possuem curvas de automação, modulações ou condições no evento atualmente selecionado na Timeline.</li>
+        <li><strong>Filtro <em>Modified</em>:</strong> Exibe exclusivamente os parâmetros cujos valores atuais na sessão de audição foram alterados em relação ao seu <code>default_value</code>, facilitando identificar o que foi modificado durante o teste.</li>
+        <li><strong>Botão <em>Reset All to Default</em>:</strong> Restaura com um único clique todos os parâmetros globais aos seus valores padrão de fábrica.</li>
+      </ul>
+
+      <h3>Grade Responsiva e Cards Especializados (<code>GlobalParamCard</code>)</h3>
+      <p>
+        Os parâmetros são organizados em uma grade responsiva que se adapta automaticamente à largura do painel (distribuindo-se em 1, 2, 3 ou 4 colunas). Cada cartão adapta seus controles ao tipo de dado do parâmetro:
+      </p>
+      <ul>
+        <li><strong>Parâmetros Contínuos (ex: <code>MasterVolume</code>, <code>World_Wind</code>):</strong> Fader analógico deslizante suave com campo numérico à direita, display de valor atual e reset via duplo-clique.</li>
+        <li><strong>Parâmetros Discretos (ex: <code>Game_Difficulty</code>):</strong> Slider quantizado complementado por botões de passo <code>[-]</code> e <code>[+]</code> para incrementos e decrementos inteiros precisos.</li>
+        <li><strong>Parâmetros Enumerados / Labeled (ex: <code>Biome</code>):</strong> Barra de botões segmentados com destaque visual imediato no estado ativo (em amarelo âmbar), exibindo os nomes literais dos rótulos (como <code>Desert</code>, <code>Forest</code>, <code>Tundra</code>).</li>
+      </ul>
+
+      <h3>Telemetria de Modificadores em Tempo Real</h3>
+      <p>
+        Cartões cujos parâmetros possuem dinâmicas configuradas exibem badges de telemetria em tempo real:
+      </p>
+      <ul>
+        <li><code>vel: ±X/s</code> (âmbar): Indica que o parâmetro varia autonomamente com o tempo enquanto o transporte está em reprodução. Durante o Play, o cartão recebe um pulso luminoso dinâmico proporcional à taxa de variação.</li>
+        <li><code>seek: X/s</code> (ciano): Indica a taxa de rampa física suave ao trocar de valor, evitando saltos bruscos no áudio.</li>
+        <li><code>[HOLD]</code> (verde): Sinaliza que o parâmetro mantém seu valor fixo e não retorna automaticamente durante a reprodução.</li>
+      </ul>
+
+      <h3>Janela Flutuante (Pop-Out ^ e Dock Back)</h3>
+      <p>
+        Para sessões de mixagem complexas ou testes dinâmicos de jogo em múltiplos monitores, clique no botão <code>Pop-Out ^</code> no canto superior direito do cabeçalho único do Bottom Deck (<code>34 px</code>). O painel se converterá em uma janela independente do sistema operacional que pode ser posicionada ao lado de engines externas (como a Unity) ou em um segundo display.
+      </p>
+      <p>
+        Para devolver o painel à sua aba original no deck, basta clicar em <code>Dock Back</code> no topo da janela flutuante. O estado de ancoragem é preservado automaticamente no arquivo de layout da sessão (<code>oae_studio_layout.json</code>).
+      </p>
+
+      <div class="purpose-box box">
+        <div class="box-title">Tutorial Prático: Simulando Variáveis de Mundo no Deck Global</div>
+        <ol>
+          <li>Abra o Bottom Deck e clique na aba <strong>Global Parameters</strong> (ou clique no atalho <code>[Params (N)]</code> da Barra de Transporte).</li>
+          <li>Digite <code>wind</code> na caixa de busca ou clique no filtro <strong>Modified</strong> para inspecionar parâmetros alterados.</li>
+          <li>Inicie o Play da timeline e clique nas opções de bioma (<code>Forest</code> / <code>Tundra</code>): observe os botões segmentados comutando instantaneamente.</li>
+          <li>Use o botão <strong>Reset All to Default</strong> para restabelecer o estado neutro de todas as variáveis do projeto.</li>
+        </ol>
+      </div>
+
+      <!-- BOAS PRÁTICAS -->
+      <h2 id="boas-praticas-deck">Boas Práticas de Engenharia no Deck</h2>
+      <div class="purpose-box box">
+        <div class="box-title">Checklist do Sound Designer no Bottom Deck</div>
+        <ul>
+          <li><strong>Mixer:</strong> Nunca deixe o medidor do Master ultrapassar <code>-0.1 dBFS</code> durante os momentos de maior intensidade sonora do jogo.</li>
+          <li><strong>Effects:</strong> Evite exagerar no tempo de cauda do Reverb em sons que disparam com alta frequência (como tiros rápidos), para não poluir o mix com lama sonora nas frequências médias.</li>
+          <li><strong>Playlist:</strong> Utilize sempre o modo <code>Shuffle</code> ou <code>Random (weighted)</code> com modulação de afinação de ±1 a ±2 semitons para passos e tiros repetitivos.</li>
+          <li><strong>Logic:</strong> Configure sempre tempos de crossfade de pelo menos 100 ms a 300 ms nos marcadores de transição musical para evitar cortes secos de onda.</li>
+          <li><strong>3D Spatializer:</strong> Mantenha o <code>Min Distance</code> alinhado com o tamanho físico real do objeto no jogo (ex: 1 metro para passos, 15 metros para um helicóptero).</li>
+        </ul>
+      </div>
+
+      <div class="chapter-footer">
+        <a href="06-inspetor-e-modulacao.html">← Cap. 6 — Inspetor e Modulação</a>
+        <a href="08-unity-instalacao-e-workflow.html">Próximo: Cap. 8 — Studio ↔ Unity →</a>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/manual.js"></script>
+</body>
+</html>

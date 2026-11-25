@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <IsPackable>false</IsPackable>
+    <OutputPath>..\..\build\StandaloneTests\bin\$(Configuration)\</OutputPath>
+    <BaseIntermediateOutputPath>..\..\build\StandaloneTests\obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageReference Include="NUnit" Version="4.1.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Include Runtime, Editor and Test sources from com.openaudio.core -->
+    <Compile Include="..\com.openaudio.core\Runtime\Core\*.cs" Link="Runtime\Core\%(RecursiveDir)%(FileName)%(Extension)" />
+    <Compile Include="..\com.openaudio.core\Runtime\Live\*.cs" Link="Runtime\Live\%(RecursiveDir)%(FileName)%(Extension)" />
+    <Compile Include="..\com.openaudio.core\Runtime\Timeline\*.cs" Link="Runtime\Timeline\%(RecursiveDir)%(FileName)%(Extension)" />
+    <Compile Include="..\com.openaudio.core\Runtime\Loading\*.cs" Link="Runtime\Loading\%(RecursiveDir)%(FileName)%(Extension)" />
+    <Compile Include="..\com.openaudio.core\Runtime\Attributes\*.cs" Link="Runtime\Attributes\%(RecursiveDir)%(FileName)%(Extension)" />
+    <Compile Include="..\com.openaudio.core\Runtime\Components\*.cs" Link="Runtime\Components\%(RecursiveDir)%(FileName)%(Extension)" />
+    <Compile Include="..\com.openaudio.core\Editor\CatalogCache.cs" Link="Editor\CatalogCache.cs" />
+    <Compile Include="..\com.openaudio.core\Tests\Runtime\*.cs" Link="Tests\Runtime\%(RecursiveDir)%(FileName)%(Extension)" />
+    <Compile Include="..\com.openaudio.core\Tests\Editor\*.cs" Link="Tests\Editor\%(RecursiveDir)%(FileName)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Copy native oae_audio.dll and the Playground banks next to test binary -->
+    <None Include="..\com.openaudio.core\Plugins\x86_64\oae_audio.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\example_project\playground.bank">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\example_project\playground_vo.bank">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

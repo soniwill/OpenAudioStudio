@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 11 — Tutoriais Práticos Ponta-a-Ponta | OpenAudio Studio</title>
+  <link rel="stylesheet" href="../assets/css/manual.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="manual-sidebar"></aside>
+
+    <main class="main-content">
+      <div class="breadcrumbs"><a href="../index.html">Manual</a> › Cap. 11 — Tutoriais Práticos</div>
+      <h1>Capítulo 11 — Tutoriais Práticos Ponta-a-Ponta</h1>
+
+      <p class="lead">Três exercícios para repetir com os arquivos de exemplo. Trabalhe em uma cópia se quiser guardar a referência original.</p>
+      <h2 id="moeda">1. Uma moeda no Studio e no jogo</h2>
+      <figure class="callout-figure"><div class="callout-stage"><img src="../assets/img/studio-timeline.png" alt="Timeline do Studio com faixas e clipe"></div><figcaption class="callout-caption">Selecione o clipe na timeline para comparar a posição e as propriedades no Inspetor.</figcaption></figure>
+      <ol><li>Abra <code>example_project/project.json</code>, selecione <code>event:/sfx/coin</code> e clique em <strong>Play</strong>.</li>
+      <li>Abaixe o volume do evento em 6 dB e ouça de novo. Ao publicar, use <strong>Build Bank</strong> e espere o sucesso no log.</li>
+      <li>Copie o banco e o catálogo e monte a cena pelo <a href="09-unity-componentes-inspector.html#primeiro-som">primeiro som na Unity</a>. Compare o ganho no jogo com a audição no Studio.</li>
+      <li>Saia do Play Mode, restaure o ganho, publique e substitua o par. Entre novamente para comparar as duas versões.</li></ol>
+      <h2 id="snapshot">2. Abra espaço na mixagem com um snapshot</h2>
+      <p>O exemplo já traz <code>snapshot:/pause_menu</code>, com um alvo de <code>-6 dB</code> em <code>bus:/music</code> e entrada de <code>100 ms</code>. Abra o Mixer Deck. Ouça o tema e compare o nível da música antes, durante e depois do snapshot. Na Unity, mantenha a instância do tema ativa e use o <a href="10-unity-api-csharp-e-live.html#mix">ciclo de vida do snapshot</a> para aplicar e retirar o ajuste.</p>
+      <h2 id="playground">3. Explore o AudioPlayground na Unity</h2>
+      <ol><li>Gere os bancos com <code>./scripts/create_playground_assets.ps1 -SyntheticOnly</code> e instale a DLL com <code>./scripts/deploy_unity.ps1 -Config Release</code> após o build nativo.</li>
+      <li>Abra <code>unity/OpenAudioUnity</code> e a cena <code>Assets/Scenes/AudioPlayground.unity</code>. Entre em Play Mode, caminhe com <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> e experimente as estações sinalizadas.</li>
+      <li>Compare passos em superfícies diferentes, ouça como o emissor 3D muda quando você se aproxima e observe o carregamento do banco de voz sob demanda.</li></ol>
+      <h2 id="checagem">O que observar em cada exercício</h2>
+      <table><thead><tr><th>Teste</th><th>Antes</th><th>Depois esperado</th><th>Como voltar</th></tr></thead><tbody>
+      <tr><td>Moeda</td><td>Evento a 0 dB</td><td>Com −6 dB, a amplitude cai depois de carregar a nova publicação.</td><td>Restaure o ganho e republique o par.</td></tr>
+      <tr><td>Snapshot</td><td>Música sem snapshot</td><td>Enquanto ativo, o nível da música reduz conforme o alvo.</td><td>Desligue o snapshot ou encerre sua instância no jogo.</td></tr>
+      <tr><td>Passos do AudioPlayground</td><td>Mesmo ritmo em uma superfície</td><td>O timbre muda ao atravessar outra superfície.</td><td>Volte à primeira superfície e compare.</td></tr>
+      </tbody></table>
+
+      <h2 id="fogueira-3d">4. Testar um evento 3D no Studio e na Unity</h2>
+      <p>Abra uma cópia de <code>example_project/project.json</code> e use <code>event:/music/theme</code>, que já tem um clipe em loop. No Studio, use o <a href="07-deck-inferior-mixer-efeitos.html#aba5-spatializer">3D Spatializer</a> para comparar distância, pan e espalhamento na prévia local. Publique o banco com <strong>Build Bank</strong>.</p>
+      <ol>
+        <li>Na Unity, siga a configuração de <a href="09-unity-componentes-inspector.html#listener">StudioListener</a> e use um listener ativo no sistema. Na câmera ou no objeto escolhido para o ponto de escuta, adicione <code>StudioListener</code>.</li>
+        <li>Adicione o banco publicado ao <code>StudioBankLoader</code>. No objeto emissor, configure o <code>StudioEventEmitter</code> com <code>event:/music/theme</code>, <strong>Spatial Mode: Spatial3D</strong> e os valores do cone indicados no capítulo 9.</li>
+        <li>Entre em Play Mode. Compare a prévia local do Studio com o som no jogo enquanto move o emissor ou o listener; teste posições à mesma distância (como 4 metros), na frente e atrás do cone (ganho frontal 1.0 vs traseiro 0.25), conferindo o cálculo automático dos parâmetros <code>Distance</code>, <code>Direction</code>, <code>Elevation</code>, <code>EventConeAngle</code> e <code>Speed</code>.</li>
+      </ol>
+
+      <h2 id="command-orquestracao">5. Disparar evento e snapshot com Command Instruments</h2>
+      <ol>
+        <li>Abra <code>example_project/project.json</code> e selecione <code>event:/music/theme</code>. Ele usa <code>theme.wav</code> em loop; o alvo <code>event:/sfx/coin</code> usa <code>coin.wav</code>, e <code>snapshot:/pause_menu</code> já atenua <code>bus:/music</code> em <code>−6 dB</code>.</li>
+        <li>Na Timeline do tema, crie uma faixa, adicione um instrumento <strong>Command Instrument</strong> e selecione o clipe. No Inspector, defina <strong>Command Type</strong> como <code>start_event</code> e <strong>Command Target</strong> como <code>event:/sfx/coin</code>. Coloque-o, por exemplo, em <code>500 ms</code>.</li>
+        <li>Adicione um segundo comando em <code>0 ms</code>, com <strong>Command Type</strong> <code>snapshot_on</code> e destino <code>snapshot:/pause_menu</code>. Adicione um terceiro comando em <code>1000 ms</code>, com <strong>Command Type</strong> <code>snapshot_off</code> e o mesmo destino.</li>
+        <li>Na prévia local, clique em <strong>Play</strong>. Confirme que a moeda dispara na posição do primeiro comando e que a música abaixa enquanto o snapshot está ligado, voltando ao nível anterior após <code>snapshot_off</code>. Se não vir os alvos, confira que o projeto e o evento de origem são os indicados.</li>
+      </ol>
+
+      <h2 id="parameter-sheet-veiculo">6. Disparar um clipe pelo intervalo de um parâmetro</h2>
+      <ol>
+        <li>Abra a cópia de <code>example_project/project.json</code> e selecione o instrumento de <code>theme.wav</code> em <code>event:/music/theme</code>. O projeto já possui o parâmetro global contínuo <code>MasterVolume</code> de <code>0</code> a <code>1</code>, com padrão <code>0.8</code>.</li>
+        <li>No Inspector do instrumento, selecione <code>MasterVolume</code> em <strong>Trigger Sheet</strong>. Configure <strong>Sheet Min</strong> = <code>0.4</code> e <strong>Sheet Max</strong> = <code>0.8</code>.</li>
+        <li>No transporte, ative <strong>Loop</strong>, ajuste <code>MasterVolume</code> para <code>0.2</code> e clique em <strong>Play</strong>. O tema deve ficar em silêncio. Mude para <code>0.6</code> para ouvir o tema e para <code>0.95</code> para encerrá-lo. Os limites <code>0.4</code> e <code>0.8</code> estão dentro da faixa. Termine com <strong>Stop</strong>, desative <strong>Loop</strong> e restaure <code>0.8</code>.</li>
+        <li>Para repetir com parâmetro local, crie um contínuo no evento, escolha-o no mesmo campo do Inspector e defina um subintervalo. Use fades e ganho de faixa separados se quiser suavizar a soma de instrumentos que se sobrepõem.</li>
+      </ol>
+
+      <h2 id="async">7. Ouvir Async até Sustain Point e liberar com Key Off</h2>
+      <ol>
+        <li>Na cópia do projeto de exemplo, abra <code>event:/sfx/charge_sustain_async</code>. A definição usa <code>charge_up.wav</code>, <code>charge_hold.wav</code> e <code>charge_release.wav</code>; não é necessário importar arquivos.</li>
+        <li>Selecione o clipe de <code>charge_hold.wav</code> e confira a caixa <strong>Async</strong> no card do clipe, no Inspector. O disparo deixa a voz avançar independentemente da posição do cursor. Este exemplo combina a opção com loop e envelope de liberação.</li>
+        <li>Inicie a audição local. Ouça o início da carga até o <strong>Sustain Point</strong> em <code>600 ms</code>; a reprodução espera ali. Acione <strong>Key Off</strong> no transporte para continuar a saída e ouvir o trecho de release.</li>
+        <li>Repita sem alterar o projeto e compare o trecho sustentado e a liberação. Pare a audição e restaure qualquer valor que tenha editado.</li>
+      </ol>
+
+      <h2 id="playlist-programmer">8. Multi, Scatterer e Programmer com assets do projeto</h2>
+      <ol>
+        <li>Em uma faixa de teste, adicione <strong>Multi Instrument</strong>. Na aba <a href="07-deck-inferior-mixer-efeitos.html#aba3-playlist">Playlist / Weights</a>, adicione o sample <code>sample_coin</code> (<code>coin.wav</code>) e um evento aninhado <code>event:/music/theme</code>. Use o modo <code>Random (Weighted)</code> e pesos <code>80</code> e <code>20</code>. Acione a reprodução várias vezes no transporte: como cada play inicializa com semente não-determinística (PCG32), você ouvirá a alternância estocástica entre a moeda curta e o tema em loop, convergindo para a proporção 80/20.</li>
+        <li>Em outra faixa, adicione <strong>Scatterer</strong> e inclua <code>sample_coin</code> na lista. No Inspector, ajuste <strong>Int Min</strong> = <code>250 ms</code>, <strong>Int Max</strong> = <code>500 ms</code>, <strong>Polyphony</strong> = <code>3</code> e <strong>Total</strong> = <code>6</code>. Na prévia da timeline, ouça os 6 disparos ocorrendo em intervalos pseudoaleatórios dentro da janela configurada, respeitando a polifonia máxima de 3 vozes e cessando automaticamente após o total de 6 disparos.</li>
+        <li>Em uma terceira faixa, adicione <strong>Programmer Instrument</strong>. No Inspector, defina <strong>Key</strong> como <code>coin_demo</code> e associe <strong>Table Sample</strong> a <code>sample_coin</code> na tabela de áudio. Na prévia do Studio, inicie a audição: a tabela de áudio é carregada no banco e o som da moeda toca imediatamente, acendendo os medidores do barramento <code>bus:/sfx</code>.</li>
+        <li>A lista aceita amostras e eventos como entradas. Ao selecionar eventos aninhados, referências que criariam recursão direta ou indireta com o evento pai ficam automaticamente desabilitadas. Para Programmer, a associação via Audio Table permite audição e prévia completas diretamente no Studio; a resolução dinâmica por callbacks nativos (<code>CREATE_PROGRAMMER_SOUND</code>) é o fluxo complementar para código em tempo de execução no jogo.</li>
+      </ol>
+      <p>A resolução de <code>coin_demo</code> pela Audio Table foi verificada no Studio Release com reprodução audível e medidores ativos no barramento SFX. Para jogos que geram nomes de arquivos dinamicamente ou usam áudio procedural em runtime, consulte o <a href="13-unity-timeline-e-bancos.html#authored">fluxo de Programmer via callbacks de integração</a>.</p>
+
+      <h2 id="logic-transition">9. Criar uma região de transição com condição</h2>
+      <ol>
+        <li>Na cópia de exemplo, use <code>event:/music/theme</code> como evento de teste e mantenha sua faixa <code>theme.wav</code> em loop. Na régua, clique com o botão direito em uma posição de origem e confira as opções de marcador, loop e transição; crie um marcador de destino em outra posição e dê a ele um nome curto, como <code>destino</code>.</li>
+        <li>Crie <strong>Transition Region</strong> na régua e selecione-a na aba <a href="07-deck-inferior-mixer-efeitos.html#aba4-logic">Logic &amp; Triggers</a>. Em <strong>Destination marker</strong>, escolha <code>destino</code>; adicione uma condição para <code>MasterVolume</code>, com mínimo inclusivo <code>0.4</code> e máximo inclusivo <code>0.8</code>.</li>
+        <li>Defina <strong>Quantization</strong> como <code>Beat</code> e <strong>Crossfade (ms)</strong> como <code>100</code>. Durante a prévia, com <code>MasterVolume</code> dentro do intervalo, confirme o salto quantizado para o destino. Repita com valor fora do intervalo e confirme que a reprodução segue sem fazer o salto; restaure <code>0.8</code> ao terminar.</li>
+        <li>Para reproduzir o exemplo de navegação aninhada, use um clipe Event para abrir o evento filho e compare o breadcrumb pai/filho. A referência de Playlist acima deixa a lista preenchida visível; selecione um efeito no Effects Rack para completar a comparação dos estados de Deck.</li>
+      </ol>
+
+      <h2 id="audio-playground">10. Explorar a sala 3D Audio Playground na Unity</h2>
+      <ol>
+        <li>Na raiz do repositório, execute <code>./scripts/create_playground_assets.ps1</code> (use <code>-Offline</code> em ambientes sem rede) para sintetizar/normalizar os WAVs em <code>example_project/assets/playground/</code>, gerar <code>playground_project.json</code> e <code>playground_vo_project.json</code> e compilar <code>playground.bank</code> e <code>playground_vo.bank</code> (com seus catálogos) em <code>unity/OpenAudioUnity/Assets/StreamingAssets/</code>.</li>
+        <li>Abra o projeto <code>unity/OpenAudioUnity</code> e a cena <code>Assets/Scenes/AudioPlayground.unity</code>, e entre em <strong>Play Mode</strong>. O controlador <code>AudioPlaygroundController</code> constrói a sala 3D procedural e conecta o <code>StudioListener</code> à câmera em primeira pessoa (mova com <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> ou setas, gire segurando o botão direito do mouse).</li>
+        <li>Percorra as 6 estações de validação interativa:
+          <ul>
+            <li><strong>Estação 1 (Superfícies &amp; Multi Instrument):</strong> Caminhe sobre os pisos de Madeira, Concreto e Grama ou pressione <kbd>1</kbd>, <kbd>2</kbd> e <kbd>3</kbd> para alternar <code>SurfaceType</code> e disparar variações em <code>event:/playground/footstep</code>.</li>
+            <li><strong>Estação 2 (Emissor 3D, Cones &amp; Built-in Parameters):</strong> Contorne o totem central (<code>event:/playground/emitter_3d</code>) pela frente e pelas costas e observe no HUD os valores em tempo real de <code>Distance</code>, <code>Direction</code>, <code>Elevation</code>, <code>EventConeAngle</code> e <code>Speed</code>.</li>
+            <li><strong>Estação 3 (Arena Adaptativa):</strong> Entre na zona vermelha à esquerda ou pressione <kbd>C</kbd> para alternar <code>CombatIntensity</code> entre <code>0.0</code> (Exploração) e <code>1.0</code> (Combate) em <code>event:/playground/adaptive_music</code>.</li>
+            <li><strong>Estação 4 (Bosque Scatterer):</strong> Entre na área verde à direita ou pressione <kbd>F</kbd> para ativar <code>event:/playground/forest_scatterer</code> com grãos estocásticos limitados por polifonia.</li>
+            <li><strong>Estação 5 (Túnel Snapshot &amp; Diálogo Programmer):</strong> Entre no túnel azul ou pressione <kbd>V</kbd> para ativar <code>snapshot:/playground/cave_reverb</code>; pressione <kbd>E</kbd> (ou clique no botão do HUD) para carregar <code>playground_vo.bank</code> sob demanda e disparar <code>event:/playground/dialogue_vo</code> via <code>Programmer Instrument</code> com ducking na música.</li>
+            <li><strong>Estação 6 (HUD 2D, VCAs &amp; Live-Linking):</strong> Ajuste os sliders de <code>vca:/playground_master</code>, <code>vca:/playground_music</code> e <code>vca:/playground_sfx</code>, dispare <code>event:/playground/ui_click</code> e acompanhe o status de conexão Live-Linking (<code>127.0.0.1:7450</code>) com o Studio aberto.</li>
+          </ul>
+        </li>
+      </ol>
+
+      <h2>Termos dos exercícios</h2>
+      <dl><dt>Snapshot</dt><dd>Conjunto temporário de alterações na mixagem. A instância define quando o conjunto entra e sai.</dd><dt>Republicação</dt><dd>Nova compilação do projeto. Distribua o banco e seu catálogo juntos.</dd><dt>Banco de conteúdo</dt><dd>Banco que adiciona eventos e amostras e depende dos barramentos do Master Bank.</dd></dl>
+
+      <div class="chapter-footer">
+        <a href="13-unity-timeline-e-bancos.html">← Integração avançada</a>
+        <a href="12-glossario-e-atalhos.html">Próximo: Cap. 12 — Glossário A–Z e Atalhos →</a>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/manual.js"></script>
+</body>
+</html>

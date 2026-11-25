@@ -1,0 +1,18 @@
+{
+    "name": "OpenAudio.Editor",
+    "rootNamespace": "OpenAudio.Editor",
+    "references": [
+        "OpenAudio.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

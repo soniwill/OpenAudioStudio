@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 4 — Navegador do Projeto | OpenAudio Studio</title>
+  <link rel="stylesheet" href="../assets/css/manual.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="manual-sidebar"></aside>
+
+    <main class="main-content">
+      <div class="breadcrumbs"><a href="../index.html">Manual</a> › Cap. 4 — Navegador do Projeto</div>
+      <h1>Capítulo 4 — Navegador do projeto</h1>
+      <p class="lead">
+        O painel esquerdo é o inventário completo do seu projeto. Tudo o que existe no seu jogo — eventos,
+        snapshots, buses, VCAs, arquivos de áudio e parâmetros globais — é criado, organizado e buscado aqui.
+      </p>
+
+      <div class="purpose-box box">
+        <div class="box-title">Fundamentos Arquiteturais das Raízes do Navegador</div>
+        <p>
+          Antes de criar ou reestruturar os itens do seu projeto, compreenda o papel de cada raiz: leia sobre o desacoplamento de eventos e parâmetros em <a href="fundamentos-eventos-e-parametros.html">Fundamentos: Eventos e Parâmetros</a> e sobre a topologia de barramentos, VCAs e snapshots em <a href="fundamentos-mixagem-buses-vcas-snapshots.html">Fundamentos: Buses, VCAs e Snapshots</a>.
+        </p>
+      </div>
+
+      <figure class="callout-figure callout-figure--split">
+        <div class="callout-stage">
+          <img src="../assets/img/studio-tree.png" alt="Captura real do Navegador do Projeto">
+          <svg class="callout-svg" viewBox="0 0 260 620" preserveAspectRatio="none">
+            <g class="callout-group" data-callout="1">
+              <rect class="callout-rect" x="100" y="3" width="156" height="27" rx="4"/>
+              <circle class="callout-badge-bg" cx="244" cy="16" r="9"/>
+              <text class="callout-badge-text" x="244" y="16" font-size="11">1</text>
+            </g>
+            <g class="callout-group" data-callout="2">
+              <rect class="callout-rect amber" x="3" y="3" width="95" height="27" rx="4"/>
+              <circle class="callout-badge-bg" cx="14" cy="16" r="9"/>
+              <text class="callout-badge-text" x="14" y="16" font-size="11">2</text>
+            </g>
+            <g class="callout-group" data-callout="3">
+              <rect class="callout-rect" x="18" y="48" width="234" height="110" rx="5"/>
+              <circle class="callout-badge-bg" cx="238" cy="62" r="10"/>
+              <text class="callout-badge-text" x="238" y="62" font-size="12">3</text>
+            </g>
+            <g class="callout-group" data-callout="4">
+              <rect class="callout-rect" x="18" y="162" width="234" height="252" rx="5"/>
+              <circle class="callout-badge-bg" cx="238" cy="176" r="10"/>
+              <text class="callout-badge-text" x="238" y="176" font-size="12">4</text>
+            </g>
+          </svg>
+        </div>
+        <ul class="callout-legend">
+          <li data-callout="1"><span class="legend-num">1</span><div><strong>Abas do Navegador (<code>Events | Snapshots | Buses | Assets</code>):</strong> alterne entre as quatro categorias principais. A aba <code>Buses</code> agrupa os barramentos hierárquicos e a subseção <code>VCAs</code>.</div></li>
+          <li data-callout="2"><span class="legend-num">2</span><div><strong>Busca e Menu de Contexto:</strong> digite no campo de busca para filtrar a árvore e use o clique direito (ou <kbd>F2</kbd>, <kbd>Ctrl</kbd>+<kbd>D</kbd>, <kbd>Del</kbd>) para criar, renomear, duplicar, importar áudio ou excluir itens.</div></li>
+          <li data-callout="3"><span class="legend-num">3</span><div><strong>Raiz <code>event:/</code>:</strong> todos os eventos jogáveis. Use barras <code>/</code> no nome (ex.: <code>SFX/Passos</code>) para criar subpastas automaticamente.</div></li>
+          <li data-callout="4"><span class="legend-num">4</span><div><strong>Rodapé <code>PROJECT PARAMETERS (N)</code>:</strong> lista fixa inferior exibindo parâmetros globais e seus domínios reais, com seleção direta no Inspetor e menu de contexto.</div></li>
+        </ul>
+      </figure>
+
+      <h2>Como ler a árvore</h2>
+      <p>Clique na seta de uma categoria para ver seus itens. Em <strong>Events</strong>, um clique no evento prepara a timeline e o transporte para aquela seleção. Em <strong>Buses</strong>, um clique abre as propriedades do canal no Inspetor. O campo de busca reduz as linhas visíveis e preserva a estrutura que ajuda a localizar o item. Se uma pasta sumir depois de renomear algo, limpe primeiro o filtro.</p>
+      <p>Pastas da árvore derivam dos caminhos dos itens. Elas organizam o projeto e são independentes da pasta <code>assets/</code> no Explorador e do <a href="14-barramentos-vcas-snapshots.html#barramento">roteamento de áudio</a>.</p>
+
+      <h2>As 6 Raízes do Projeto Explicadas</h2>
+      <table>
+        <thead>
+          <tr><th>Raiz</th><th>Cor na Árvore</th><th>O que fica aqui</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>Events (event:/)</code></td><td>Ciano</td><td>Efeitos sonoros, músicas e diálogos que o jogo dispara.</td></tr>
+          <tr><td><code>Snapshots (snapshot:/)</code></td><td>Roxo</td><td>Cenas de mixagem temporárias (ex.: <code>snapshot:/Pausa</code>, <code>snapshot:/DuckMusic</code>).</td></tr>
+          <tr><td><code>Buses (bus:/)</code></td><td>Âmbar</td><td>Grupos de roteamento (<code>bus:/</code> Master, <code>bus:/SFX</code>, <code>bus:/Music</code>).</td></tr>
+          <tr><td><code>VCAs (vca:/)</code></td><td>Verde</td><td>Controles mestres ligados a múltiplos Buses (ex.: controle de volume do menu).</td></tr>
+          <tr><td><code>Audio Assets</code></td><td>Cinza</td><td>Arquivos e amostras cadastradas no projeto (WAV, OGG, MP3 e FLAC em <code>assets/</code>).</td></tr>
+          <tr><td><code>Global Parameters</code></td><td>Cinza</td><td>Parâmetros compartilhados pelo jogo inteiro (ex.: <code>HoraDoDia</code>, <code>VidaJogador</code>).</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="renomear">Renomear um item sem perder a referência</h2>
+      <p>A árvore mostra apenas a última parte de muitos nomes. Em <code>event:/sfx/coin</code>, a linha <strong>coin</strong> aparece dentro de <strong>sfx</strong>. O Studio e o jogo identificam o evento pelo caminho completo, incluindo o prefixo <code>event:/</code>. Ao mudar <code>sfx/coin</code> para <code>ui/coin</code>, a árvore passa a mostrar o item em outra pasta. O destino de áudio continua definido por <strong>Bus Route</strong>.</p>
+      <ol>
+        <li>Trabalhe em uma cópia de <code>example_project</code>. Abra o JSON e expanda <strong>Events</strong> e <strong>sfx</strong>.</li>
+        <li>Clique na linha <strong>coin</strong>. Com a árvore em foco, pressione <kbd>F2</kbd> ou abra o menu de contexto e escolha <strong>Rename (F2)</strong>.</li>
+        <li>Na janela <strong>Rename Item</strong>, substitua o texto completo por <code>event:/ui/moeda</code> e confirme com <strong>OK</strong>. Preserve <code>event:/</code> e escolha um caminho ainda livre. Para voltar, use <strong>Cancel</strong> antes de confirmar ou <kbd>Ctrl</kbd>+<kbd>Z</kbd> depois.</li>
+        <li>Confira a nova linha em <strong>Events → ui</strong>. Se o filtro estiver em <code>coin</code>, limpe-o para encontrar <code>moeda</code>. Selecione o item e confira o novo caminho no Inspetor. Dê <strong>Play</strong> e confirme que o som continua sendo o mesmo.</li>
+        <li>Salve e publique. Se a Unity já referenciava <code>event:/sfx/coin</code>, copie o novo banco e catálogo e altere o <strong>Event Path</strong> ou a string do script para <code>event:/ui/moeda</code>. Teste o disparo novamente.</li>
+      </ol>
+      <table>
+        <thead><tr><th>Item</th><th>Exemplo de novo nome</th><th>O que inspecionar depois</th></tr></thead>
+        <tbody>
+          <tr><td>Evento</td><td><code>event:/ui/moeda</code></td><td>Instrumentos que disparam o evento, listas de VCA, campos da Unity e scripts.</td></tr>
+          <tr><td>Snapshot</td><td><code>snapshot:/menu/pausa</code></td><td>Comandos que ativam ou desligam o snapshot e caminhos usados no jogo.</td></tr>
+          <tr><td>Barramento</td><td><code>bus:/efeitos</code></td><td>Rotas dos eventos, barramentos filhos, alvos de snapshot, VCA e sidechain. <code>bus:/</code> identifica o Master.</td></tr>
+          <tr><td>VCA</td><td><code>vca:/opcoes/efeitos</code></td><td>Campos e scripts que buscam o controle pelo caminho.</td></tr>
+          <tr><td>Audio Asset</td><td><code>moeda_curta</code></td><td>O identificador usado por clipes e playlists muda. O caminho do WAV em <strong>File</strong> continua sendo o do arquivo de origem.</td></tr>
+          <tr><td>Parâmetro global</td><td><code>IntensidadeDoJogo</code></td><td>Condições e automações ligadas ao parâmetro e o nome enviado por <code>SetGlobalParameter</code>.</td></tr>
+        </tbody>
+      </table>
+      <p>O Studio atualiza referências internas que reconhece. Outros projetos, bancos antigos e dados da Unity precisam ser revisados à parte. Para mudar o nome da pasta ou o nome do projeto publicado, siga <a href="02-projetos-e-publicacao.html#salvar">Salvar, duplicar ou renomear um projeto</a>.</p>
+
+      <h2 id="duplicar">Criar, duplicar e excluir</h2>
+      <p>O botão <strong>+</strong> oferece evento, snapshot, barramento, VCA e parâmetro global. Selecione o novo item para editar suas propriedades. Para testar duas versões do mesmo som, selecione o evento, clique em <strong>Dup</strong> ou pressione <kbd>Ctrl</kbd>+<kbd>D</kbd>, encontre a cópia na árvore e renomeie-a. Mude o pitch da cópia e alterne entre as duas audições. Os eventos podem apontar para o mesmo áudio de origem.</p>
+      <p>Para remover a cópia, selecione a linha, clique em <strong>Del</strong> e confira o caminho na confirmação. Revise as dependências de qualquer item usado por outros eventos. Se a exclusão foi acidental, use <kbd>Ctrl</kbd>+<kbd>Z</kbd> antes de salvar e publicar novamente.</p>
+
+      <h2>Encontre um evento e seu áudio de origem</h2>
+      <ol><li>No projeto de exemplo, procure <code>coin</code> no filtro. Selecione <code>event:/sfx/coin</code> em <strong>Events</strong> para ver sua timeline.</li>
+      <li>Limpe o filtro e procure <code>sample_coin</code> em <strong>Samples</strong>. O sample identifica o arquivo <code>assets/coin.wav</code>. O evento define como reproduzi-lo.</li>
+      <li>Volte ao evento e compare com <code>event:/music/theme</code>. Os dois têm clipes e são roteados a barramentos diferentes.</li></ol>
+      <h2 id="importar-audio">Importação de áudio (WAV, OGG, MP3, FLAC) e Drag-and-Drop</h2>
+      <p>O OpenAudio Studio suporta nativamente a importação e decodificação de múltiplos formatos de áudio:</p>
+      <ul>
+        <li><strong>Formatos Suportados:</strong> <code>.wav</code> (PCM), <code>.ogg</code> (Vorbis), <code>.mp3</code> (MPEG Layer 3) e <code>.flac</code> (lossless).</li>
+        <li><strong>Ação "Import Audio...":</strong> Clique com o botão direito sobre a categoria <strong>Audio Assets</strong> (ou qualquer amostra existente) e selecione <strong>Import Audio...</strong>, ou use o botão <strong>+</strong> no topo do painel. A caixa de diálogo do sistema operacional permite selecionar um ou vários arquivos simultaneamente.</li>
+        <li><strong>Drag-and-Drop Direto:</strong> Arraste um ou múltiplos arquivos de áudio do gerenciador de arquivos do sistema (Windows Explorer, Finder, etc.) e solte-os sobre o painel do navegador de assets. O Studio copia automaticamente os arquivos para a pasta <code>assets/</code> do projeto, previne colisões de nomes adicionando sufixos numéricos quando necessário e cadastra os novos samples no catálogo <code>project.json</code>.</li>
+        <li><strong>Undo/Redo Total:</strong> Toda importação de asset é integrada ao histórico do projeto (<kbd>Ctrl</kbd>+<kbd>Z</kbd> desfaz o cadastro).</li>
+      </ul>
+
+      <h2>Termos do navegador</h2>
+      <dl><dt>Raiz</dt><dd>Grupo superior que reúne itens da mesma categoria.</dd><dt>Caminho do evento</dt><dd>Identificador usado no Studio e no código do jogo. Preserve a grafia ao copiá-lo.</dd></dl>
+
+      <div class="chapter-footer">
+        <a href="03-transporte-e-audicao.html">← Cap. 3 — Transporte e Audição</a>
+        <a href="05-timeline-e-waveforms.html">Próximo: Cap. 5 — Timeline e Waveforms →</a>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/manual.js"></script>
+</body>
+</html>
